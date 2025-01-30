@@ -55,31 +55,35 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/UserLogineditText01"
+            android:id="@+id/UserSignUpeditText01"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
             android:background="@drawable/edit_text_background"
-            android:ems="10"
-            android:hint="Email"
             android:drawableLeft="@drawable/user"
             android:drawablePadding="10dp"
-            android:inputType="text|textEmailAddress" />
+            android:ems="10"
+            android:hint="Email"
+            android:inputType="text|textEmailAddress"
+            android:padding="12dp"
+            android:textSize="14sp" />
 
         <EditText
-            android:id="@+id/UserLogineditText02"
+            android:id="@+id/UserSignUpeditText02"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="50dp"
             android:background="@drawable/edit_text_background"
-            android:ems="10"
-            android:hint="Password"
             android:drawableLeft="@drawable/lock"
             android:drawablePadding="10dp"
-            android:inputType="text|textPassword" />
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="text|textPassword"
+            android:padding="12dp"
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/button2"
