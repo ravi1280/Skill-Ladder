@@ -16,4 +16,8 @@
     <string name="Greeting">Welcome to Skill-Ladder</string>
     <string name="GoSignUp">Don\'t have account ?  SignUp</string>
 
+    <string name="SignUpTV1">User SignUp</string>
+    <string name="UserSignUpBtn">SignUp</string>
+    <string name="GoLogIn">Alredy have account ? LogIn</string>
+
 </resources>
