@@ -2,4 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="editTextbackground">#51BDDEF6</color>
+    <color name="editTextBorder">#CACACA</color>
+    <color name="UserLoginBtn">#6495ED</color>
 </resources>

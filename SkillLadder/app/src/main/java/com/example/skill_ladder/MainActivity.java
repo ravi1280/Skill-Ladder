@@ -37,9 +37,9 @@ public class MainActivity extends AppCompatActivity {
 
         springAnimation.setSpring(springForce);
         springAnimation.start();
-        new Handler().postDelayed(()->{
 
-            Intent intent = new Intent(MainActivity.this,TestActivity.class);
+        new Handler().postDelayed(()->{
+            Intent intent = new Intent(MainActivity.this,UserLoginActivity.class);
             startActivity(intent);
             finish();
         },2000);
