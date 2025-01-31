@@ -39,7 +39,7 @@ public class UserLoginActivity extends AppCompatActivity {
             }
         });
 
-        Button btn01 = findViewById(R.id.CompanyLoginBtn01);
+        Button btn01 = findViewById(R.id.CompanySignUpBtn01);
         btn01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
