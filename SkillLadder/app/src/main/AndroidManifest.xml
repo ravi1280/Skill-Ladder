@@ -13,6 +13,9 @@
         android:theme="@style/Theme.SkillLadder"
         tools:targetApi="31">
         <activity
+            android:name=".CompanySignUpActivity"
+            android:exported="false" />
+        <activity
             android:name=".CompanyLogInActivity"
             android:exported="false" />
         <activity

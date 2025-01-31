@@ -27,14 +27,14 @@ public class UserSignUpActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        Button btn01 = findViewById(R.id.UserLoginBtn01);
+        Button btn01 = findViewById(R.id.CompanyLoginBtn01);
         btn01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText editText01 = findViewById(R.id.UserSignUpeditText01);
-                EditText editText02 = findViewById(R.id.UserSignUpeditText02);
-                EditText editText03 = findViewById(R.id.UserSignUpeditText03);
-                EditText editText04 = findViewById(R.id.UserSignUpeditText04);
+                EditText editText01 = findViewById(R.id.CompanyLogineditText01);
+                EditText editText02 = findViewById(R.id.CompanyLogineditText02);
+                EditText editText03 = findViewById(R.id.CompanySignUpeditText03);
+                EditText editText04 = findViewById(R.id.CompanySignUpeditText04);
 
                 String fullName = editText01.getText().toString();
                 String mobile = editText02.getText().toString();
@@ -56,7 +56,7 @@ public class UserSignUpActivity extends AppCompatActivity {
         });
 
 
-        TextView textView= findViewById(R.id.textView7);
+        TextView textView= findViewById(R.id.CompanySignUpTV04);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
