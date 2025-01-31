@@ -137,7 +137,7 @@
             android:background="?android:attr/listDivider" />
 
         <TextView
-            android:id="@+id/CompanySignUpTV04"
+            android:id="@+id/CompanySignUpTV004"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="30dp"

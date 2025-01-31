@@ -56,7 +56,7 @@ public class UserSignUpActivity extends AppCompatActivity {
         });
 
 
-        TextView textView= findViewById(R.id.CompanySignUpTV04);
+        TextView textView= findViewById(R.id.CompanyLogInTV04);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
