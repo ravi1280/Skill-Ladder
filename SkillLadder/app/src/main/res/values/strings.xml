@@ -16,15 +16,23 @@
     <string name="GetStartbtn02TV01">Hire Talent</string>
     <string name="GetStartbtn02TV02">Post jobs and find skilled professionals.</string>
 
+    <string name="Hello">Hello !</string>
+    <string name="Greeting">Welcome to Skill-Ladder</string>
 
     <string name="UserLoginTV1">User Login</string>
     <string name="UserLoginBtn">Login</string>
-    <string name="Hello">Hello !</string>
-    <string name="Greeting">Welcome to Skill-Ladder</string>
     <string name="GoSignUp">Don\'t have account ?  SignUp</string>
 
     <string name="SignUpTV1">User SignUp</string>
     <string name="UserSignUpBtn">SignUp</string>
     <string name="GoLogIn">Alredy have account ? LogIn</string>
+
+    <string name="companyLoginTV1">Company Login</string>
+    <string name="companyLoginBtn">Login</string>
+    <string name="GocompanySignUp">Don\'t have account ?  SignUp</string>
+
+    <string name="companySignUpTV1">Company SignUp</string>
+    <string name="companySignUpBtn">SignUp</string>
+    <string name="GoCompanyLogIn">Alredy have account ? LogIn</string>
 
 </resources>
