@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LessonSummaryActivity">
+    tools:context=".LessonSummaryActivity"
+    android:background="@drawable/start_background">
 
     <TextView
         android:id="@+id/textView"
@@ -13,8 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:fontFamily="@font/nunito_bold"
-        android:text="TextView"
-        android:textSize="25sp"
+        android:text="Java"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,13 +25,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:fontFamily="@font/inter_regular"
+        android:fontFamily="@font/nunito_bold"
         android:text="10%"
         app:layout_constraintBottom_toBottomOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/LessonSummeryRecyclerView"
         android:layout_width="0dp"
         android:layout_height="590dp"
         android:layout_marginStart="16dp"
