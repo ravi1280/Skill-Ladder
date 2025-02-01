@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="25dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardElevation="6dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <!-- Lesson Title -->
+        <TextView
+            android:id="@+id/tvLessonTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Lesson Title"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <!-- Subtopics -->
+        <TextView
+            android:id="@+id/tvSubtopics"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Subtopics will be shown here"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            android:maxLines="2"
+            android:ellipsize="end"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvLessonTitle"/>
+
+        <!-- YouTube Thumbnail -->
+<!--        <ImageView-->
+<!--            android:id="@+id/imgYoutubeThumbnail"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="180dp"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            android:src="@drawable/youtube_placeholder"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/tvSubtopics"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintMarginTop="10dp"/>-->
+
+<!--        &lt;!&ndash; View PDF Button &ndash;&gt;-->
+<!--        <Button-->
+<!--            android:id="@+id/btnViewPdf"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="View Assessment PDF"-->
+<!--            android:textSize="14sp"-->
+<!--            android:backgroundTint="@color/purple_500"-->
+<!--            android:textColor="@android:color/white"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/imgYoutubeThumbnail"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintMarginTop="12dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
