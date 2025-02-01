@@ -115,10 +115,8 @@ class LessonTopicListAdapter extends RecyclerView.Adapter<LessonTopicListAdapter
                 intent01.putExtra("mainTopic",lessonTopic.topic);
                 intent01.putExtra("subTopic",lessonTopic.subtopic);
                 view.getContext().startActivity(intent01);
-
             }
         });
-
     }
 
     @Override
