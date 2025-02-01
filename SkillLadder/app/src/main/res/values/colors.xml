@@ -6,6 +6,8 @@
     <color name="editTextbackground">#FEDAE9F8</color>
     <color name="editTextBorder">#CACACA</color>
     <color name="UserLoginBtn">#6495ED</color>
+    <color name="lightblue">#80D8FF</color>
+
 
 
 </resources>
