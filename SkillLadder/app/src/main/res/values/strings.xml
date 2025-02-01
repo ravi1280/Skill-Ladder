@@ -35,5 +35,10 @@
     <string name="companySignUpBtn">SignUp</string>
     <string name="GoCompanyLogIn">Alredy have account ? LogIn</string>
 
+    <string name="UserProfileTV1">User Profile</string>
+    <string name="UserProfileBtn01">Update Profile</string>
+    <string name="UserProfileBtn02">Update Password</string>
+    <string name="UserProfileUpdatePasswordBtn01">Update Password</string>
+
 
 </resources>
