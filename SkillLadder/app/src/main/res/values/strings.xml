@@ -40,5 +40,8 @@
     <string name="UserProfileBtn02">Update Password</string>
     <string name="UserProfileUpdatePasswordBtn01">Update Password</string>
 
+    <string name="CourseTitle">Course Title</string>
+    <string name="CourseContinue">Continue ▶️</string>
+
 
 </resources>
