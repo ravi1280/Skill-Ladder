@@ -27,7 +27,7 @@ public class LessonSuccessActivity extends AppCompatActivity {
         button01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent01 = new Intent(LessonSuccessActivity.this,LessonSummaryActivity.class);
+                Intent intent01 = new Intent(LessonSuccessActivity.this,UserHomeActivity.class);
                 startActivity(intent01);
             }
         });
