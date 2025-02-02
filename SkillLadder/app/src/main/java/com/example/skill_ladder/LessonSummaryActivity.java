@@ -34,7 +34,7 @@ public class LessonSummaryActivity extends AppCompatActivity {
             return insets;
         });
 
-        //set Vertical Linearlayout for RecyclerView
+
         RecyclerView recyclerView = findViewById(R.id.LessonSummeryRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(LessonSummaryActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);

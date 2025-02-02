@@ -29,7 +29,7 @@
 
     <string name="companyLoginTV1">Company Login</string>
     <string name="companyLoginBtn">Login</string>
-    <string name="GocompanySignUp">Don\'t have account ?  SignUp</string>
+    <string name="GocompanySignUp">Don\'t have account ? SignUp</string>
 
     <string name="companySignUpTV1">Company SignUp</string>
     <string name="companySignUpBtn">SignUp</string>
@@ -45,6 +45,10 @@
     <string name="CourseBuy">Buy Course ️</string>
 
     <string name="JobTile">Job Title ️</string>
+
+    <string name="lessonBuyTV01">Lesson Title ️</string>
+    <string name="lessonBuydicription">Lesson description ️</string>
+    <string name="lessonBuyBtn">Buy ️</string>
 
 
 </resources>
