@@ -7,5 +7,7 @@
     <color name="editTextBorder">#CACACA</color>
     <color name="UserLoginBtn">#6495ED</color>
     <color name="lightblue">#80D8FF</color>
+    <color name="glassWhite">#99FFFFFF</color>
+
 
 </resources>
