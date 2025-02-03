@@ -8,6 +8,7 @@
     <color name="UserLoginBtn">#6495ED</color>
     <color name="lightblue">#80D8FF</color>
     <color name="glassWhite">#99FFFFFF</color>
+    <color name="red">#FF80AB</color>
 
 
 </resources>
