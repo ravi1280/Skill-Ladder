@@ -27,7 +27,7 @@ public class PaymentSuccessActivity extends AppCompatActivity {
         button01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PaymentSuccessActivity.this,LessonBuyActivity.class);
+                Intent intent = new Intent(PaymentSuccessActivity.this,MyLessonsActivity.class);
                 startActivity(intent);
             }
         });
