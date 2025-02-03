@@ -40,7 +40,7 @@ public class GetStartActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                Intent intent02 = new Intent(GetStartActivity.this,CompanyLogInActivity.class);
 //                startActivity(intent02);
-                Intent intent02 = new Intent(GetStartActivity.this,JobTitleRelatedLessonActivity.class);
+                Intent intent02 = new Intent(GetStartActivity.this,UserHomeActivity.class);
                 startActivity(intent02);
             }
         });
