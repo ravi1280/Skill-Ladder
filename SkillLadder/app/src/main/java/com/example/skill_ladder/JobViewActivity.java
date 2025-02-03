@@ -34,18 +34,26 @@ public class JobViewActivity extends AppCompatActivity {
             return insets;
         });
 
+        ImageView imageView = findViewById(R.id.JobviewBackImg01);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
         RecyclerView recyclerView = findViewById(R.id.jobviewRecyclerview);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(JobViewActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         List<jobDetails> jobdetails = new ArrayList<>();
-        jobdetails.add(new jobDetails("Java institute01", "javainstitute01@gmail.com","0719681816"));
-        jobdetails.add(new jobDetails("Java institute02", "javainstitute02@gmail.com","0719681815"));
-        jobdetails.add(new jobDetails("Java institute03", "javainstitute03@gmail.com","0719681814"));
-        jobdetails.add(new jobDetails("Java institute04", "javainstitute04@gmail.com","0719681817"));
-        jobdetails.add(new jobDetails("Java institute05", "javainstitute05@gmail.com","0719681818"));
-        jobdetails.add(new jobDetails("Java institute06", "javainstitute06@gmail.com","0719681819"));
+        jobdetails.add(new jobDetails("Java institute01", "javainstitute01@gmail.com","0719681816","Software Engineer","2025-02-13"));
+        jobdetails.add(new jobDetails("Java institute02", "javainstitute02@gmail.com","0719681815","Software Engineer","2025-02-13"));
+        jobdetails.add(new jobDetails("Java institute03", "javainstitute03@gmail.com","0719681814","Software Engineer","2025-02-13"));
+        jobdetails.add(new jobDetails("Java institute04", "javainstitute04@gmail.com","0719681817","Software Engineer","2025-02-13"));
+        jobdetails.add(new jobDetails("Java institute05", "javainstitute05@gmail.com","0719681818","Software Engineer","2025-02-13"));
+        jobdetails.add(new jobDetails("Java institute06", "javainstitute06@gmail.com","0719681819","Software Engineer","2025-02-13"));
 
         JobListAdapter jobListAdapter = new JobListAdapter(jobdetails);
         recyclerView.setAdapter(jobListAdapter);
@@ -56,12 +64,16 @@ class jobDetails {
     String companyName;
     String companyEmail;
     String companyNumber;
+    String Jobtitle;
+    String Jobclosedate;
 
 
-    public jobDetails(String name, String email,String number ) {
+    public jobDetails(String name, String email,String number,String jobtitle,String jobclosedate ) {
         this.companyName = name;
         this.companyEmail = email;
         this.companyNumber = number;
+        this.Jobclosedate = jobclosedate;
+        this.Jobtitle = jobtitle;
 
     }
 }
@@ -76,6 +88,8 @@ class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewHolder> 
     static class JobViewHolder extends RecyclerView.ViewHolder {
         TextView CompanyName;
         TextView CompanyEmail;
+        TextView CompanyJobTitle;
+        TextView CompanyJobClosingDate;
 
         View ContainerView;
 
@@ -83,6 +97,8 @@ class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewHolder> 
             super(itemView);
             CompanyName = itemView.findViewById(R.id.jobCompanyName);
             CompanyEmail = itemView.findViewById(R.id.jobCompanyEmail);
+            CompanyJobTitle = itemView.findViewById(R.id.jobTitle);
+            CompanyJobClosingDate = itemView.findViewById(R.id.jobClosingDate);
             ContainerView = itemView;
         }
     }
@@ -101,6 +117,8 @@ class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewHolder> 
         jobDetails jobDetails = jobdetails.get(position);
         holder.CompanyName.setText(jobDetails.companyName);
         holder.CompanyEmail.setText(jobDetails.companyEmail);
+        holder.CompanyJobTitle.setText(jobDetails.Jobtitle);
+        holder.CompanyJobClosingDate.setText(jobDetails.Jobclosedate);
 
         String cname = jobDetails.companyName;
         String cnumber = jobDetails.companyNumber;
