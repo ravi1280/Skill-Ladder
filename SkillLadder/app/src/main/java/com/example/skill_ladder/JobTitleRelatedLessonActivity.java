@@ -55,7 +55,6 @@ public class JobTitleRelatedLessonActivity extends AppCompatActivity {
 }
 class LessonTitle {
     String LessontitleName;
-
     public LessonTitle(String name ) {
         this.LessontitleName = name;
 
@@ -63,14 +62,12 @@ class LessonTitle {
 }
 class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonViewHolder> {
     private final List<LessonTitle> lessondetails;
-
     public LessonAdapter(List<LessonTitle> jobdetails) {
         this.lessondetails = jobdetails;
     }
 
     static class LessonViewHolder extends RecyclerView.ViewHolder {
         TextView LessonName;
-
         View ContainerView;
 
         public LessonViewHolder(@NonNull View itemView) {
@@ -98,34 +95,21 @@ class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonViewHolder>
         holder.ContainerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Create BottomSheetDialog
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(holder.itemView.getContext());
-
-                // Inflate the pre-created Bottom Sheet layout
                 View sheetView = LayoutInflater.from(holder.itemView.getContext()).inflate(R.layout.buy_lesson_bottom_sheet, null);
-
-                // Find the TextView inside the Bottom Sheet layout
                 TextView textView = sheetView.findViewById(R.id.lessonsheetTV01);
-                textView.setText(lessonName); // Set the text to "Hello"
-
-                // Find the Buy button
+                textView.setText(lessonName);
                 Button buyButton = sheetView.findViewById(R.id.lessonBuysheetdBtn01);
+
                 buyButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // Navigate to the Success Activity
                         Intent intent = new Intent(holder.itemView.getContext(), PaymentSuccessActivity.class);
                         holder.itemView.getContext().startActivity(intent);
-
-                        // Dismiss the Bottom Sheet
                         bottomSheetDialog.dismiss();
                     }
                 });
-
-                // Set the view to the BottomSheetDialog
                 bottomSheetDialog.setContentView(sheetView);
-
-                // Show the Bottom Sheet
                 bottomSheetDialog.show();
             }
         });
