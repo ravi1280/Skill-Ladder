@@ -22,20 +22,6 @@ public class UserHomeActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-//        Button btnHome = findViewById(R.id.btn_home);
-//        Button btnLessons = findViewById(R.id.btn_lessons);
-//        Button btnProfile = findViewById(R.id.btn_profile);
 
-//        btnHome.setOnClickListener(v -> {
-//            Toast.makeText(UserHomeActivity.this, "Home Clicked", Toast.LENGTH_SHORT).show();
-//        });
-//
-//        btnLessons.setOnClickListener(v -> {
-//            Toast.makeText(UserHomeActivity.this, "Lessons Clicked", Toast.LENGTH_SHORT).show();
-//        });
-//
-//        btnProfile.setOnClickListener(v -> {
-//            Toast.makeText(UserHomeActivity.this, "Profile Clicked", Toast.LENGTH_SHORT).show();
-//        });
     }
 }
