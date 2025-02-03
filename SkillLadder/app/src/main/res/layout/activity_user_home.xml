@@ -6,7 +6,6 @@
     android:id="@+id/main"
     android:background="@drawable/blue_gradient">
 
-    <!-- Main content with ScrollView -->
     <ScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
@@ -20,8 +19,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
-
-            <!-- Add your main content here -->
 
             <Button
                 android:id="@+id/homebutton"
@@ -44,7 +41,7 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Footer CardView -->
+
     <androidx.cardview.widget.CardView
         android:id="@+id/footer_card"
         android:layout_width="0dp"

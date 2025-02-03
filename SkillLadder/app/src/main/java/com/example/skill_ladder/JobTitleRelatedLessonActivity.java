@@ -68,11 +68,13 @@ class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonViewHolder>
 
     static class LessonViewHolder extends RecyclerView.ViewHolder {
         TextView LessonName;
+        TextView LessonBtn;
         View ContainerView;
 
         public LessonViewHolder(@NonNull View itemView) {
             super(itemView);
             LessonName = itemView.findViewById(R.id.ByLessonTitle01);
+            LessonBtn = itemView.findViewById(R.id.courseBuyBtn01);
             ContainerView = itemView;
         }
     }
@@ -92,7 +94,7 @@ class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonViewHolder>
         holder.LessonName.setText(lessonDetails.LessontitleName);
 
         String lessonName = lessonDetails.LessontitleName;
-        holder.ContainerView.setOnClickListener(new View.OnClickListener() {
+        holder.LessonBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(holder.itemView.getContext());
