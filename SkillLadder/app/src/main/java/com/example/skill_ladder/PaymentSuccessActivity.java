@@ -29,6 +29,7 @@ public class PaymentSuccessActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(PaymentSuccessActivity.this,MyLessonsActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
