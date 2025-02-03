@@ -76,11 +76,13 @@ class SearchLessonAdapter extends RecyclerView.Adapter<SearchLessonAdapter.Searc
 
     static class SearchLessonViewHolder extends RecyclerView.ViewHolder {
         TextView LessonName;
+        TextView LessonBtn;
         View ContainerView;
 
         public SearchLessonViewHolder(@NonNull View itemView) {
             super(itemView);
             LessonName = itemView.findViewById(R.id.ByLessonTitle01);
+            LessonBtn= itemView.findViewById(R.id.courseBuyBtn01);
             ContainerView = itemView;
         }
     }
@@ -100,7 +102,7 @@ class SearchLessonAdapter extends RecyclerView.Adapter<SearchLessonAdapter.Searc
         holder.LessonName.setText(lessonDetails.LessontitleName);
 
         String lessonName = lessonDetails.LessontitleName;
-        holder.ContainerView.setOnClickListener(new View.OnClickListener() {
+        holder.LessonBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(holder.itemView.getContext());

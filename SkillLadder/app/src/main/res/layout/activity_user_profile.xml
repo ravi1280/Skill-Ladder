@@ -8,43 +8,6 @@
     android:background="@drawable/normalbackground"
     tools:context=".UserProfileActivity">
 
-<!--    <androidx.cardview.widget.CardView-->
-<!--        android:id="@+id/cardView"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:cardBackgroundColor="@color/white"-->
-<!--        app:cardCornerRadius="0dp"-->
-<!--        app:cardElevation="8dp"-->
-<!--        app:contentPadding="0dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
-
-<!--        &lt;!&ndash; CardView content: Mimicking a Toolbar &ndash;&gt;-->
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:padding="20dp">-->
-
-<!--            &lt;!&ndash; Add your Toolbar-like items here, e.g., Title, Navigation Icon &ndash;&gt;-->
-<!--            <ImageView-->
-<!--                android:layout_width="24dp"-->
-<!--                android:layout_height="24dp"-->
-<!--                android:contentDescription="Back Icon"-->
-<!--                android:src="@drawable/left" />-->
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginLeft="16dp"-->
-<!--                android:gravity="center_vertical"-->
-<!--                android:text="User Profile"-->
-<!--                android:textColor="@android:color/black"-->
-<!--                android:textSize="20sp" />-->
-
-<!--        </LinearLayout>-->
-<!--    </androidx.cardview.widget.CardView>-->
 
     <ImageView
         android:id="@+id/imageView"
@@ -188,5 +151,15 @@
             android:text="@string/UserProfileBtn02" />
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/UserProfileBackIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/left" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

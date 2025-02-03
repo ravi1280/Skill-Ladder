@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -26,6 +27,13 @@ public class UserProfileActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+        ImageView imageView01 = findViewById(R.id.UserProfileBackIcon);
+        imageView01.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
         });
         Button btn01 = findViewById(R.id.UserProfileBtn01);
         btn01.setOnClickListener(new View.OnClickListener() {
@@ -59,12 +67,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
         showBottomSheetButton.setOnClickListener(v -> {
 
-            // Inflate the bottom sheet layout
             View bottomSheetView = getLayoutInflater().inflate(R.layout.update_password_bottom, null);
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(UserProfileActivity.this);
             bottomSheetDialog.setContentView(bottomSheetView);
 
-            // Find views inside the bottom sheet
+
             Button actionOne = bottomSheetView.findViewById(R.id.UserUpdatePasswordBtn);
             EditText text01 = bottomSheetView.findViewById(R.id.UserOldPassword);
             EditText text02 = bottomSheetView.findViewById(R.id.UserNewPassword);
