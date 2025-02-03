@@ -55,5 +55,9 @@
 
     <string name="BuyLesson">Buy Lesson ️</string>
 
+    <string name="SearchTv">Search</string>
+
+    <string name="MyLessonTv01">My Lessons</string>
+
 
 </resources>
