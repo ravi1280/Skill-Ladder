@@ -53,7 +53,10 @@ public class UserLoginActivity extends AppCompatActivity {
                 } else if (password.isEmpty()) {
                     customAlert.showCustomAlert(UserLoginActivity.this, "Error !", "Please Fill Password",R.drawable.cancel);
                 }else {
-                    customAlert.showCustomAlert(UserLoginActivity.this, "Success !", "Your operation was successful!",R.drawable.checked);
+//
+//                    customAlert.showCustomAlert(UserLoginActivity.this, "Success !", "Your operation was successful!",R.drawable.checked);
+                    Intent intent01 = new Intent(UserLoginActivity.this,UserHomeActivity.class);
+                    startActivity(intent01);
                 }
             }
         });
