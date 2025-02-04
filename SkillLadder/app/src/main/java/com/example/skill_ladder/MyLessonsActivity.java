@@ -106,22 +106,9 @@ class MyLessonAdapter extends RecyclerView.Adapter<MyLessonAdapter.MyLessonViewH
         holder.myLessonbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(holder.itemView.getContext());
-                View sheetView = LayoutInflater.from(holder.itemView.getContext()).inflate(R.layout.buy_lesson_bottom_sheet, null);
-                TextView textView = sheetView.findViewById(R.id.lessonsheetTV01);
-                textView.setText(mylessonName01);
-                Button buyButton = sheetView.findViewById(R.id.lessonBuysheetdBtn01);
 
-                buyButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(holder.itemView.getContext(), PaymentSuccessActivity.class);
-                        holder.itemView.getContext().startActivity(intent);
-                        bottomSheetDialog.dismiss();
-                    }
-                });
-                bottomSheetDialog.setContentView(sheetView);
-                bottomSheetDialog.show();
+                Intent intent = new Intent(holder.itemView.getContext(), LessonSuccessActivity.class);
+                holder.itemView.getContext().startActivity(intent);
             }
         });
     }

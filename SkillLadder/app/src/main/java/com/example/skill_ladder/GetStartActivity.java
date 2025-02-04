@@ -28,7 +28,7 @@ public class GetStartActivity extends AppCompatActivity {
         cardView01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent01 = new Intent(GetStartActivity.this,CompanyLogInActivity.class);
+                Intent intent01 = new Intent(GetStartActivity.this,UserLoginActivity.class);
                 startActivity(intent01);
 //                Intent intent01 = new Intent(GetStartActivity.this,LessonSuccessActivity.class);
 //                startActivity(intent01);
@@ -40,7 +40,7 @@ public class GetStartActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                Intent intent02 = new Intent(GetStartActivity.this,CompanyLogInActivity.class);
 //                startActivity(intent02);
-                Intent intent02 = new Intent(GetStartActivity.this,UserHomeActivity.class);
+                Intent intent02 = new Intent(GetStartActivity.this,CompanyLogInActivity.class);
                 startActivity(intent02);
             }
         });

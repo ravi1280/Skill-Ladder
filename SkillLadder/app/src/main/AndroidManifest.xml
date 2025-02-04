@@ -13,6 +13,18 @@
         android:theme="@style/Theme.SkillLadder"
         tools:targetApi="31">
         <activity
+            android:name=".AdminLoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Admin"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".CompanyUpdateProfileActivity"
             android:exported="false" />
         <activity
