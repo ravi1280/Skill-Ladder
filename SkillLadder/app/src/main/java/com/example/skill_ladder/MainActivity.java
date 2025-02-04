@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         springAnimation.start();
 
         new Handler().postDelayed(()->{
-            Intent intent = new Intent(MainActivity.this,GetStartActivity.class);
+            Intent intent = new Intent(MainActivity.this,WebViewActivity.class);
             startActivity(intent);
             finish();
         },2000);
