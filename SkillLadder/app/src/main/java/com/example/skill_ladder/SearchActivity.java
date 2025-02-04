@@ -64,7 +64,6 @@ class SearchLessonTitle {
     String LessontitleName;
     public SearchLessonTitle(String name ) {
         this.LessontitleName = name;
-
     }
 }
 

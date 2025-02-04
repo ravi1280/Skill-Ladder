@@ -1,6 +1,5 @@
 package com.example.skill_ladder;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,8 +96,8 @@ class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewHolder> 
             super(itemView);
             CompanyName = itemView.findViewById(R.id.jobCompanyName);
             CompanyEmail = itemView.findViewById(R.id.jobCompanyEmail);
-            CompanyJobTitle = itemView.findViewById(R.id.jobTitle);
-            CompanyJobClosingDate = itemView.findViewById(R.id.jobClosingDate);
+            CompanyJobTitle = itemView.findViewById(R.id.CompanyTV01);
+            CompanyJobClosingDate = itemView.findViewById(R.id.jobCompanyTV02);
             ContainerView = itemView;
         }
     }
