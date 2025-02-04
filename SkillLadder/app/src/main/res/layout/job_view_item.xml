@@ -16,12 +16,6 @@
         android:layout_height="wrap_content"
         android:padding="12dp">
 
-        <!-- Topic Icon (Optional) -->
-
-        <!-- Lesson Topic Title -->
-
-        <!-- Subtopics Count -->
-
         <ImageView
             android:id="@+id/CompanyIcon"
             android:layout_width="71dp"
@@ -57,7 +51,7 @@
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/CompanyIcon"
-            app:layout_constraintTop_toBottomOf="@+id/jobClosingDate" />
+            app:layout_constraintTop_toBottomOf="@+id/jobCompanyTV02" />
 
         <ImageView
             android:id="@+id/imageView2"
@@ -82,7 +76,7 @@
             app:srcCompat="@drawable/call" />
 
         <TextView
-            android:id="@+id/jobTitle"
+            android:id="@+id/CompanyTV01"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
@@ -94,7 +88,7 @@
             app:layout_constraintTop_toBottomOf="@+id/jobCompanyName" />
 
         <TextView
-            android:id="@+id/jobClosingDate"
+            android:id="@+id/jobCompanyTV02"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
@@ -104,7 +98,7 @@
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/CompanyIcon"
-            app:layout_constraintTop_toBottomOf="@+id/jobTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/CompanyTV01" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

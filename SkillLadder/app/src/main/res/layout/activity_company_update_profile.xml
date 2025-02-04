@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/normalbackground"
+    tools:context=".UserProfileActivity">
+
+
+    <ImageView
+        android:id="@+id/CompanyimageView"
+        android:layout_width="123dp"
+        android:layout_height="133dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/man" />
+
+    <TextView
+        android:id="@+id/CompanyProfiletextView01"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/nunito_bold"
+        android:text="Company Name"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CompanyimageView" />
+
+    <TextView
+        android:id="@+id/CompanyProfiletexview02"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Company@gmail.com"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CompanyProfiletextView01" />
+
+    <LinearLayout
+        android:id="@+id/CompanyProfileLinierLayout01"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/user_login_frame"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CompanyProfiletexview02">
+
+        <EditText
+            android:id="@+id/CompanyProfileDataText01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/edit_text_background"
+            android:drawableLeft="@drawable/user"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="Company Name"
+            android:inputType="text|textPersonName|textCapWords"
+            android:padding="12dp"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/CompanyProfileDataText02"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/edit_text_background"
+            android:drawableLeft="@drawable/envelope"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="Company Email"
+            android:focusable="false"
+            android:clickable="false"
+            android:inputType="text|textEmailAddress"
+            android:padding="12dp"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/CompanyProfileDataText03"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/edit_text_background"
+            android:drawableLeft="@drawable/mobile_button"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="Company Mobile"
+            android:inputType="number"
+            android:padding="12dp"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/CompanyProfileDataText04"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/edit_text_background"
+            android:drawableLeft="@drawable/lock"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="text|textPassword"
+            android:focusable="false"
+            android:clickable="false"
+            android:padding="12dp"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/CompanyProfileBtn01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="@color/UserLoginBtn"
+            android:text="@string/UserProfileBtn01"
+            android:textSize="15sp" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+        <Button
+            android:id="@+id/CompanyProfileBtn02"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            android:backgroundTint="@color/UserLoginBtn"
+            android:text="@string/UserProfileBtn02" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/CompanyProfileBackIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/left" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

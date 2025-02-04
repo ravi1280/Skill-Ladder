@@ -44,7 +44,10 @@ public class CompanyLogInActivity extends AppCompatActivity {
                     customAlert.showCustomAlert(CompanyLogInActivity.this,"Error ","Please Fill The Company Password",R.drawable.cancel);
 
                 }else {
-                    customAlert.showCustomAlert(CompanyLogInActivity.this,"Success ","Your Action is Successfully ! ",R.drawable.checked);
+//                    customAlert.showCustomAlert(CompanyLogInActivity.this,"Success ","Your Action is Successfully ! ",R.drawable.checked);
+
+                    Intent intent01 = new Intent(CompanyLogInActivity.this,JobCompanyHomeActivity.class);
+                    startActivity(intent01);
 
                 }
 

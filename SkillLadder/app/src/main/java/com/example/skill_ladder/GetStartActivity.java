@@ -28,7 +28,7 @@ public class GetStartActivity extends AppCompatActivity {
         cardView01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent01 = new Intent(GetStartActivity.this,UserLoginActivity.class);
+                Intent intent01 = new Intent(GetStartActivity.this,CompanyLogInActivity.class);
                 startActivity(intent01);
 //                Intent intent01 = new Intent(GetStartActivity.this,LessonSuccessActivity.class);
 //                startActivity(intent01);
