@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerLayout01"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+    <LinearLayout
+        android:id="@+id/LineatLaoyout001"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar001"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@color/gcenter"
+            app:subtitle="subtitle"
+            app:subtitleTextColor="@color/glassWhite"
+            app:title="@string/app_name"
+            app:titleTextColor="@color/gend"
+            app:navigationIcon="@drawable/user" />
+
+
+        <!--            <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="start"-->
+<!--                android:src="@drawable/left" />-->
+
+
+        <FrameLayout
+            android:id="@+id/FrameLayout001"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragmentContainerView001"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+<com.google.android.material.navigation.NavigationView
+    android:layout_marginTop="35dp"
+    android:id="@+id/navigationView01"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    app:headerLayout="@layout/nav_header"
+    app:menu="@menu/navigation_menu"
+    />
+</androidx.drawerlayout.widget.DrawerLayout>

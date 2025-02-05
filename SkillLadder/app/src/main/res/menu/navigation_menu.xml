@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/AdminDashBoard"
+        android:title="@string/DashBoard"
+        android:icon="@drawable/user"/>
+    <item
+        android:id="@+id/adminUserManage"
+        android:title="@string/UserManage"
+        android:icon="@drawable/user"/>
+    <item
+        android:id="@+id/AdminCompanyManage"
+    android:title="@string/CompanyManage"
+    android:icon="@drawable/user"/>
+
+
+
+</menu>
