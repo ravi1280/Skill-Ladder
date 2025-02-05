@@ -12,6 +12,14 @@
         android:id="@+id/AdminCompanyManage"
     android:title="@string/CompanyManage"
     android:icon="@drawable/user"/>
+    <item
+        android:id="@+id/AdminlessonManage"
+        android:title="@string/LessonManage"
+        android:icon="@drawable/user"/>
+    <item
+    android:id="@+id/AdminProfile"
+    android:title="@string/AProfile"
+    android:icon="@drawable/user"/>
 
 
 
