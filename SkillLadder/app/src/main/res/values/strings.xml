@@ -68,9 +68,10 @@
 
     <string name="DashBoard">DashBoard</string>
     <string name="UserManage">User Manage</string>
-    <string name="CompanyManage">User Manage</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="CompanyManage">Company Manage</string>
+    <string name="LessonManage">Lessons Manage</string>
+    <string name="AProfile">Admin profile</string>
+
 
 
 </resources>

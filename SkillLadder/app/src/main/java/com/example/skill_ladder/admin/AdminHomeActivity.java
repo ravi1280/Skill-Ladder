@@ -19,6 +19,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.skill_ladder.R;
 import com.example.skill_ladder.navigation.AdminDashboardFragment;
+import com.example.skill_ladder.navigation.ManageCompanyFragment;
+import com.example.skill_ladder.navigation.ManageLessonsFragment;
+import com.example.skill_ladder.navigation.ManageUsersFragment;
 import com.google.android.material.navigation.NavigationView;
 
 public class AdminHomeActivity extends AppCompatActivity {
@@ -55,6 +58,14 @@ public class AdminHomeActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if(item.getItemId()== R.id.AdminDashBoard){
                     loadFragment(new AdminDashboardFragment());
+                } else if (item.getItemId()==R.id.adminUserManage) {
+                    loadFragment(new ManageUsersFragment());
+                }else if (item.getItemId()==R.id.AdminCompanyManage) {
+                    loadFragment(new ManageCompanyFragment());
+                }else if (item.getItemId()==R.id.AdminlessonManage) {
+                    loadFragment(new ManageLessonsFragment());
+                }else if (item.getItemId()==R.id.AdminProfile) {
+//                    loadFragment(new ManageUsersFragment());
                 }
                 toolbar.setSubtitle(item.getTitle());
                 drawerLayout.closeDrawers();
