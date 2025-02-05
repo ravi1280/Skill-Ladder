@@ -3,23 +3,23 @@
     <item
         android:id="@+id/AdminDashBoard"
         android:title="@string/DashBoard"
-        android:icon="@drawable/user"/>
+        android:icon="@drawable/dashboard"/>
     <item
         android:id="@+id/adminUserManage"
         android:title="@string/UserManage"
-        android:icon="@drawable/user"/>
+        android:icon="@drawable/users"/>
     <item
         android:id="@+id/AdminCompanyManage"
     android:title="@string/CompanyManage"
-    android:icon="@drawable/user"/>
+    android:icon="@drawable/buildingsico"/>
     <item
         android:id="@+id/AdminlessonManage"
         android:title="@string/LessonManage"
-        android:icon="@drawable/user"/>
+        android:icon="@drawable/document"/>
     <item
     android:id="@+id/AdminProfile"
     android:title="@string/AProfile"
-    android:icon="@drawable/user"/>
+    android:icon="@drawable/admin"/>
 
 
 
