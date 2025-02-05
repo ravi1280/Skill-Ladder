@@ -1,9 +1,6 @@
-package com.example.skill_ladder;
+package com.example.skill_ladder.admin;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,28 +8,19 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.skill_ladder.admin.AdminHomeActivity;
+import com.example.skill_ladder.R;
 
-public class AdminLoginActivity extends AppCompatActivity {
+public class AdminAddLessonActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_admin_login);
+        setContentView(R.layout.activity_admin_add_lesson);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-        });
-        Button button= findViewById(R.id.AdminLoginBtn01);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(AdminLoginActivity.this, AdminHomeActivity.class);
-                startActivity(intent);
-                finish();
-            }
         });
     }
 }
