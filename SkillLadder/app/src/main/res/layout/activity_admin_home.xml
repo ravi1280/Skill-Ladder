@@ -11,25 +11,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar001"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:background="@color/gcenter"
-            app:subtitle="subtitle"
-            app:subtitleTextColor="@color/glassWhite"
-            app:title="@string/app_name"
-            app:titleTextColor="@color/gend"
-            app:navigationIcon="@drawable/user" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:theme="@style/Theme.SkillLadder.AppBarOverlay">
 
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar001"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/Theme.SkillLadder.PopupOverlay"
+                app:navigationIcon="@drawable/left_slider"
+                android:background="@color/gcenter"
+                app:subtitle="DashBoard"
+                app:subtitleTextColor="@color/glassWhite"
+                app:title="@string/app_name"
+                app:titleTextColor="@color/gend"
+                />
 
-        <!--            <ImageView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="start"-->
-<!--                android:src="@drawable/left" />-->
-
+        </com.google.android.material.appbar.AppBarLayout>
 
         <FrameLayout
             android:id="@+id/FrameLayout001"

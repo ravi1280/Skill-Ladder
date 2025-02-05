@@ -6,4 +6,7 @@
     </style>
 
     <style name="Theme.SkillLadder" parent="Base.Theme.SkillLadder" />
+    <style name="Theme.SkillLadder.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.SkillLadder.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

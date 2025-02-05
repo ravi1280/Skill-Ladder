@@ -32,27 +32,30 @@ public class AdminHomeActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+
         });
 
+        loadFragment(new AdminDashboardFragment());
 
         DrawerLayout drawerLayout= findViewById(R.id.drawerLayout01);
         Toolbar toolbar = findViewById(R.id.toolbar001);
         NavigationView navigationView= findViewById(R.id.navigationView01);
 
-//        ImageView navIcon = findViewById(R.id.nav_icon);
-//        navIcon.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                drawerLayout.openDrawer(navigationView);
-//            }
-//        });
+        setSupportActionBar(toolbar);
+
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.openDrawer(navigationView);
+            }
+        });
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if(item.getItemId()== R.id.AdminDashBoard){
                     loadFragment(new AdminDashboardFragment());
                 }
-
                 toolbar.setSubtitle(item.getTitle());
                 drawerLayout.closeDrawers();
                 return false;
