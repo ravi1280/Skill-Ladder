@@ -10,5 +10,15 @@
     <color name="glassWhite">#99FFFFFF</color>
     <color name="red">#FF80AB</color>
 
+    <color name="gstart">#D1004A</color>
+    <color name="gcenter">#FF80AB</color>
+    <color name="gend">#E6E5E5</color>
+
+    <color name="chart01">#EA80FC</color>
+    <color name="chart02">#FFE57F</color>
+    <color name="chart03">#FF8A80</color>
+    <color name="chart04">#84FFFF</color>
+    <color name="chart05">#CCFF90</color>
+
 
 </resources>

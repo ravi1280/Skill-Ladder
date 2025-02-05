@@ -14,6 +14,8 @@ import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
 
+import com.example.skill_ladder.admin.AdminHomeActivity;
+
 public class Admin extends AppCompatActivity {
 
     @Override
@@ -38,7 +40,7 @@ public class Admin extends AppCompatActivity {
         springAnimation.start();
 
         new Handler().postDelayed(()->{
-            Intent intent = new Intent(Admin.this,AdminLoginActivity.class);
+            Intent intent = new Intent(Admin.this, AdminHomeActivity.class);
             startActivity(intent);
             finish();
         },2000);
