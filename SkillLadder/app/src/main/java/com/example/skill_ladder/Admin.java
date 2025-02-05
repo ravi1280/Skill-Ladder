@@ -40,7 +40,7 @@ public class Admin extends AppCompatActivity {
         springAnimation.start();
 
         new Handler().postDelayed(()->{
-            Intent intent = new Intent(Admin.this, AdminHomeActivity.class);
+            Intent intent = new Intent(Admin.this, AdminLoginActivity.class);
             startActivity(intent);
             finish();
         },2000);

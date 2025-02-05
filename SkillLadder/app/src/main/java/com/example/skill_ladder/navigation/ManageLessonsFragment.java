@@ -1,5 +1,6 @@
 package com.example.skill_ladder.navigation;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.skill_ladder.R;
+import com.example.skill_ladder.admin.AdminAddLessonActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,16 @@ public class ManageLessonsFragment extends Fragment {
         View view= inflater.inflate(R.layout.fragment_manage_lessons, container, false);
 
         RecyclerView ManageUserRecyclerView = view.findViewById(R.id.ManageLessonRV01);
+        FloatingActionButton FAB = view.findViewById(R.id.FABAddLesson01);
+        FAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent01 = new Intent(requireActivity(), AdminAddLessonActivity.class);
+                startActivity(intent01);
+
+            }
+        });
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         ManageUserRecyclerView.setLayoutManager(linearLayoutManager);
