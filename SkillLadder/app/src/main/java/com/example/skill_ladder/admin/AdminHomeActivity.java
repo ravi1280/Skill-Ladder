@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.skill_ladder.R;
 import com.example.skill_ladder.navigation.AdminDashboardFragment;
+import com.example.skill_ladder.navigation.AdminProfileFragment;
 import com.example.skill_ladder.navigation.ManageCompanyFragment;
 import com.example.skill_ladder.navigation.ManageLessonsFragment;
 import com.example.skill_ladder.navigation.ManageOtherFragment;
@@ -66,7 +67,7 @@ public class AdminHomeActivity extends AppCompatActivity {
                 }else if (item.getItemId()==R.id.AdminlessonManage) {
                     loadFragment(new ManageLessonsFragment());
                 }else if (item.getItemId()==R.id.AdminProfile) {
-//                    loadFragment(new ManageUsersFragment());
+                    loadFragment(new AdminProfileFragment());
                 }else if (item.getItemId()==R.id.ManageOther) {
                     loadFragment(new ManageOtherFragment());
                 }
