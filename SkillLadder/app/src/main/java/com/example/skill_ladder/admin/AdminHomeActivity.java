@@ -21,6 +21,7 @@ import com.example.skill_ladder.R;
 import com.example.skill_ladder.navigation.AdminDashboardFragment;
 import com.example.skill_ladder.navigation.ManageCompanyFragment;
 import com.example.skill_ladder.navigation.ManageLessonsFragment;
+import com.example.skill_ladder.navigation.ManageOtherFragment;
 import com.example.skill_ladder.navigation.ManageUsersFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -66,6 +67,8 @@ public class AdminHomeActivity extends AppCompatActivity {
                     loadFragment(new ManageLessonsFragment());
                 }else if (item.getItemId()==R.id.AdminProfile) {
 //                    loadFragment(new ManageUsersFragment());
+                }else if (item.getItemId()==R.id.ManageOther) {
+                    loadFragment(new ManageOtherFragment());
                 }
                 toolbar.setSubtitle(item.getTitle());
                 drawerLayout.closeDrawers();

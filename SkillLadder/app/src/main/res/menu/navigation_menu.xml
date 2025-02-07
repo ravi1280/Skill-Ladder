@@ -20,6 +20,10 @@
     android:id="@+id/AdminProfile"
     android:title="@string/AProfile"
     android:icon="@drawable/admin"/>
+    <item
+        android:id="@+id/ManageOther"
+        android:title="@string/mOther"
+        android:icon="@drawable/other"/>
 
 
 
