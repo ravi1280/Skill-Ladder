@@ -17,6 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SkillLadder"
         tools:targetApi="31">
+
         <activity
             android:name=".admin.AdminAddLessonActivity"
             android:exported="false" />
