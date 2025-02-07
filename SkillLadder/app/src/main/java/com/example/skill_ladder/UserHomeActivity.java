@@ -13,6 +13,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class UserHomeActivity extends AppCompatActivity {
 
     @Override
@@ -24,6 +26,14 @@ public class UserHomeActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+        FloatingActionButton buttonFAB = findViewById(R.id.floatingActionButton2);
+        buttonFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent01 = new Intent(UserHomeActivity.this,UserCartActivity.class);
+                startActivity(intent01);
+            }
         });
         ImageView imageViewHome01 = findViewById(R.id.HomeUserSearchImageView);
         imageViewHome01.setOnClickListener(new View.OnClickListener() {
