@@ -1,19 +1,32 @@
 package com.example.skill_ladder;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.skill_ladder.model.Company;
 import com.example.skill_ladder.model.customAlert;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CompanySignUpActivity extends AppCompatActivity {
 
@@ -33,32 +46,77 @@ public class CompanySignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                EditText editText01 =findViewById(R.id.CompanySignUpeditText01);
-                EditText editText02 =findViewById(R.id.CompanySignUpeditText02);
-                EditText editText03 =findViewById(R.id.CompanySignUpeditText03);
-                EditText editText04 =findViewById(R.id.CompanySignUpeditText04);
+                EditText editText01 = findViewById(R.id.CompanySignUpeditText01);
+                EditText editText02 = findViewById(R.id.CompanySignUpeditText02);
+                EditText editText03 = findViewById(R.id.CompanySignUpeditText03);
+                EditText editText04 = findViewById(R.id.CompanySignUpeditText04);
 
                 String name = editText01.getText().toString();
                 String mobile = editText02.getText().toString();
                 String email = editText03.getText().toString();
                 String password = editText04.getText().toString();
 
-                if(name.isEmpty()){
-                    customAlert.showCustomAlert(CompanySignUpActivity.this,"Error ","Please Fill The Company Name",R.drawable.cancel);
+                if (name.isEmpty()) {
+                    customAlert.showCustomAlert(CompanySignUpActivity.this, "Error ", "Please Fill The Company Name", R.drawable.cancel);
                 } else if (mobile.isEmpty()) {
-                    customAlert.showCustomAlert(CompanySignUpActivity.this,"Error ","Please Fill The Company Mobile",R.drawable.cancel);
+                    customAlert.showCustomAlert(CompanySignUpActivity.this, "Error ", "Please Fill The Company Mobile", R.drawable.cancel);
 
                 } else if (email.isEmpty()) {
-                    customAlert.showCustomAlert(CompanySignUpActivity.this,"Error ","Please Fill The Company Email",R.drawable.cancel);
+                    customAlert.showCustomAlert(CompanySignUpActivity.this, "Error ", "Please Fill The Company Email", R.drawable.cancel);
 
                 } else if (password.isEmpty()) {
-                    customAlert.showCustomAlert(CompanySignUpActivity.this,"Error ","Please Fill The Company Password",R.drawable.cancel);
+                    customAlert.showCustomAlert(CompanySignUpActivity.this, "Error ", "Please Fill The Company Password", R.drawable.cancel);
 
-                }else {
-                    customAlert.showCustomAlert(CompanySignUpActivity.this,"Success ","Your Action is Succesfully ! ",R.drawable.checked);
+                } else {
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+                    db.collection("company")
+                            .whereEqualTo("email", email)
+                            .get()
+                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    if (!queryDocumentSnapshots.isEmpty()) {
+                                        customAlert.showCustomAlert(CompanySignUpActivity.this, "Error ", "Email already exists!", R.drawable.cancel);
+                                    } else {
+
+                                        Company company = new Company(name, mobile, email, password);
+                                        db.collection("company").add(company)
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        String documentId = documentReference.getId();
+//                                                        Toast.makeText(CompanySignUpActivity.this, "Data saved successfully! Document ID: " + documentId, Toast.LENGTH_SHORT).show();
+
+                                                        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                                                        Map<String, Object> companyData = new HashMap<>();
+                                                        companyData.put("companyId", documentId);
+                                                        companyData.put("companyName", name);
+                                                        companyData.put("companyEmail", email);
+                                                        companyData.put("companyMobile", mobile);
+
+                                                        Gson gson = new Gson();
+                                                        String Cjson = gson.toJson(companyData);
+                                                        editor.putString("Company", Cjson);
+                                                        editor.apply();
+
+                                                        Intent intent = new Intent(CompanySignUpActivity.this, CompanyLogInActivity.class);
+                                                        startActivity(intent);
+
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        customAlert.showCustomAlert(CompanySignUpActivity.this, "Error ", "Error in Saving Data", R.drawable.cancel);
+
+                                                    }
+                                                });
+                                    }
+                                }
+                            });
                 }
-
 
             }
         });
@@ -67,7 +125,7 @@ public class CompanySignUpActivity extends AppCompatActivity {
         textView01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent01 = new Intent(CompanySignUpActivity.this,CompanyLogInActivity.class);
+                Intent intent01 = new Intent(CompanySignUpActivity.this, CompanyLogInActivity.class);
                 startActivity(intent01);
             }
         });
