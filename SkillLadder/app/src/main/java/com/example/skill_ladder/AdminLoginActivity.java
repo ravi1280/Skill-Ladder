@@ -2,6 +2,7 @@ package com.example.skill_ladder;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,8 +50,6 @@ public class AdminLoginActivity extends AppCompatActivity {
         TextView email = findViewById(R.id.AdminLoginedText01);
         TextView password = findViewById(R.id.AdminLoginedText02);
 
-
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,6 +84,19 @@ public class AdminLoginActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     if (document.get("email").equals(email01) && document.get("password").equals(password01)) {
+
+
+                                        // Get SharedPreferences instance
+                                        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                                        editor.putString("username", email01);
+                                        editor.putBoolean("isLoggedIn", true);
+                                        editor.apply();
+
+                                        String username = sharedPreferences.getString("username", "DefaultUser");
+                                        Log.d("username", username);
+
                                         Intent intent = new Intent(AdminLoginActivity.this, AdminHomeActivity.class);
                                         startActivity(intent);
                                         finish();
