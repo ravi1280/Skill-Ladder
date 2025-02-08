@@ -30,6 +30,12 @@ import java.util.Map;
 
 public class CompanySignUpActivity extends AppCompatActivity {
 
+    String name;
+    String mobile;
+    String email;
+    String password;
+    String documentId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,10 +57,10 @@ public class CompanySignUpActivity extends AppCompatActivity {
                 EditText editText03 = findViewById(R.id.CompanySignUpeditText03);
                 EditText editText04 = findViewById(R.id.CompanySignUpeditText04);
 
-                String name = editText01.getText().toString();
-                String mobile = editText02.getText().toString();
-                String email = editText03.getText().toString();
-                String password = editText04.getText().toString();
+                name = editText01.getText().toString();
+                mobile = editText02.getText().toString();
+                email = editText03.getText().toString();
+                password = editText04.getText().toString();
 
                 if (name.isEmpty()) {
                     customAlert.showCustomAlert(CompanySignUpActivity.this, "Error ", "Please Fill The Company Name", R.drawable.cancel);
@@ -85,22 +91,8 @@ public class CompanySignUpActivity extends AppCompatActivity {
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {
-                                                        String documentId = documentReference.getId();
-//                                                        Toast.makeText(CompanySignUpActivity.this, "Data saved successfully! Document ID: " + documentId, Toast.LENGTH_SHORT).show();
-
-                                                        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                                                        Map<String, Object> companyData = new HashMap<>();
-                                                        companyData.put("companyId", documentId);
-                                                        companyData.put("companyName", name);
-                                                        companyData.put("companyEmail", email);
-                                                        companyData.put("companyMobile", mobile);
-
-                                                        Gson gson = new Gson();
-                                                        String Cjson = gson.toJson(companyData);
-                                                        editor.putString("Company", Cjson);
-                                                        editor.apply();
+                                                        documentId = documentReference.getId();
+                                                        setSharedPreferences();
 
                                                         Intent intent = new Intent(CompanySignUpActivity.this, CompanyLogInActivity.class);
                                                         startActivity(intent);
@@ -129,5 +121,23 @@ public class CompanySignUpActivity extends AppCompatActivity {
                 startActivity(intent01);
             }
         });
+    }
+
+    private void setSharedPreferences() {
+
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Map<String, Object> companyData = new HashMap<>();
+        companyData.put("companyId", documentId);
+        companyData.put("companyName", name);
+        companyData.put("companyEmail", email);
+        companyData.put("companyMobile", mobile);
+
+        Gson gson = new Gson();
+        String Cjson = gson.toJson(companyData);
+        editor.putString("Company", Cjson);
+        editor.apply();
+
     }
 }
