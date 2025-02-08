@@ -90,7 +90,6 @@ public class UserProfileActivity extends AppCompatActivity {
                     bottomSheetDialog.dismiss();
                 }
             });
-
             bottomSheetDialog.show();
         });
 

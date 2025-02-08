@@ -22,7 +22,6 @@ public class customAlert {
         ImageView imgIcon = view.findViewById(R.id.imgIcon);
         Button btnOk = view.findViewById(R.id.btnOk);
 
-
         tvTitle.setText(title);
         tvMessage.setText(message);
         imgIcon.setImageResource(iconRes);
