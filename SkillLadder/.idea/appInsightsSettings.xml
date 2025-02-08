@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.skill_ladder" />
+                  <option name="mobileSdkAppId" value="1:790223545029:android:5fc934b4fcdd3cdd3246ac" />
+                  <option name="projectId" value="skill-ladder" />
+                  <option name="projectNumber" value="790223545029" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
