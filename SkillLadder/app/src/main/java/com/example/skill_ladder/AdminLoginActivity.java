@@ -44,37 +44,61 @@ public class AdminLoginActivity extends AppCompatActivity {
             return insets;
         });
 
-
-
         Button button= findViewById(R.id.AdminLoginBtn01);
-        TextView email = findViewById(R.id.AdminLogineditText01);
-        TextView password = findViewById(R.id.AdminLogineditText02);
+
+        TextView email = findViewById(R.id.AdminLoginedText01);
+        TextView password = findViewById(R.id.AdminLoginedText02);
+
+
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("admin").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Log.i("FireBaseLog", String.valueOf(document.get("name")));
-                                Toast.makeText(AdminLoginActivity.this, String.valueOf(document.get("name")), Toast.LENGTH_SHORT).show();
-                                if (document.get("email").equals(email.getText().toString()) && document.get("password").equals(password.getText().toString())) {
-                                    Intent intent = new Intent(AdminLoginActivity.this, AdminHomeActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    customAlert.showCustomAlert(AdminLoginActivity.this, "Invalid Credentials", "Please enter valid email and password", R.drawable.cancel);
+                String email01 = email.getText().toString();
+                String password01 = password.getText().toString();
+                String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+                if(email01.isEmpty()){
+                    customAlert.showCustomAlert(AdminLoginActivity.this, "Email is required", "Please enter your email", R.drawable.cancel);
+                    email.setError("Email is required");
+                    email.requestFocus();
+                    return;
+
+                }
+//                else if(email01.matches(emailPattern)){
+//                    customAlert.showCustomAlert(AdminLoginActivity.this, "Invalid Email", "Please enter valid email", R.drawable.cancel);
+//                    email.setError("Invalid Email");
+//                    email.requestFocus();
+//                    return;
+//                }
+                else if(password01.isEmpty()){
+                    customAlert.showCustomAlert(AdminLoginActivity.this, "Password is required", "Please enter your password", R.drawable.cancel);
+                    password.setError("Password is required");
+                    password.requestFocus();
+                    return;
+                }else {
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("admin").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    if (document.get("email").equals(email01) && document.get("password").equals(password01)) {
+                                        Intent intent = new Intent(AdminLoginActivity.this, AdminHomeActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+                                        customAlert.showCustomAlert(AdminLoginActivity.this, "Invalid Credentials", "Please enter valid email and password", R.drawable.cancel);
+                                    }
                                 }
                             }
                         }
-                    }
-                });
+                    });
+                }
 
-            }
+                }
+
         });
     }
 }

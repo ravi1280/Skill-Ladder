@@ -57,7 +57,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/AdminLogineditText01"
+            android:id="@+id/AdminLoginedText01"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
@@ -72,7 +72,7 @@
             android:textSize="14sp" />
 
         <EditText
-            android:id="@+id/AdminLogineditText02"
+            android:id="@+id/AdminLoginedText02"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
