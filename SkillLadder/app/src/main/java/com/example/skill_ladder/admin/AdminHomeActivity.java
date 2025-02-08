@@ -45,9 +45,7 @@ public class AdminHomeActivity extends AppCompatActivity {
         DrawerLayout drawerLayout= findViewById(R.id.drawerLayout01);
         Toolbar toolbar = findViewById(R.id.toolbar001);
         NavigationView navigationView= findViewById(R.id.navigationView01);
-
         setSupportActionBar(toolbar);
-
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +53,7 @@ public class AdminHomeActivity extends AppCompatActivity {
                 drawerLayout.openDrawer(navigationView);
             }
         });
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

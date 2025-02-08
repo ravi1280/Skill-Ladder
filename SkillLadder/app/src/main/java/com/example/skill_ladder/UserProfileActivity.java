@@ -64,13 +64,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
         Button showBottomSheetButton = findViewById(R.id.UserProfileBtn02);
-
         showBottomSheetButton.setOnClickListener(v -> {
 
             View bottomSheetView = getLayoutInflater().inflate(R.layout.update_password_bottom, null);
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(UserProfileActivity.this);
             bottomSheetDialog.setContentView(bottomSheetView);
-
 
             Button actionOne = bottomSheetView.findViewById(R.id.UserUpdatePasswordBtn);
             EditText text01 = bottomSheetView.findViewById(R.id.UserOldPassword);
