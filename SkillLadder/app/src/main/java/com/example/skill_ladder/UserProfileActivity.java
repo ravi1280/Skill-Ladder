@@ -32,7 +32,7 @@ public class UserProfileActivity extends AppCompatActivity {
         imageView01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+               finish();
             }
         });
         Button btn01 = findViewById(R.id.UserProfileBtn01);
@@ -61,7 +61,6 @@ public class UserProfileActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         Button showBottomSheetButton = findViewById(R.id.UserProfileBtn02);
         showBottomSheetButton.setOnClickListener(v -> {
