@@ -1,8 +1,10 @@
 package com.example.skill_ladder;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
@@ -43,6 +45,30 @@ public class Admin extends AppCompatActivity {
             Intent intent = new Intent(Admin.this, AdminLoginActivity.class);
             startActivity(intent);
             finish();
+            checkAndDeleteSharedPreferences();
         },2000);
     }
+
+    private void checkAndDeleteSharedPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs",MODE_PRIVATE);
+        long savedTime = sharedPreferences.getLong("timestamp", 0);
+        long currentTime = System.currentTimeMillis();
+
+        if ((currentTime - savedTime) > 300000) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+            Log.d("SharedPreferences", "Data expired. SharedPreferences cleared.");
+            Intent intent = new Intent(Admin.this, AdminLoginActivity.class);
+            startActivity(intent);
+            finish();
+
+        } else {
+            Intent intent = new Intent(Admin.this, AdminHomeActivity.class);
+            startActivity(intent);
+            finish();
+            Log.d("SharedPreferences", "Data is still valid.");
+        }
+    }
+
 }

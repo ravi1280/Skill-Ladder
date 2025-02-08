@@ -57,7 +57,6 @@ public class AdminProfileFragment extends Fragment {
             Log.e("AdminProfile", "No username found in SharedPreferences");
             return;
         }
-
         Log.d("AdminProfile", "Fetching admin with email: " + username);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -91,5 +90,5 @@ public class AdminProfileFragment extends Fragment {
                     }
                 });
     }
-    
+
 }

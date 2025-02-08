@@ -92,6 +92,7 @@ public class AdminLoginActivity extends AppCompatActivity {
 
                                         editor.putString("username", email01);
                                         editor.putBoolean("isLoggedIn", true);
+                                        editor.putLong("timestamp", System.currentTimeMillis());
                                         editor.apply();
 
                                         String username = sharedPreferences.getString("username", "DefaultUser");
@@ -108,7 +109,6 @@ public class AdminLoginActivity extends AppCompatActivity {
                         }
                     });
                 }
-
                 }
 
         });
