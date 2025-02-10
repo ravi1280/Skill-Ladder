@@ -156,5 +156,5 @@ public class AddJobsActivity extends AppCompatActivity {
         }
 
     }
-    
+
 }

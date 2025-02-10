@@ -1,7 +1,9 @@
 package com.example.skill_ladder;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +20,27 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.example.skill_ladder.model.customAlert;
+import com.example.skill_ladder.model.job;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class JobCompanyHomeActivity extends AppCompatActivity {
+    private CompanyJobListAdapter companyJobListAdapter;
+    private List<CompanyJob> jobdetails;
+    private LottieAnimationView lottieAnimationView;
+    private RecyclerView recyclerView;
+    FirebaseFirestore firestore;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,24 +70,69 @@ public class JobCompanyHomeActivity extends AppCompatActivity {
             }
         });
 
-        RecyclerView recyclerView = findViewById(R.id.CompanyHomeRV01);
+       lottieAnimationView = findViewById(R.id.lottie_view02);
+
+         recyclerView = findViewById(R.id.CompanyHomeRV01);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(JobCompanyHomeActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        List<CompanyJob> jobdetails = new ArrayList<>();
-        jobdetails.add(new CompanyJob("Software Engineer","2025-02-13"));
-        jobdetails.add(new CompanyJob("Software Engineer","2025-02-13"));
-        jobdetails.add(new CompanyJob("Software Engineer","2025-02-13"));
-        jobdetails.add(new CompanyJob("Software Engineer","2025-02-13"));
-        jobdetails.add(new CompanyJob("Software Engineer","2025-02-13"));
-        jobdetails.add(new CompanyJob("Software Engineer","2025-02-13"));
-        jobdetails.add(new CompanyJob("Software Engineer","2025-02-13"));
-        jobdetails.add(new CompanyJob("Software Engineer","2025-02-13"));
-        jobdetails.add(new CompanyJob("Software Engineer","2025-02-13"));
+         jobdetails = new ArrayList<>();
+        companyJobListAdapter = new CompanyJobListAdapter(jobdetails);
+        recyclerView.setAdapter(companyJobListAdapter);
 
-        CompanyJobListAdapter jobListAdapter = new CompanyJobListAdapter(jobdetails);
-        recyclerView.setAdapter(jobListAdapter);
+        loadJobs();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        firestore = FirebaseFirestore.getInstance();
+        loadJobs();
+    }
+
+    private void loadJobs() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String companyEmail = sharedPreferences.getString("companyEmail", "");
+
+        if (companyEmail.isEmpty()) {
+            Log.e("companyEmail", "No companyEmail found in SharedPreferences");
+            return;
+        }
+        firestore = FirebaseFirestore.getInstance();
+        firestore.collection("jobs")
+                .whereEqualTo("companyEmail", companyEmail)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(QuerySnapshot value, FirebaseFirestoreException error) {
+                        if (error != null) {
+                            customAlert.showCustomAlert(JobCompanyHomeActivity.this, "Error", " Fail to load data", R.drawable.cancel);
+                            return;
+                        }
+
+                        jobdetails.clear();
+
+                        for (QueryDocumentSnapshot doc : value) {
+                            String jobTitle = doc.getString("JobTitle");
+                            String date = doc.getString("ClosingDate");
+
+                            if (jobTitle != null && date != null) {
+                                jobdetails.add(new CompanyJob(jobTitle, date));
+                            }
+                        }
+
+                        if (jobdetails.isEmpty()) {
+                            recyclerView.setVisibility(View.GONE);
+                            lottieAnimationView.setVisibility(View.VISIBLE);
+                        } else {
+                            recyclerView.setVisibility(View.VISIBLE);
+                            lottieAnimationView.setVisibility(View.GONE);
+                        }
+
+                        companyJobListAdapter.notifyDataSetChanged();
+                    }
+                });
+
     }
 }
 class CompanyJob {
