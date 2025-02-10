@@ -81,7 +81,7 @@ public class JobCompanyHomeActivity extends AppCompatActivity {
         companyJobListAdapter = new CompanyJobListAdapter(jobdetails);
         recyclerView.setAdapter(companyJobListAdapter);
 
-        loadJobs();
+//        loadJobs();
     }
 
     @Override
@@ -101,7 +101,7 @@ public class JobCompanyHomeActivity extends AppCompatActivity {
         }
         firestore = FirebaseFirestore.getInstance();
         firestore.collection("jobs")
-                .whereEqualTo("companyEmail", companyEmail)
+                .whereEqualTo("CompanyEmail", companyEmail)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(QuerySnapshot value, FirebaseFirestoreException error) {
