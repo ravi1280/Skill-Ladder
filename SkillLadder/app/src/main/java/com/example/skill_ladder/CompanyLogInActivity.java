@@ -77,7 +77,6 @@ public class CompanyLogInActivity extends AppCompatActivity {
                                     if (queryDocumentSnapshots.isEmpty()) {
                                         customAlert.showCustomAlert(CompanyLogInActivity.this,"Error ","Invalid UserName or Password",R.drawable.cancel);
                                     } else {
-                                        customAlert.showCustomAlert(CompanyLogInActivity.this,"Success ","Login Success",R.drawable.checked);
                                         Intent intent01 = new Intent(CompanyLogInActivity.this, JobCompanyHomeActivity.class);
                                         startActivity(intent01);
                                     }
