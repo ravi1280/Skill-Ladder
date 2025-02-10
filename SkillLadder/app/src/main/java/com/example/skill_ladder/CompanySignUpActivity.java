@@ -91,7 +91,7 @@ public class CompanySignUpActivity extends AppCompatActivity {
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {
-                                                        documentId = documentReference.getId();
+//                                                        documentId = documentReference.getId();
                                                         setSharedPreferences();
 
                                                         Intent intent = new Intent(CompanySignUpActivity.this, CompanyLogInActivity.class);
@@ -125,18 +125,23 @@ public class CompanySignUpActivity extends AppCompatActivity {
 
     private void setSharedPreferences() {
 
+//        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//
+//        Map<String, Object> companyData = new HashMap<>();
+//        companyData.put("companyId", documentId);
+//        companyData.put("companyName", name);
+//        companyData.put("companyEmail", email);
+//        companyData.put("companyMobile", mobile);
+//
+//        Gson gson = new Gson();
+//        String Cjson = gson.toJson(companyData);
+//        editor.putString("Company", Cjson);
+//        editor.apply();
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        Map<String, Object> companyData = new HashMap<>();
-        companyData.put("companyId", documentId);
-        companyData.put("companyName", name);
-        companyData.put("companyEmail", email);
-        companyData.put("companyMobile", mobile);
-
-        Gson gson = new Gson();
-        String Cjson = gson.toJson(companyData);
-        editor.putString("Company", Cjson);
+        editor.putString("companyEmail", email);
         editor.apply();
 
     }

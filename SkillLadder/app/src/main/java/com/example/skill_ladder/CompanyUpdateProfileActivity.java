@@ -1,21 +1,43 @@
 package com.example.skill_ladder;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.skill_ladder.model.Admin;
+import com.example.skill_ladder.model.Company;
 import com.example.skill_ladder.model.customAlert;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CompanyUpdateProfileActivity extends AppCompatActivity {
+    private  TextView CompanyNameView, CompanyEmailView;
+
+    private EditText CompanyNameEdit, CompanyEmailEdit, CompanyMobileEdit, CompanyPasswordEdit;
+    private FirebaseFirestore firestore;
+    ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +50,33 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
             return insets;
         });
 
+        CompanyNameView = findViewById(R.id.CompanyProfiletextView01);
+        CompanyEmailView = findViewById(R.id.CompanyProfiletexview02);
+
+        CompanyNameEdit = findViewById(R.id.CompanyProfileDataText01);
+        CompanyEmailEdit = findViewById(R.id.CompanyProfileDataText02);
+        CompanyMobileEdit = findViewById(R.id.CompanyProfileDataText03);
+        CompanyPasswordEdit = findViewById(R.id.CompanyProfileDataText04);
+
+
+        fillProfileDetails();
+
         ImageView imageView01 = findViewById(R.id.CompanyProfileBackIcon);
         imageView01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                finish();
             }
         });
+
+        Button updateButton = findViewById(R.id.CompanyProfileBtn01);
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                profileUpdateDetails();
+            }
+        });
+
 
         Button showBottomSheetButton = findViewById(R.id.CompanyProfileBtn02);
 
@@ -62,12 +104,156 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
                 } else if (reNewPassword.isEmpty()) {
                     customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Please Fill Re-Type Password!", R.drawable.cancel);
                 } else {
-                    customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Success", "Password Updated Successfully!", R.drawable.checked);
-                    bottomSheetDialog.dismiss();
+                    if (oldpassword.equals(CompanyPasswordEdit.getText().toString().trim())){
+
+                        if(newPassword.equals(reNewPassword)){
+                            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                            String companyEmail = sharedPreferences.getString("companyEmail", "");
+                            firestore = FirebaseFirestore.getInstance();
+                            firestore.collection("company")
+                                    .whereEqualTo("email", companyEmail)
+                                    .whereEqualTo("password", oldpassword)
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                                    String documentId = document.getId();
+                                                    Map<String, Object> updatedData = new HashMap<>();
+                                                    updatedData.put("password", newPassword);
+                                                    firestore.collection("company")
+                                                            .document(documentId)
+                                                            .update(updatedData)
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void unused) {
+                                                                    customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Success", "Password Updated Successfully!", R.drawable.checked);
+                                                                    bottomSheetDialog.dismiss();
+                                                                }
+                                                            })
+                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Password Not Updated!", R.drawable.cancel);
+                                                                }
+                                                            });
+                                                }
+                                            } else {
+                                                customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Old Password Not Matched!", R.drawable.cancel);
+                                            }
+                                        }
+                                    });
+
+                        }else {
+                            customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Retype Password Not Matched!", R.drawable.cancel);
+                        }
+
+                    }else {
+                        customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Old Password Not Matched!", R.drawable.cancel);
+                    }
+
+
                 }
             });
-
             bottomSheetDialog.show();
         });
+    }
+
+    private void fillProfileDetails (){
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String companyEmail = sharedPreferences.getString("companyEmail", "");
+
+        if (companyEmail.isEmpty()) {
+            Log.e("companyEmail", "No companyEmail found in SharedPreferences");
+            return;
+        }
+        Log.d("companyEmail", "companyEmail " + companyEmail);
+
+        firestore = FirebaseFirestore.getInstance();
+        firestore.collection("company")
+                .whereEqualTo("email", companyEmail)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (queryDocumentSnapshots.isEmpty()) {
+                        Log.d("CompanyProfile", "No company found for email: " + companyEmail);
+                        return;
+                    }
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        if (document.exists()) {
+                            CompanyNameView.setText(document.getString("name"));
+                            CompanyEmailView.setText(document.getString("email"));
+                            CompanyNameEdit.setText(document.getString("name"));
+                            CompanyEmailEdit.setText(document.getString("email"));
+                            CompanyMobileEdit.setText( document.getString("mobile"));
+                            CompanyPasswordEdit.setText(document.getString("password"));
+                            Log.d("CompanyProfile", "Company profile loaded successfully.");
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("CompanyProfile", "Error fetching company data", e);
+                    }
+                });
+    }
+    private void profileUpdateDetails(){
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String companyEmail = sharedPreferences.getString("companyEmail", "");
+
+        if (companyEmail.isEmpty()) {
+            Log.e("companyEmail", "No companyEmail found in SharedPreferences");
+            return;
+        }
+        Log.d("companyEmail", "companyEmail " + companyEmail);
+
+        firestore = FirebaseFirestore.getInstance();
+        firestore.collection("company")
+                .whereEqualTo("email", companyEmail)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots.isEmpty()) {
+                            Log.d("Firestore", "No company found with email: " + companyEmail);
+                            return;
+                        }
+
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            String documentId = document.getId();
+
+                            String name= CompanyNameEdit.getText().toString();
+                            String mobile= CompanyMobileEdit.getText().toString();
+
+                            Map<String, Object> updatedData = new HashMap<>();
+                            updatedData.put("name", name);
+                            updatedData.put("mobile", mobile);
+
+                            firestore.collection("company")
+                                    .document(documentId)
+                                    .update(updatedData)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            recreate();
+                                            Log.i("Firestore", "Company profile updated successfully.");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.e("Firestore", "Error updating company profile", e);
+                                        }
+                                    });
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Firestore", "Error fetching company data", e);
+                    }
+                });
+
     }
 }

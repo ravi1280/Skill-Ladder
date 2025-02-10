@@ -1,8 +1,10 @@
 package com.example.skill_ladder;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,13 +45,15 @@ public class CompanyLogInActivity extends AppCompatActivity {
         button01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-//                String json = sharedPreferences.getString("Company", null);
-//
-//                Gson gson = new Gson();
-//                Map<String, Object> companyData = gson.fromJson(json, Map.class);
-//                String name = (String) companyData.get("companyName");
-//                Toast.makeText(CompanyLogInActivity.this, name, Toast.LENGTH_SHORT).show();
+                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                String companyEmail = sharedPreferences.getString("companyEmail", ""); // Default is empty string
+
+                if (companyEmail.isEmpty()) {
+                    Log.e("companyEmail", "No username found in SharedPreferences");
+                    customAlert.showCustomAlert(CompanyLogInActivity.this,"Error ","Please Sign Up First",R.drawable.cancel);
+                    return;
+                }
+                Log.d("companyEmail", "companyEmail " + companyEmail);
 
 
                 EditText editText01 =findViewById(R.id.CompanyLogineditText01);
