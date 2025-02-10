@@ -30,7 +30,7 @@
         app:srcCompat="@drawable/left" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/AddJobBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -53,9 +53,11 @@
         app:layout_constraintTop_toBottomOf="@+id/textView8">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/AddJobEditText01"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Company Name"
+            android:focusable="false"
             android:textSize="14sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -71,9 +73,11 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/AddJobEditText02"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Company Email"
+            android:focusable="false"
             android:textSize="14sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -89,8 +93,10 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/AddJobEditText03"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="false"
             android:hint="Company Mobile"
             android:textSize="14sp" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -107,6 +113,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/AddJobEditText04"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Job Title"
@@ -117,23 +124,36 @@
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:text="Select Job Closing Date"
         android:textColor="@color/red"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout4" />
 
     <CalendarView
-        android:id="@+id/calendarView"
+        android:id="@+id/calendarView01"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/AddJobBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+    <TextView
+        android:id="@+id/AddjobDateText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:textAlignment="textEnd"
+        android:textColor="#FF4081"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView9"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4" />
 </androidx.constraintlayout.widget.ConstraintLayout>
