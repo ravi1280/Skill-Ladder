@@ -121,15 +121,19 @@ public class JobCompanyHomeActivity extends AppCompatActivity {
                             }
                         }
 
-                        if (jobdetails.isEmpty()) {
-                            recyclerView.setVisibility(View.GONE);
-                            lottieAnimationView.setVisibility(View.VISIBLE);
-                        } else {
-                            recyclerView.setVisibility(View.VISIBLE);
-                            lottieAnimationView.setVisibility(View.GONE);
-                        }
+                        runOnUiThread(() -> {
+                            if (jobdetails.isEmpty()) {
+                                recyclerView.setVisibility(View.GONE);
+                                lottieAnimationView.setVisibility(View.VISIBLE);
+                            } else {
+                                recyclerView.setVisibility(View.VISIBLE);
+                                lottieAnimationView.setVisibility(View.GONE);
+                            }
 
-                        companyJobListAdapter.notifyDataSetChanged();
+                            companyJobListAdapter.notifyDataSetChanged();
+                        });
+
+
                     }
                 });
 
