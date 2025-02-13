@@ -138,8 +138,8 @@ public class AdminProfileFragment extends Fragment {
                                             @Override
                                             public void onSuccess(Void unused) {
                                                 customAlert.showCustomAlert(getContext(), "Success", "Admin Name Updated Successfully!", R.drawable.checked);
-                                                FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-                                                ft.detach(AdminProfileFragment.this).attach(AdminProfileFragment.this).commit();
+                                                AdminName.setText(AdminNameED.getText().toString().trim());
+                                                AdminNameED.clearFocus();
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -205,8 +205,8 @@ public class AdminProfileFragment extends Fragment {
                                                                 public void onSuccess(Void unused) {
                                                                     customAlert.showCustomAlert(getContext(), "Success", "Password Updated Successfully!", R.drawable.checked);
                                                                     bottomSheetDialog.dismiss();
-                                                                    FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-                                                                    ft.detach(AdminProfileFragment.this).attach(AdminProfileFragment.this).commit();
+                                                                    AdminPasswordED.setText(newPassword);
+
                                                                 }
                                                             })
                                                             .addOnFailureListener(new OnFailureListener() {
