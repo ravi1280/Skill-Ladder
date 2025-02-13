@@ -1,16 +1,28 @@
 package com.example.skill_ladder.model;
 
 public class Company {
+
+    private String id;
     private String name;
     private String mobile;
     private String email;
-    private String password;
 
-    public Company(String name, String mobile, String email, String password) {
+    private boolean isActive;
+
+    public Company(String id, String name, String mobile, String email, boolean isActive) {
+        this.id = id;
         this.name = name;
         this.mobile = mobile;
         this.email = email;
-        this.password = password;
+        this.isActive = isActive;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -37,11 +49,15 @@ public class Company {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+
+
+    public boolean isActive() {
+        return isActive;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setActive(boolean active) {
+        isActive = active;
     }
+
+
 }

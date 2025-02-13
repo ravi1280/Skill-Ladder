@@ -21,9 +21,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.skill_ladder.model.JobField;
 import com.example.skill_ladder.model.customAlert;
 import com.example.skill_ladder.model.job;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -65,8 +67,28 @@ public class JobCompanyHomeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent02 = new Intent(JobCompanyHomeActivity.this,AddJobsActivity.class);
-                startActivity(intent02);
+                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                String companyEmail = sharedPreferences.getString("companyEmail", "");
+
+                firestore = FirebaseFirestore.getInstance();
+                firestore.collection("company")
+                        .whereEqualTo("email", companyEmail)
+                        .whereEqualTo("isActive", true)
+                        .get()
+                        .addOnSuccessListener(queryDocumentSnapshots -> {
+                            if (!queryDocumentSnapshots.isEmpty()) {
+                                Intent intent02 = new Intent(JobCompanyHomeActivity.this, AddJobsActivity.class);
+                                startActivity(intent02);
+                            } else {
+                                customAlert.showCustomAlert(JobCompanyHomeActivity.this, "Error",
+                                        "You do not have access to add a job. Please ensure your company is active.", R.drawable.cancel);
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e("Firestore", "Error fetching job fields", e);
+                        });
+
+
             }
         });
 

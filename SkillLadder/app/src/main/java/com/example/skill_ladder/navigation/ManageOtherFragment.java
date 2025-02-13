@@ -111,7 +111,7 @@ public class ManageOtherFragment extends Fragment {
 
                     jobFieldList.clear();
                     for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        String id = documentSnapshot.getId(); // Get the document ID
+                        String id = documentSnapshot.getId();
                         String name = documentSnapshot.getString("name");
                         boolean isActive = Boolean.TRUE.equals(documentSnapshot.getBoolean("isActive"));
 
@@ -251,10 +251,8 @@ public class ManageOtherFragment extends Fragment {
                     .addOnSuccessListener(documentReference -> {
                         Log.d("Firestore", "Job Title added with ID: " + documentReference.getId());
                         Toast.makeText(getContext(), "Job Title Added", Toast.LENGTH_SHORT).show();
-//                        spinner.setSelection(0);
                         jobTitle01.setText("");
                         loadjobTitles();
-//                        refresh();
                     })
                     .addOnFailureListener(e -> {
                         Log.e("Firestore", "Error adding job title", e);
@@ -262,7 +260,6 @@ public class ManageOtherFragment extends Fragment {
                     });
 
         }
-
 
     }
 
