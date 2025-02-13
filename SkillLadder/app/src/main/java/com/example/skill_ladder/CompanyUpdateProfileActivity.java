@@ -36,7 +36,7 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
 
     private EditText CompanyNameEdit, CompanyEmailEdit, CompanyMobileEdit, CompanyPasswordEdit;
     private FirebaseFirestore firestore;
-    ;
+
 
 
     @Override
