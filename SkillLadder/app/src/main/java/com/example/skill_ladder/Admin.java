@@ -54,7 +54,7 @@ public class Admin extends AppCompatActivity {
         long savedTime = sharedPreferences.getLong("timestamp", 0);
         long currentTime = System.currentTimeMillis();
 
-        if ((currentTime - savedTime) > 60000) {
+        if ((currentTime - savedTime) > 6000000) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
             editor.apply();

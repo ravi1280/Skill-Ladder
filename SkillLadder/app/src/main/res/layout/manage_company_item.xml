@@ -32,12 +32,12 @@
             android:id="@+id/ManageCompanyTV01"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/nunito_regular"
             android:text="TextView"
             android:textAlignment="textStart"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView11"
+            android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/ManageCompanyBtn01"
             app:layout_constraintStart_toEndOf="@+id/imageView11"
             app:layout_constraintTop_toTopOf="@+id/imageView11" />
@@ -49,8 +49,34 @@
             android:layout_marginEnd="16dp"
             android:backgroundTint="#80D8FF"
             android:text="Active"
+            android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView11"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imageView11" />
+
+        <TextView
+            android:id="@+id/ManageCompanyTV02"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="TextView"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/ManageCompanyTV03"
+            app:layout_constraintEnd_toStartOf="@+id/ManageCompanyBtn01"
+            app:layout_constraintStart_toEndOf="@+id/imageView11"
+            app:layout_constraintTop_toBottomOf="@+id/ManageCompanyTV01" />
+
+        <TextView
+            android:id="@+id/ManageCompanyTV03"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="TextView"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView11"
+            app:layout_constraintEnd_toStartOf="@+id/ManageCompanyBtn01"
+            app:layout_constraintStart_toEndOf="@+id/imageView11" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

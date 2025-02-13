@@ -85,9 +85,15 @@ public class CompanySignUpActivity extends AppCompatActivity {
                                     if (!queryDocumentSnapshots.isEmpty()) {
                                         customAlert.showCustomAlert(CompanySignUpActivity.this, "Error ", "Email already exists!", R.drawable.cancel);
                                     } else {
+                                        Map<String, Object> CompanyDetails01 = new HashMap<>();
+                                        CompanyDetails01.put("name", name);
+                                        CompanyDetails01.put("mobile", mobile);
+                                        CompanyDetails01.put("email",email);
+                                        CompanyDetails01.put("password", password);
+                                        CompanyDetails01.put("isActive", true);
 
-                                        Company company = new Company(name, mobile, email, password);
-                                        db.collection("company").add(company)
+
+                                        db.collection("company").add(CompanyDetails01)
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {
