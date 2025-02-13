@@ -1,6 +1,5 @@
 package com.example.skill_ladder.navigation;
 
-import android.nfc.Tag;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.skill_ladder.R;
+import com.example.skill_ladder.model.JobField;
 import com.example.skill_ladder.model.customAlert;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -29,6 +29,9 @@ import java.util.Map;
 public class ManageOtherFragment extends Fragment {
 
     EditText jobFiled,jobTitle;
+    RecyclerView ManageOtherFieldRV,ManageOtherTitledRV;
+    List<JobField> jobFieldList;
+    FieldListAdapter fieldListAdapter;
 
 
 
@@ -49,30 +52,29 @@ public class ManageOtherFragment extends Fragment {
             }
         });
 
-
-
-
-        RecyclerView ManageOtherFieldRV = view.findViewById(R.id.ManageOtherRecyclerView01);
+        ManageOtherFieldRV = view.findViewById(R.id.ManageOtherRecyclerView01);
         LinearLayoutManager linearLayoutManager01 = new LinearLayoutManager(requireActivity());
         linearLayoutManager01.setOrientation(LinearLayoutManager.HORIZONTAL);
         ManageOtherFieldRV.setLayoutManager(linearLayoutManager01);
+        jobFieldList = new ArrayList<>();
+        fieldListAdapter = new FieldListAdapter(jobFieldList);
+        ManageOtherFieldRV.setAdapter(fieldListAdapter);
+
+        loadjobFields();
 
 
-        RecyclerView ManageOtherTitledRV = view.findViewById(R.id.ManageOtherRecyclerView02);
+
+
+
+
+
+
+
+
+        ManageOtherTitledRV = view.findViewById(R.id.ManageOtherRecyclerView02);
         LinearLayoutManager linearLayoutManager02 = new LinearLayoutManager(requireActivity());
         linearLayoutManager02.setOrientation(LinearLayoutManager.HORIZONTAL);
         ManageOtherTitledRV.setLayoutManager(linearLayoutManager02);
-
-        List<Field> fieldDetails = new ArrayList<>();
-        fieldDetails.add(new Field("Management","Active"));
-        fieldDetails.add(new Field("Management","Active"));
-        fieldDetails.add(new Field("Management","Deactive"));
-        fieldDetails.add(new Field("Management","Active"));
-        fieldDetails.add(new Field("Management","Deactive"));
-
-        FieldListAdapter fieldListAdapter = new FieldListAdapter(fieldDetails);
-        ManageOtherFieldRV.setAdapter(fieldListAdapter);
-
         List<Title> titleDetails = new ArrayList<>();
         titleDetails.add(new Title("Quality Assursance","Active"));
         titleDetails.add(new Title("Quality Assursance","Active"));
@@ -84,60 +86,69 @@ public class ManageOtherFragment extends Fragment {
         ManageOtherTitledRV.setAdapter(titleListAdapter);
         return view;
     }
+    private void loadjobFields(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("JobFields")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    jobFieldList.clear();
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        String id = documentSnapshot.getId(); // Get the document ID
+                        String name = documentSnapshot.getString("name");
+                        boolean isActive = Boolean.TRUE.equals(documentSnapshot.getBoolean("isActive"));
+
+                        jobFieldList.add(new JobField(id, name, isActive));
+                    }
+                    fieldListAdapter.notifyDataSetChanged();
+
+                })
+                .addOnFailureListener(e -> {
+                });
+    }
 
     private void addFiled(){
         String jobfiled = jobFiled.getText().toString();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-// Add Job Field
         Map<String, Object> jobField = new HashMap<>();
         jobField.put("name", jobfiled);
         jobField.put("isActive", true);
 
-// Add the document to the "JobFields" collection
         db.collection("JobFields")
                 .add(jobField)
                 .addOnSuccessListener(documentReference -> {
                     customAlert.showCustomAlert(getContext(),"Success","Successfully Add Field",R.drawable.checked);
-                    jobFiled.setText("");
-//                    Toast.makeText(getContext(),"Job field added with ID: " + documentReference.getId(),Toast.LENGTH_SHORT).show();
+                    jobFiled.setText(""); Toast.makeText(getContext(),"Job field added with ID: " + documentReference.getId(),Toast.LENGTH_SHORT).show();
 
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(getContext(),"Job field added Error" ,Toast.LENGTH_SHORT).show();
+                    customAlert.showCustomAlert(getContext(),"Error","Job field added Error",R.drawable.cancel);
+
                 });
 
-
-    }
-}
-
-class Field {
-    String FiledName;
-    String FStatus;
-    public Field(String name,String status ) {
-
-        this.FiledName = name;
-        this.FStatus = status;
     }
 }
 
 class FieldListAdapter extends RecyclerView.Adapter<FieldListAdapter.FieldViewHolder> {
-    private final List<Field> fielddetails;
+    private final List<JobField> fielddetails;
 
-    public FieldListAdapter(List<Field> fdetails) {
+    public FieldListAdapter(List<JobField> fdetails) {
         this.fielddetails = fdetails;
     }
 
     static class FieldViewHolder extends RecyclerView.ViewHolder {
 
-        TextView fName;
-        Button active;
+        TextView jobFieldNameTextView;
+        Button jobFieldStatus;
         View ContainerView;
         public FieldViewHolder(@NonNull View itemView) {
             super(itemView);
-            fName = itemView.findViewById(R.id.ManageFieldtextView01);
-            active = itemView.findViewById(R.id.ManageFieldBtn);
+            jobFieldNameTextView = itemView.findViewById(R.id.ManageFieldtextView01);
+            jobFieldStatus = itemView.findViewById(R.id.ManageFieldBtn);
             ContainerView = itemView;
         }
     }
@@ -153,29 +164,38 @@ class FieldListAdapter extends RecyclerView.Adapter<FieldListAdapter.FieldViewHo
 
     @Override
     public void onBindViewHolder(@NonNull FieldViewHolder holder, int position) {
-        Field FDetails = fielddetails.get(position);
-        holder.fName.setText(FDetails.FiledName);
-        holder.active.setText(FDetails.FStatus);
-
-        String Status = FDetails.FStatus.toString();
-
-        holder.active.setOnClickListener(new View.OnClickListener() {
+        JobField FDetails = fielddetails.get(position);
+        holder.jobFieldNameTextView.setText(FDetails.getName());
+        holder.jobFieldStatus.setText(FDetails.isActive() ? "Deactivate" : "Activate");
+        holder.jobFieldStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (FDetails.FStatus.equalsIgnoreCase("Active")) {
-                    FDetails.FStatus = "Deactive";
-                } else {
-                    FDetails.FStatus = "Active";
-                }
-
-                // Update button text
-                holder.active.setText(FDetails.FStatus);
-
-                // Notify the adapter to refresh the view
-                notifyItemChanged(position);
+                toggleJobFieldStatus(FDetails, holder);
             }
         });
+
+    }
+    private void toggleJobFieldStatus(JobField jobField, FieldViewHolder holder) {
+        boolean newStatus = !jobField.isActive(); // Toggle status
+
+        // Update Firestore
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("JobFields").document(jobField.getId())
+                .update("isActive", newStatus)
+                .addOnSuccessListener(aVoid -> {
+                    // Update local object
+                    jobField.setActive(newStatus);
+
+                    // Update UI
+//                    holder.jobFieldNameTextView.setText(newStatus ? "Active" : "Inactive");
+
+                    holder.jobFieldStatus.setText(newStatus ? "Deactivate" : "Activate");
+
+                    Toast.makeText(holder.itemView.getContext(), "Status updated", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(holder.itemView.getContext(), "Failed to update", Toast.LENGTH_SHORT).show();
+                });
     }
 
 
