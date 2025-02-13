@@ -1,5 +1,7 @@
 package com.example.skill_ladder;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,6 +92,8 @@ class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewHolder> 
         TextView CompanyJobTitle;
         TextView CompanyJobClosingDate;
 
+        ImageView callImage, smsImage;
+
         View ContainerView;
 
         public JobViewHolder(@NonNull View itemView) {
@@ -98,6 +102,8 @@ class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewHolder> 
             CompanyEmail = itemView.findViewById(R.id.jobCompanyEmail);
             CompanyJobTitle = itemView.findViewById(R.id.CompanyTV01);
             CompanyJobClosingDate = itemView.findViewById(R.id.jobCompanyTV02);
+            callImage = itemView.findViewById(R.id.CompanyCallImageView);
+            smsImage = itemView.findViewById(R.id.CompanySmsImageView);
             ContainerView = itemView;
         }
     }
@@ -121,6 +127,28 @@ class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewHolder> 
 
         String cname = jobDetails.companyName;
         String cnumber = jobDetails.companyNumber;
+
+        holder.callImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Intent.ACTION_DIAL);
+                i.setData(Uri.parse("tel:"+jobDetails.companyNumber));
+                view.getContext().startActivity(i);
+
+            }
+        });
+        holder.smsImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                intent.setData(Uri.parse("smsto:" + jobDetails.companyNumber)); // Replace contact.getMobile() with the desired phone number
+                intent.putExtra("sms_body", "Hello! Start Your Conversation."); // Optional: Pre-fill the SMS body
+
+                view.getContext().startActivity(intent);
+
+
+            }
+        });
 
         holder.ContainerView.setOnClickListener(new View.OnClickListener() {
             @Override
