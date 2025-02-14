@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +41,7 @@ public class ManageLessonsFragment extends Fragment {
     RecyclerView ManageLessonRecyclerView;
     Spinner spinner;
     String SelectedName;
+    EditText search;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,6 +60,16 @@ public class ManageLessonsFragment extends Fragment {
         });
         spinner = view.findViewById(R.id.ManageLessonspinner001);
         loadSpinner();
+
+        search = view.findViewById(R.id.manageLessoneditText01);
+
+        ImageView imageView = view.findViewById(R.id.manageLessonSearch);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchData();
+            }
+        });
 
        ManageLessonRecyclerView = view.findViewById(R.id.ManageLessonRV01);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireActivity());
@@ -114,7 +127,6 @@ public class ManageLessonsFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 JobField selectedField = jobFieldList.get(position);
                 Log.d("Spinner", "Selected Job Field ID: " + selectedField.getId());
-//                SelectedID = selectedField.getId();
                 SelectedName =selectedField.getName();
                 loadjobTitlesData();
 
@@ -136,6 +148,37 @@ public class ManageLessonsFragment extends Fragment {
 
         db.collection("lessons")
                 .whereEqualTo("jobField", SelectedName)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    lDetails.clear();
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        String id = documentSnapshot.getId();
+                        String lessonName = documentSnapshot.getString("lessonName");
+                        boolean isActive = Boolean.TRUE.equals(documentSnapshot.getBoolean("active"));
+
+                        lDetails.add(new Lesson(id,lessonName,isActive));
+                    }
+                    lessonListAdapter.notifyDataSetChanged();
+
+                })
+                .addOnFailureListener(e -> {
+
+                });
+    }
+
+    private void searchData(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String searchValue = search.getText().toString().trim();
+
+        if(searchValue.isEmpty()){
+            loadLessonDate();
+            return;
+        }
+
+        db.collection("lessons")
+                .whereGreaterThanOrEqualTo("lessonName", searchValue)
+                .whereLessThanOrEqualTo("lessonName", searchValue + "\uf8ff")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
 
