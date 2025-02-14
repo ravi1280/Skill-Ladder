@@ -3,8 +3,11 @@ package com.example.skill_ladder.admin;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -14,9 +17,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.skill_ladder.R;
+import com.example.skill_ladder.model.JobField;
+import com.example.skill_ladder.model.JobTitle;
 import com.example.skill_ladder.model.Lesson;
 import com.example.skill_ladder.model.SubTopic;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -24,9 +30,12 @@ import java.util.List;
 
 public class AdminAddLessonActivity extends AppCompatActivity {
 
-    private EditText jobFieldEditText, jobTitleEditText, lessonNameEditText, subTopicNameEditText, contentTextEditText, webUrlEditText, ytVideoUrlEditText, StatusEditText01;
+    private EditText  lessonNameEditText,lessonPriceEditText, subTopicNameEditText, contentTextEditText, webUrlEditText, ytVideoUrlEditText;
     private Button addSubTopicButton, saveLessonButton;
+    private Spinner SpjobField, SpjobTitle ;
     private List<SubTopic> subTopics = new ArrayList<>();
+
+    private String SelectedJobFiledID,SelectedJobFieldName,SelectedJobTitleName;
     private FirebaseFirestore db;
 
     @Override
@@ -40,18 +49,19 @@ public class AdminAddLessonActivity extends AppCompatActivity {
             return insets;
         });
 
-// Initialize Views
-        jobFieldEditText = findViewById(R.id.jobFieldEditText);
-        jobTitleEditText = findViewById(R.id.jobTitleEditText);
+
+        SpjobField = findViewById(R.id.JobFieldSpinner);
+        SpjobTitle = findViewById(R.id.JobtitleSpinner);
+
+
         lessonNameEditText = findViewById(R.id.lessonNameEditText);
         subTopicNameEditText = findViewById(R.id.subTopicNameEditText);
         contentTextEditText = findViewById(R.id.contentTextEditText);
         webUrlEditText = findViewById(R.id.webUrlEditText);
         ytVideoUrlEditText = findViewById(R.id.ytVideoUrlEditText);
+        lessonPriceEditText = findViewById(R.id.lessonPriceEditText);
 
-        StatusEditText01 = findViewById(R.id.StatusEditText01);
-        StatusEditText01.setText("Active");
-        StatusEditText01.setEnabled(false);
+
 
         addSubTopicButton = findViewById(R.id.addSubTopicButton);
         saveLessonButton = findViewById(R.id.saveLessonButton);
@@ -70,7 +80,125 @@ public class AdminAddLessonActivity extends AppCompatActivity {
             }
         });
 
+        loadJobFieldSpinner();
+        loadJobTitleSpinner();
+
     }
+    private void loadJobFieldSpinner(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("JobFields")
+                .whereEqualTo("isActive", true)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<JobField> jobFieldList = new ArrayList<>();
+                    List<String> fieldNames = new ArrayList<>();
+
+                    jobFieldList.add(new JobField("", "Select Field ---", true));
+                    fieldNames.add("Select Field ---");
+
+                    for (DocumentSnapshot document : queryDocumentSnapshots) {
+                        JobField jobField = document.toObject(JobField.class);
+                        if (jobField != null) {
+                            jobField.setId(document.getId());
+                            jobFieldList.add(jobField);
+                            fieldNames.add(jobField.getName());
+                        }
+                    }
+
+                    updateFieldSpinner(fieldNames, jobFieldList);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error fetching job fields", e);
+                });
+
+    }
+
+    private void updateFieldSpinner(List<String> fieldNames, List<JobField> jobFieldList) {
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(AdminAddLessonActivity.this,android.R.layout.simple_spinner_item, fieldNames);
+        adapter.setDropDownViewResource(R.layout.coustom_spinner_dropdown);
+        SpjobField.setAdapter(adapter);
+
+
+        SpjobField.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                JobField selectedField = jobFieldList.get(position);
+                Log.d("Spinner", "Selected Job Field ID: " + selectedField.getId());
+                SelectedJobFiledID = selectedField.getId();
+                SelectedJobFieldName =selectedField.getName();
+
+                loadJobTitleSpinner();
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+    }
+
+    private void loadJobTitleSpinner(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("JobTitles")
+                .whereEqualTo("fieldId", SelectedJobFiledID)
+                .whereEqualTo("isActive", true)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<JobTitle> JobTitleList = new ArrayList<>();
+                    List<String> titleNames = new ArrayList<>();
+
+//                    JobTitleList.add(new JobTitle("", "Select Field ---", true));
+//                    fieldNames.add("Select Field ---");
+
+                    for (DocumentSnapshot document : queryDocumentSnapshots) {
+                        JobTitle jobTitle = document.toObject(JobTitle.class);
+                        if (jobTitle != null) {
+                            jobTitle.setId(document.getId());
+
+                            JobTitleList.add(jobTitle);
+                            titleNames.add(jobTitle.getName());
+                        }
+                    }
+
+                    updateTitleSpinner(titleNames, JobTitleList);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error fetching job fields", e);
+                });
+
+    }
+
+    private void updateTitleSpinner(List<String> titleNames, List<JobTitle> JobTitleList) {
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(AdminAddLessonActivity.this,android.R.layout.simple_spinner_item, titleNames);
+        adapter.setDropDownViewResource(R.layout.coustom_spinner_dropdown);
+        SpjobTitle.setAdapter(adapter);
+
+
+        SpjobTitle.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (JobTitleList.isEmpty() || position < 0 || position >= JobTitleList.size()) {
+                    return;
+                }
+                JobTitle selectedTitle = JobTitleList.get(position);
+                Log.d("Spinner", "Selected Job Field ID: " + selectedTitle.getId());
+//                SelectedJobFiledID = selectedTitle.getId();
+                SelectedJobTitleName =selectedTitle.getName();
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+    }
+
+
 
     private void addSubTopic() {
         String subTopicName = subTopicNameEditText.getText().toString().trim();
@@ -78,54 +206,59 @@ public class AdminAddLessonActivity extends AppCompatActivity {
         String webUrl = webUrlEditText.getText().toString().trim();
         String ytVideoUrl = ytVideoUrlEditText.getText().toString().trim();
 
-        // Basic validation
+
         if (subTopicName.isEmpty() || contentText.isEmpty() || webUrl.isEmpty() || ytVideoUrl.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AdminAddLessonActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Create and add new subtopic to the list
+
         SubTopic newSubTopic = new SubTopic(subTopicName, contentText, webUrl, ytVideoUrl);
         subTopics.add(newSubTopic);
 
-        // Clear input fields for the next subtopic
+
         subTopicNameEditText.setText("");
         contentTextEditText.setText("");
         webUrlEditText.setText("");
         ytVideoUrlEditText.setText("");
 
-        Toast.makeText(this, "Subtopic added!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(AdminAddLessonActivity.this, "Subtopic added!", Toast.LENGTH_SHORT).show();
     }
 
     private void saveLessonToFirestore() {
-        String jobField = jobFieldEditText.getText().toString().trim();
-        String jobTitle = jobTitleEditText.getText().toString().trim();
-        String lessonName = lessonNameEditText.getText().toString().trim();
-        String lessonStatus = StatusEditText01.getText().toString().trim();
 
-        // Validate inputs
-        if (jobField.isEmpty() || jobTitle.isEmpty() || lessonName.isEmpty() || subTopics.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+        String lessonName = lessonNameEditText.getText().toString().trim();
+        String lessonPrice = lessonPriceEditText.getText().toString().trim();
+
+        if (lessonName.isEmpty() || lessonPrice.isEmpty() || subTopics.isEmpty()) {
+            Toast.makeText(AdminAddLessonActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Create lesson object
-        Lesson lesson = new Lesson(jobField, jobTitle, lessonName, lessonStatus, subTopics);
+        int lessonPrice01;
+        try {
+            lessonPrice01 = Integer.parseInt(lessonPrice);
+        } catch (NumberFormatException e) {
+            Toast.makeText(AdminAddLessonActivity.this, "Invalid price! Please enter a valid number.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        // Add lesson to Firestore
-        DocumentReference lessonRef = db.collection("lessons").document(); // Auto-generate a unique ID
-        lessonRef.set(lesson)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(this, "Lesson saved successfully!", Toast.LENGTH_SHORT).show();
-                    Log.d("MainActivity", "Lesson saved to Firestore!");
+        Lesson newLesson = new Lesson(SelectedJobFieldName, SelectedJobTitleName, lessonName, lessonPrice01, subTopics, true);
 
-                     jobFieldEditText.setText("");
-                     jobTitleEditText.setText("");
-                     lessonNameEditText.setText("");
+        db.collection("lessons")
+                .add(newLesson)
+                .addOnSuccessListener(newDocumentReference -> {
+                    Log.d("Firestore", "DocumentSnapshot added with ID: " + newDocumentReference.getId());
+                    Toast.makeText(AdminAddLessonActivity.this, "Lesson added!", Toast.LENGTH_SHORT).show();
+                    SpjobField.setSelection(0);
+                    SpjobTitle.setSelection(0);
+                    lessonNameEditText.setText("");
+                    lessonPriceEditText.setText("");
+                    subTopics.clear();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Error saving lesson", Toast.LENGTH_SHORT).show();
-                    Log.w("MainActivity", "Error saving lesson", e);
+                    Log.e("Firestore", "Error adding document", e);
+                    Toast.makeText(AdminAddLessonActivity.this, "Error adding lesson", Toast.LENGTH_SHORT).show();
                 });
     }
 

@@ -6,15 +6,20 @@ public class Lesson {
     private String jobField;
     private String jobTitle;
     private String lessonName;
-    private String lessonStatus;
+
+    private Integer price;
+
     private List<SubTopic> subTopics;
 
-    public Lesson(String jobField, String jobTitle, String lessonName,String lessonstatus, List<SubTopic> subTopics) {
+    private boolean isActive;
+
+    public Lesson(String jobField, String jobTitle, String lessonName,Integer price, List<SubTopic> subTopics,boolean isActive) {
         this.jobField = jobField;
         this.jobTitle = jobTitle;
         this.lessonName = lessonName;
-        this.lessonStatus = lessonstatus;
+        this.price = price;
         this.subTopics = subTopics;
+        this.isActive = isActive;
     }
 
     public String getJobField() {
@@ -28,13 +33,16 @@ public class Lesson {
     public String getLessonName() {
         return lessonName;
     }
+    public Integer getPrice() {
+        return price;
+    }
 
     public List<SubTopic> getSubTopics() {
         return subTopics;
     }
 
-    public String getLessonStatus() {
-        return lessonStatus;
+    public boolean isActive() {
+        return isActive;
     }
 
 
