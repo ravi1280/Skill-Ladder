@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -82,6 +83,14 @@ public class AdminAddLessonActivity extends AppCompatActivity {
 
         loadJobFieldSpinner();
         loadJobTitleSpinner();
+
+        ImageView back = findViewById(R.id.AddLessonBack);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
     private void loadJobFieldSpinner(){

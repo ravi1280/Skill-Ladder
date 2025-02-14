@@ -3,6 +3,11 @@ package com.example.skill_ladder.model;
 import java.util.List;
 
 public class Lesson {
+
+
+
+
+    private String id;
     private String jobField;
     private String jobTitle;
     private String lessonName;
@@ -21,6 +26,11 @@ public class Lesson {
         this.subTopics = subTopics;
         this.isActive = isActive;
     }
+    public Lesson(String id,String lessonName, boolean isActive) {
+        this.id = id;
+        this.lessonName = lessonName;
+        this.isActive = isActive;
+    }
 
     public String getJobField() {
         return jobField;
@@ -33,6 +43,7 @@ public class Lesson {
     public String getLessonName() {
         return lessonName;
     }
+
     public Integer getPrice() {
         return price;
     }
@@ -43,6 +54,35 @@ public class Lesson {
 
     public boolean isActive() {
         return isActive;
+    }
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setJobField(String jobField) {
+        this.jobField = jobField;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
+    public void setLessonName(String lessonName) {
+        this.lessonName = lessonName;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public void setSubTopics(List<SubTopic> subTopics) {
+        this.subTopics = subTopics;
     }
 
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,15 +14,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.skill_ladder.R;
 import com.example.skill_ladder.admin.AdminAddLessonActivity;
+import com.example.skill_ladder.model.Company;
+import com.example.skill_ladder.model.Lesson;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ManageLessonsFragment extends Fragment {
+    mLessonListAdapter lessonListAdapter;
+    List<Lesson> lDetails;
+    RecyclerView ManageLessonRecyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,7 +38,7 @@ public class ManageLessonsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_manage_lessons, container, false);
 
-        RecyclerView ManageUserRecyclerView = view.findViewById(R.id.ManageLessonRV01);
+
         FloatingActionButton FAB = view.findViewById(R.id.FABAddLesson01);
         FAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,37 +48,42 @@ public class ManageLessonsFragment extends Fragment {
 
             }
         });
-
+       ManageLessonRecyclerView = view.findViewById(R.id.ManageLessonRV01);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        ManageUserRecyclerView.setLayoutManager(linearLayoutManager);
+        ManageLessonRecyclerView.setLayoutManager(linearLayoutManager);
+        lDetails = new ArrayList<>();
+        lessonListAdapter = new mLessonListAdapter(lDetails);
+        ManageLessonRecyclerView.setAdapter(lessonListAdapter);
 
-        List<Lesson> lDetails = new ArrayList<>();
-        lDetails.add(new Lesson("Software Engineer","Active"));
-        lDetails.add(new Lesson("Software Engineer","Active"));
-        lDetails.add(new Lesson("Software Engineer","Active"));
-        lDetails.add(new Lesson("Software Engineer","Deactive"));
-        lDetails.add(new Lesson("Software Engineer","Active"));
-        lDetails.add(new Lesson("Software Engineer","Active"));
-        lDetails.add(new Lesson("Software Engineer","Active"));
-        lDetails.add(new Lesson("Software Engineer","Active"));
-        lDetails.add(new Lesson("Software Engineer","Active"));
-
-        mLessonListAdapter jobListAdapter = new mLessonListAdapter(lDetails);
-        ManageUserRecyclerView.setAdapter(jobListAdapter);
+        loadLessonDate();
 
         return view;
     }
-}
-class Lesson {
-    String LessonName;
-    String Status;
-    public Lesson(String name,String status ) {
 
-        this.LessonName = name;
-        this.Status = status;
+    private void loadLessonDate() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("lessons")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    lDetails.clear();
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        String id = documentSnapshot.getId();
+                        String lessonName = documentSnapshot.getString("lessonName");
+                        boolean isActive = Boolean.TRUE.equals(documentSnapshot.getBoolean("active"));
+
+                        lDetails.add(new Lesson(id,lessonName,isActive));
+                    }
+                    lessonListAdapter.notifyDataSetChanged();
+
+                })
+                .addOnFailureListener(e -> {
+                });
     }
 }
+
 class mLessonListAdapter extends RecyclerView.Adapter<mLessonListAdapter.mLessonViewHolder> {
     private final List<Lesson> lessondetails;
 
@@ -102,21 +116,47 @@ class mLessonListAdapter extends RecyclerView.Adapter<mLessonListAdapter.mLesson
     public void onBindViewHolder(@NonNull mLessonViewHolder holder, int position) {
 
         Lesson lDetails = lessondetails.get(position);
-        holder.LessonName.setText(lDetails.LessonName);
-        holder.active.setText(lDetails.Status);
-        String Status = lDetails.Status.toString();
+        holder.LessonName.setText(lDetails.getLessonName());
+        holder.active.setText(lDetails.isActive() ? "Active" : "Deactive");
+        if(lDetails.isActive()){
+            holder.active.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.chart03));
+        }else {
+            holder.active.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.chart05));
+        }
 
         holder.active.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                toggleLessonStatus(lDetails, holder);
 
-                if(Status.equals("Active")){
-                    holder.active.setText("Deactive");
-                }else {
-                    holder.active.setText("Active");
-                }
             }
         });
+
+    }
+    private void toggleLessonStatus(Lesson lesson, mLessonListAdapter.mLessonViewHolder holder) {
+        boolean newStatus = !lesson.isActive();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("lessons").document(lesson.getId())
+                .update("active", newStatus)
+                .addOnSuccessListener(aVoid -> {
+
+                    lesson.setActive(newStatus);
+                    holder.active.setText(newStatus ? "Deactivate" : "Activate");
+                    if(holder.active.getText()=="Activate"){
+                        holder.active.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.chart05));
+                    }else {
+                        holder.active.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.chart03));
+
+                    }
+
+
+                    Toast.makeText(holder.itemView.getContext(), "Status updated", Toast.LENGTH_SHORT).show();
+
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(holder.itemView.getContext(), "Failed to update", Toast.LENGTH_SHORT).show();
+                });
     }
 
     @Override

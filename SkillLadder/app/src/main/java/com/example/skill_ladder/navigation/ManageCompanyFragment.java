@@ -43,26 +43,6 @@ public class ManageCompanyFragment extends Fragment {
 
         searchText = view.findViewById(R.id.manageCompanyeditText01);
         ImageView imageView = view.findViewById(R.id.manageCompanySearch);
-//        imageView.setEnabled(false);
-//
-//        searchText.addTextChangedListener((TextWatcher) new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                //loadCompany();
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                //loadCompany();
-//            }
-//
-//            @Override
-//            public void afterTextChanged(android.text.Editable s) {
-//                //loadCompany();
-//                imageView.performClick();
-//                imageView.setEnabled(true);
-//            }
-//        });
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
