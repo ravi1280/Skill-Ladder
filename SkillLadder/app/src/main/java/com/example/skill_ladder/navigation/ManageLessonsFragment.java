@@ -9,16 +9,22 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.skill_ladder.R;
 import com.example.skill_ladder.admin.AdminAddLessonActivity;
 import com.example.skill_ladder.model.Company;
+import com.example.skill_ladder.model.JobField;
+import com.example.skill_ladder.model.JobTitle;
 import com.example.skill_ladder.model.Lesson;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -31,13 +37,14 @@ public class ManageLessonsFragment extends Fragment {
     mLessonListAdapter lessonListAdapter;
     List<Lesson> lDetails;
     RecyclerView ManageLessonRecyclerView;
+    Spinner spinner;
+    String SelectedName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_manage_lessons, container, false);
 
+        View view= inflater.inflate(R.layout.fragment_manage_lessons, container, false);
 
         FloatingActionButton FAB = view.findViewById(R.id.FABAddLesson01);
         FAB.setOnClickListener(new View.OnClickListener() {
@@ -48,6 +55,9 @@ public class ManageLessonsFragment extends Fragment {
 
             }
         });
+        spinner = view.findViewById(R.id.ManageLessonspinner001);
+        loadSpinner();
+
        ManageLessonRecyclerView = view.findViewById(R.id.ManageLessonRV01);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -59,6 +69,90 @@ public class ManageLessonsFragment extends Fragment {
         loadLessonDate();
 
         return view;
+    }
+
+    public void loadSpinner(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("JobFields")
+                .whereEqualTo("isActive", true)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<JobField> jobFieldList = new ArrayList<>();
+                    List<String> fieldNames = new ArrayList<>();
+
+                    jobFieldList.add(new JobField("", "Select Field ---", true));
+                    fieldNames.add("Select Field ---");
+
+                    for (DocumentSnapshot document : queryDocumentSnapshots) {
+                        JobField jobField = document.toObject(JobField.class);
+                        if (jobField != null) {
+                            jobField.setId(document.getId());
+                            jobFieldList.add(jobField);
+                            fieldNames.add(jobField.getName());
+                        }
+                    }
+
+
+                    updateSpinner(fieldNames, jobFieldList);
+
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error fetching job fields", e);
+                });
+
+    }
+    private void updateSpinner(List<String> fieldNames, List<JobField> jobFieldList) {
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_spinner_item, fieldNames);
+        adapter.setDropDownViewResource(R.layout.coustom_spinner_dropdown);
+        spinner.setAdapter(adapter);
+
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                JobField selectedField = jobFieldList.get(position);
+                Log.d("Spinner", "Selected Job Field ID: " + selectedField.getId());
+//                SelectedID = selectedField.getId();
+                SelectedName =selectedField.getName();
+                loadjobTitlesData();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+    private void loadjobTitlesData(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        if(SelectedName.equals("Select Field ---")){
+            loadLessonDate();
+            return;
+        }
+
+        db.collection("lessons")
+                .whereEqualTo("jobField", SelectedName)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    lDetails.clear();
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        String id = documentSnapshot.getId();
+                        String lessonName = documentSnapshot.getString("lessonName");
+                        boolean isActive = Boolean.TRUE.equals(documentSnapshot.getBoolean("active"));
+
+                        lDetails.add(new Lesson(id,lessonName,isActive));
+                    }
+                    lessonListAdapter.notifyDataSetChanged();
+
+                })
+                .addOnFailureListener(e -> {
+
+                });
     }
 
     private void loadLessonDate() {
