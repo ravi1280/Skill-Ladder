@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -18,12 +19,18 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.skill_ladder.model.Lesson;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MyLessonsActivity extends AppCompatActivity {
+    RecyclerView recyclerView01;
+    List<Lesson> myLessonTitle;
+    MyLessonAdapter mylessonAdapter01;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,42 +42,55 @@ public class MyLessonsActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         ImageView imageView01 = findViewById(R.id.MylessonBackimageView);
         imageView01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                finish();
             }
         });
-        RecyclerView recyclerView = findViewById(R.id.MylessonRecyclerView01);
+
+        recyclerView01 = findViewById(R.id.MylessonRecyclerView01);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MyLessonsActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView01.setLayoutManager(linearLayoutManager);
+        myLessonTitle = new ArrayList<>();
+        mylessonAdapter01 = new MyLessonAdapter(myLessonTitle);
+        recyclerView01.setAdapter(mylessonAdapter01);
 
-        List<MyLessonTitle> LessonTitle = new ArrayList<>();
-        LessonTitle.add(new MyLessonTitle("Java institute01"));
-        LessonTitle.add(new MyLessonTitle("Java institute02"));
-        LessonTitle.add(new MyLessonTitle("Java institute03"));
-        LessonTitle.add(new MyLessonTitle("Java institute04"));
-        LessonTitle.add(new MyLessonTitle("Java institute05"));
-        LessonTitle.add(new MyLessonTitle("Java institute06"));
+        loadMylesson();
 
-        MyLessonAdapter mylessonAdapter01 = new MyLessonAdapter(LessonTitle);
-        recyclerView.setAdapter(mylessonAdapter01);
+    }
+    private void loadMylesson(){
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("lessons")
+                .whereEqualTo("active", true)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    myLessonTitle.clear();
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        String id = documentSnapshot.getId();
+                        String lessonName = documentSnapshot.getString("lessonName");
+                        Integer lessonPrice = documentSnapshot.getLong("price").intValue();
+                        boolean isActive = Boolean.TRUE.equals(documentSnapshot.getBoolean("active"));
+
+                        myLessonTitle.add(new Lesson(id,lessonName,lessonPrice,isActive));
+                    }
+                    mylessonAdapter01.notifyDataSetChanged();
+
+                })
+                .addOnFailureListener(e -> {
+
+                });
     }
 }
 
-class MyLessonTitle {
-    String myLessontitleName;
-    public MyLessonTitle(String name ) {
-        this.myLessontitleName = name;
-
-    }
-}
 class MyLessonAdapter extends RecyclerView.Adapter<MyLessonAdapter.MyLessonViewHolder> {
-    private final List<MyLessonTitle> mylessondetails;
-    public MyLessonAdapter(List<MyLessonTitle> myLessondetails) {
+    private final List<Lesson> mylessondetails;
+    public MyLessonAdapter(List<Lesson> myLessondetails) {
 
         this.mylessondetails = myLessondetails;
     }
@@ -99,15 +119,17 @@ class MyLessonAdapter extends RecyclerView.Adapter<MyLessonAdapter.MyLessonViewH
     @Override
     public void onBindViewHolder(@NonNull MyLessonViewHolder holder, int position) {
 
-        MyLessonTitle myLessondetailss = mylessondetails.get(position);
-        holder.myLessonName.setText(myLessondetailss.myLessontitleName);
+        Lesson myLessondetailss = mylessondetails.get(position);
+        holder.myLessonName.setText(myLessondetailss.getLessonName());
 
-        String mylessonName01 = myLessondetailss.myLessontitleName;
         holder.myLessonbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(holder.itemView.getContext(), "Lesson Success"+myLessondetailss.getId(), Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(holder.itemView.getContext(), LessonSuccessActivity.class);
+                Intent intent = new Intent(holder.itemView.getContext(), LessonSummaryActivity.class);
+                intent.putExtra("lessonId", myLessondetailss.getId());
+                intent.putExtra("lessonName", myLessondetailss.getLessonName());
                 holder.itemView.getContext().startActivity(intent);
             }
         });
