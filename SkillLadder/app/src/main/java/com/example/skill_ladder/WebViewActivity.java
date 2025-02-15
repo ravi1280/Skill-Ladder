@@ -1,5 +1,6 @@
 package com.example.skill_ladder;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
@@ -25,11 +26,13 @@ public class WebViewActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Intent i = getIntent();
+        String webUrl =i.getStringExtra("WebUrl");
         WebView webView01 = findViewById(R.id.WebView01);
         webView01.getSettings().setJavaScriptEnabled(true);
 
         webView01.setWebViewClient(new WebViewClient());
-        String url="https://www.w3schools.com/php/default.asp";
+        String url=webUrl;
         webView01.loadUrl(url);
         ImageView imageView01 = findViewById(R.id.webBackIcon01);
 

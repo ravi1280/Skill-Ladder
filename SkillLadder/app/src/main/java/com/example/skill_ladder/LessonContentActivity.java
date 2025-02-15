@@ -2,6 +2,7 @@ package com.example.skill_ladder;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -46,8 +47,7 @@ public class LessonContentActivity extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.LessonContendFAB);
         fab.setOnClickListener(view -> {
-            Intent intent = new Intent(LessonContentActivity.this, TestActivity.class);
-            startActivity(intent);
+           finish();
         });
 
         TextView textView01 = findViewById(R.id.LessonContentTV01);
@@ -55,7 +55,6 @@ public class LessonContentActivity extends AppCompatActivity {
         TextView textView02 = findViewById(R.id.LessonDetailTV01);
         TextView textView03 = findViewById(R.id.LessonDetailTV02);
         TextView textView04 = findViewById(R.id.LessonDetailTV03);
-        TextView textView05 = findViewById(R.id.LessonDetailTV04);
 
         Intent i = getIntent();
         subTopic =i.getStringExtra("mainTopic");
@@ -67,21 +66,22 @@ public class LessonContentActivity extends AppCompatActivity {
         textView02.setText(subTopic);
         textView03.setText(contentText);
         textView04.setText(webUrl);
-        textView05.setText(ytVideoUrl);
+//        textView05.setText(ytVideoUrl);
 
-//        YouTubePlayerView youTubePlayerView = findViewById(R.id.youtube_player_view);
-//
-//        youTubePlayerView.initialize(new YouTubePlayerInitListener() {
-//            @Override
-//            public void onInitSuccess(final YouTubePlayer initializedYouTubePlayer) {
-//                initializedYouTubePlayer.addListener(new AbstractYouTubePlayerListener() {
-//                    @Override
-//                    public void onReady() {
-//                        String videoId = "lYObYR4ZTtM";
-//                        initializedYouTubePlayer.loadVideo(videoId, 0);
-//                    }
-//                });
-//            }
-//        }, true);
+//        textView01.setText(subTopic);
+//        textView02.setText(R.string.Lorem);
+//        textView03.setText(R.string.Lorem);
+//        textView04.setText(R.string.Lorem);
+
+
+        textView04.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LessonContentActivity.this, WebViewActivity.class);
+                intent.putExtra("WebUrl", "https://www.svgrepo.com/");
+                startActivity(intent);
+            }
+        });
+
     }
 }
