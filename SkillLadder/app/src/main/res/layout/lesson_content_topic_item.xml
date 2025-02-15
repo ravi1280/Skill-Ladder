@@ -44,19 +44,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Subtopics Count -->
-        <TextView
-            android:id="@+id/LessonContentTopicItem02"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="5 Subtopics"
-            android:textAlignment="textEnd"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/imgTopicIcon"
-            app:layout_constraintTop_toBottomOf="@id/LessonContentTopicItem01" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
