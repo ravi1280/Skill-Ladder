@@ -48,6 +48,9 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.1")
+//    implementation ("com.github.PierfrancescoSoffritti:AndroidYouTubePlayer:7.0.1")
+//    implementation ("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
 
 }
