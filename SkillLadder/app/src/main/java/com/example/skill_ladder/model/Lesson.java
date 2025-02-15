@@ -31,6 +31,12 @@ public class Lesson {
         this.lessonName = lessonName;
         this.isActive = isActive;
     }
+    public Lesson(String id,String lessonName,Integer price, boolean isActive) {
+        this.id = id;
+        this.lessonName = lessonName;
+        this.price = price;
+        this.isActive = isActive;
+    }
 
     public String getJobField() {
         return jobField;
