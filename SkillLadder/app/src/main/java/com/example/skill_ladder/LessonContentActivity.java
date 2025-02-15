@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -46,9 +47,7 @@ public class LessonContentActivity extends AppCompatActivity {
         });
 
         FloatingActionButton fab = findViewById(R.id.LessonContendFAB);
-        fab.setOnClickListener(view -> {
-           finish();
-        });
+
 
         TextView textView01 = findViewById(R.id.LessonContentTV01);
 
@@ -61,18 +60,12 @@ public class LessonContentActivity extends AppCompatActivity {
         contentText =i.getStringExtra("ContentText");
         webUrl =i.getStringExtra("WebUrl");
         ytVideoUrl =i.getStringExtra("YtVideoUrl");
+        boolean isLastSubtopic = i.getBooleanExtra("is_last_subtopic", false);
 
         textView01.setText(subTopic);
         textView02.setText(subTopic);
         textView03.setText(contentText);
         textView04.setText(webUrl);
-//        textView05.setText(ytVideoUrl);
-
-//        textView01.setText(subTopic);
-//        textView02.setText(R.string.Lorem);
-//        textView03.setText(R.string.Lorem);
-//        textView04.setText(R.string.Lorem);
-
 
         textView04.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +75,19 @@ public class LessonContentActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        if(isLastSubtopic){
+            Toast.makeText(this, "Last Subtopic", Toast.LENGTH_SHORT).show();
+            fab.setOnClickListener(view -> {
+                Intent intent = new Intent(LessonContentActivity.this, LessonSuccessActivity.class);
+                startActivity(intent);
+                finish();
+            });
+        }else {
+            fab.setOnClickListener(view -> {
+                finish();
+            });
+        }
 
     }
 }

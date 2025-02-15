@@ -152,7 +152,16 @@ class LessonTopicListAdapter extends RecyclerView.Adapter<LessonTopicListAdapter
                 intent01.putExtra("ContentText",lessonTopic.getContentText());
                 intent01.putExtra("WebUrl",lessonTopic.getWebUrl());
                 intent01.putExtra("YtVideoUrl",lessonTopic.getYtVideoUrl());
+
+
+                // Check if this is the last subtopic
+                if (position == lessonTopics.size() - 1) {
+                    intent01.putExtra("is_last_subtopic", true);
+                } else {
+                    intent01.putExtra("is_last_subtopic", false);
+                }
                 view.getContext().startActivity(intent01);
+
             }
         });
     }
