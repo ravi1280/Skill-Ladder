@@ -376,7 +376,7 @@ class SearchLessonAdapter extends RecyclerView.Adapter<SearchLessonAdapter.Searc
                                         bottomSheetDialog.dismiss();
                                     });
                                 } else {
-                                    buyButton.setText("Buy Lesson"); 
+                                    buyButton.setText("Buy Lesson");
                                     buyButton.setOnClickListener(v -> {
                                         Intent intent = new Intent(holder.itemView.getContext(), PaymentSuccessActivity.class);
                                         intent.putExtra("lessonId", lessonId);

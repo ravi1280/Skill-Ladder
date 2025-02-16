@@ -17,10 +17,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 "    id              INTEGER PRIMARY KEY AUTOINCREMENT\n" +
                 "                            NOT NULL,\n" +
                 "    lesson_id       TEXT    NOT NULL,\n" +
-                "    lesson_progress INTEGER\n" +
+                "    lesson_progress INTEGER DEFAULT (0) \n" +
                 ");\n");
 
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
