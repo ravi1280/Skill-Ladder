@@ -97,7 +97,7 @@ public class CompanySignUpActivity extends AppCompatActivity {
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {
-//                                                        documentId = documentReference.getId();
+                                                        documentId = documentReference.getId();
                                                         setSharedPreferences();
 
                                                         Intent intent = new Intent(CompanySignUpActivity.this, CompanyLogInActivity.class);
