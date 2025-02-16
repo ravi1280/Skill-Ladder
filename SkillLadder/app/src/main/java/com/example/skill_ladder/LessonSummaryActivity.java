@@ -1,12 +1,15 @@
 package com.example.skill_ladder;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.skill_ladder.model.SQLiteHelper;
 import com.example.skill_ladder.model.SubTopic;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,9 +35,11 @@ public class LessonSummaryActivity extends AppCompatActivity {
     LessonTopicListAdapter lessonTopicListAdapter;
     RecyclerView recyclerView01;
 
-    String lessonId;
+     String lessonId;
     FirebaseFirestore db;
     List<SubTopic> subTopicsList ;
+    TextView lessonNameTV,progress;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,19 +57,64 @@ public class LessonSummaryActivity extends AppCompatActivity {
         lessonId = intent.getStringExtra("lessonId");
         String lessonName01 = intent.getStringExtra("lessonName");
 
-        TextView lessonNameTV = findViewById(R.id.LessonSummeryTV01);
+        lessonNameTV = findViewById(R.id.LessonSummeryTV01);
         lessonNameTV.setText(lessonName01);
+
+        progress = findViewById(R.id.LessonProgressDetails);
+        progressBar = findViewById(R.id.progressBar01);
 
         recyclerView01 = findViewById(R.id.LessonSummeryRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(LessonSummaryActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView01.setLayoutManager(linearLayoutManager);
         subTopicsList = new ArrayList<>();
-        lessonTopicListAdapter = new LessonTopicListAdapter(subTopicsList);
+        lessonTopicListAdapter = new LessonTopicListAdapter(subTopicsList,lessonId);
         recyclerView01.setAdapter(lessonTopicListAdapter);
 
         db = FirebaseFirestore.getInstance();
         getSubTopicsByLessonName(lessonName01);
+
+        getProgress();
+    }
+
+    private void getProgress(){
+        SQLiteHelper sqLiteHelper = new SQLiteHelper(
+                LessonSummaryActivity.this,
+                "lessonProgress.db",
+                null,
+                1
+        );
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SQLiteDatabase sqLiteDatabase = sqLiteHelper.getReadableDatabase();
+                Cursor cursor = sqLiteDatabase.query(
+                        "MyLessonProgress",   // Table Name
+                        new String[]{"lesson_progress"},  // Columns to retrieve
+                        "lesson_id = ?",  // WHERE clause
+                        new String[]{lessonId},  // Selection arguments
+                        null,
+                        null,
+                        null
+                );
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        int progressValue = 0;
+                        if (cursor != null && cursor.moveToFirst()) {
+                            progressValue = cursor.getInt(0);
+                            cursor.close();
+                        }
+                        progressBar.setProgress(progressValue);
+                        progressBar.setMax(100);
+                        progress.setText(String.valueOf(progressValue)+"%");
+                    }
+                });
+            }
+        }).start();
+
     }
 
     private void getSubTopicsByLessonName(String lessonName) {
@@ -88,7 +139,7 @@ public class LessonSummaryActivity extends AppCompatActivity {
                                     subTopicsList.add(subTopic);
                                 }
 
-                                // Now, subTopicsList contains all subtopics
+
                                 displaySubTopics();
                                 lessonTopicListAdapter.notifyDataSetChanged();
                             }
@@ -112,9 +163,11 @@ public class LessonSummaryActivity extends AppCompatActivity {
 
 class LessonTopicListAdapter extends RecyclerView.Adapter<LessonTopicListAdapter.LessonTopicViewHolder> {
     private final List<SubTopic> lessonTopics;
+    private final String lessonId;
 
-    public LessonTopicListAdapter(List<SubTopic> lessonTopics) {
+    public LessonTopicListAdapter(List<SubTopic> lessonTopics,String lessonId) {
         this.lessonTopics = lessonTopics;
+        this.lessonId = lessonId;
     }
 
     static class LessonTopicViewHolder extends RecyclerView.ViewHolder {
@@ -152,14 +205,21 @@ class LessonTopicListAdapter extends RecyclerView.Adapter<LessonTopicListAdapter
                 intent01.putExtra("ContentText",lessonTopic.getContentText());
                 intent01.putExtra("WebUrl",lessonTopic.getWebUrl());
                 intent01.putExtra("YtVideoUrl",lessonTopic.getYtVideoUrl());
+                intent01.putExtra("lessonId",lessonId);
 
 
-                // Check if this is the last subtopic
+                int totalSubtopics = lessonTopics.size();
+                int progressPercentage = ((position + 1) * 100) / totalSubtopics;
+
+                intent01.putExtra("subtopic_progress", progressPercentage);
+
+
                 if (position == lessonTopics.size() - 1) {
                     intent01.putExtra("is_last_subtopic", true);
                 } else {
                     intent01.putExtra("is_last_subtopic", false);
                 }
+
                 view.getContext().startActivity(intent01);
 
             }

@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/LessonProgressDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -42,5 +42,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/LessonSummeryTV01" />
+
+    <ProgressBar
+        android:id="@+id/progressBar01"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:progressDrawable="@drawable/progress_bar"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/LessonSummeryTV01"
+        app:layout_constraintStart_toStartOf="@+id/LessonSummeryTV01"
         app:layout_constraintTop_toBottomOf="@+id/LessonSummeryTV01" />
 </androidx.constraintlayout.widget.ConstraintLayout>
