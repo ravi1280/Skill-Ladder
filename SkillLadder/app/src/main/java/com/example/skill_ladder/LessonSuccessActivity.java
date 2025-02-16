@@ -29,6 +29,7 @@ public class LessonSuccessActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 finish();
+
             }
         });
     }

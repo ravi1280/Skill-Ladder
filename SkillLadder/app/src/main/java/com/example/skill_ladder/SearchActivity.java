@@ -1,6 +1,8 @@
 package com.example.skill_ladder;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +30,7 @@ import com.example.skill_ladder.admin.AdminAddLessonActivity;
 import com.example.skill_ladder.model.JobField;
 import com.example.skill_ladder.model.JobTitle;
 import com.example.skill_ladder.model.Lesson;
+import com.example.skill_ladder.model.SQLiteHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -323,6 +326,7 @@ class SearchLessonAdapter extends RecyclerView.Adapter<SearchLessonAdapter.Searc
         holder.LessonPrice.setText("$ " + lessonDetails.getPrice());
 
         String lessonName = lessonDetails.getLessonName();
+        String lessonId = lessonDetails.getId();
 
         holder.LessonBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -333,10 +337,66 @@ class SearchLessonAdapter extends RecyclerView.Adapter<SearchLessonAdapter.Searc
                 textView.setText(lessonName);
                 Button buyButton = sheetView.findViewById(R.id.lessonBuysheetdBtn01);
 
+
+                SQLiteHelper sqLiteHelper = new SQLiteHelper(
+                        holder.itemView.getContext(),
+                        "lessonProgress.db",
+                        null,
+                        1
+                );
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        SQLiteDatabase sqLiteDatabase = sqLiteHelper.getReadableDatabase();
+                        Cursor cursor = sqLiteDatabase.query(
+                                "MyLessonProgress",
+                                new String[]{"lesson_id"},
+                                "lesson_id = ?",
+                                new String[]{lessonId},
+                                null,
+                                null,
+                                null
+                        );
+
+                        boolean exists = cursor.getCount() > 0;
+
+                        cursor.close();
+                        sqLiteDatabase.close();
+
+
+                        ((SearchActivity) holder.itemView.getContext()).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (exists) {
+                                    buyButton.setText("Go to My Lessons");
+                                    buyButton.setOnClickListener(v -> {
+                                        Intent intent = new Intent(holder.itemView.getContext(), MyLessonsActivity.class);
+                                        intent.putExtra("lessonId", lessonId);
+                                        holder.itemView.getContext().startActivity(intent);
+                                        bottomSheetDialog.dismiss();
+                                    });
+                                } else {
+                                    buyButton.setText("Buy Lesson"); 
+                                    buyButton.setOnClickListener(v -> {
+                                        Intent intent = new Intent(holder.itemView.getContext(), PaymentSuccessActivity.class);
+                                        intent.putExtra("lessonId", lessonId);
+                                        holder.itemView.getContext().startActivity(intent);
+                                        bottomSheetDialog.dismiss();
+                                    });
+                                }
+                            }
+                        });
+                    }
+                }).start();
+
+
+
+
                 buyButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(holder.itemView.getContext(), PaymentSuccessActivity.class);
+                        intent.putExtra("lessonId",lessonId);
                         holder.itemView.getContext().startActivity(intent);
                         bottomSheetDialog.dismiss();
                     }
