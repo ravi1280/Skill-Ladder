@@ -77,7 +77,7 @@ public class AdminProfileFragment extends Fragment {
 
     private void loadAdminProfile() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        String username = sharedPreferences.getString("username", ""); // Default is empty string
+        String username = sharedPreferences.getString("AdminUsername", ""); // Default is empty string
 
         if (username.isEmpty()) {
             Log.e("AdminProfile", "No username found in SharedPreferences");

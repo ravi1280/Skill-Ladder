@@ -49,7 +49,6 @@ public class CompanyLogInActivity extends AppCompatActivity {
                 String companyEmail = sharedPreferences.getString("companyEmail", ""); // Default is empty string
 
                 if (companyEmail.isEmpty()) {
-                    Log.e("companyEmail", "No username found in SharedPreferences");
                     customAlert.showCustomAlert(CompanyLogInActivity.this,"Error ","Please Sign Up First",R.drawable.cancel);
                     return;
                 }

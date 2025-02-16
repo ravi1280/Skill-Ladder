@@ -42,21 +42,20 @@ public class Admin extends AppCompatActivity {
         springAnimation.start();
 
         new Handler().postDelayed(()->{
-//            Intent intent = new Intent(Admin.this, AdminLoginActivity.class);
-//            startActivity(intent);
-//            finish();
             checkAndDeleteSharedPreferences();
         },2000);
     }
 
     private void checkAndDeleteSharedPreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs",MODE_PRIVATE);
-        long savedTime = sharedPreferences.getLong("timestamp", 0);
+        long savedTime = sharedPreferences.getLong("AdminTimestamp", 0);
         long currentTime = System.currentTimeMillis();
 
         if ((currentTime - savedTime) > 6000000) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
+            editor.remove("AdminUsername");
+            editor.remove("AdminIsLoggedIn");
+            editor.remove("AdminTimestamp");
             editor.apply();
             Log.d("SharedPreferences", "Data expired. SharedPreferences cleared.");
             Intent intent = new Intent(Admin.this, AdminLoginActivity.class);

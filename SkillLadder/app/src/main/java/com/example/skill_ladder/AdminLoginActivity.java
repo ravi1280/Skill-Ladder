@@ -85,18 +85,16 @@ public class AdminLoginActivity extends AppCompatActivity {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     if (document.get("email").equals(email01) && document.get("password").equals(password01)) {
 
-
-                                        // Get SharedPreferences instance
                                         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
                                         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                                        editor.putString("username", email01);
-                                        editor.putBoolean("isLoggedIn", true);
-                                        editor.putLong("timestamp", System.currentTimeMillis());
+                                        editor.putString("AdminUsername", email01);
+                                        editor.putBoolean("AdminIsLoggedIn", true);
+                                        editor.putLong("AdminTimestamp", System.currentTimeMillis());
                                         editor.apply();
 
-                                        String username = sharedPreferences.getString("username", "DefaultUser");
-                                        Log.d("username", username);
+                                        String username = sharedPreferences.getString("AdminUsername", "DefaultUser");
+                                        Log.d("AdminUsername", username);
 
                                         Intent intent = new Intent(AdminLoginActivity.this, AdminHomeActivity.class);
                                         startActivity(intent);
