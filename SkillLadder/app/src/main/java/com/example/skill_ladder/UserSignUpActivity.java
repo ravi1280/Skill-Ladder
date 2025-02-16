@@ -128,6 +128,7 @@ public class UserSignUpActivity extends AppCompatActivity {
         editor.putString("UserEmail", email);
         editor.putString("UserMobile", mobile);
         editor.putString("UserFullName", fullName);
+        editor.putString("UserPassword", password);
         editor.apply();
 
     }
