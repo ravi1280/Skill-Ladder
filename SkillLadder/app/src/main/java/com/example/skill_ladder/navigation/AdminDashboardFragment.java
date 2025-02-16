@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import com.example.skill_ladder.R;
+import com.example.skill_ladder.model.customAlert;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -37,6 +38,7 @@ public class AdminDashboardFragment extends Fragment {
         colorArrayList.add(getResources().getColor(R.color.chart03));
         colorArrayList.add(getResources().getColor(R.color.chart04));
         colorArrayList.add(getResources().getColor(R.color.chart05));
+
         pieDataSet.setColors(colorArrayList);
 
         PieData pieData = new PieData(pieDataSet);
@@ -47,6 +49,9 @@ public class AdminDashboardFragment extends Fragment {
         pieChart01.animateY(3000, Easing.EaseInCirc);
         pieChart01.setCenterText("Information");
         pieChart01.setCenterTextColor(getResources().getColor(R.color.UserLoginBtn));
+
+
+
 
         pieChart01.getDescription().setEnabled(false);
         pieChart01.invalidate(); // Refresh Chart
