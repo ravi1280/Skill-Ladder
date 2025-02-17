@@ -1,6 +1,8 @@
 package com.example.skill_ladder;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -27,16 +29,26 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.skill_ladder.admin.AdminAddLessonActivity;
+import com.example.skill_ladder.model.AppConfig;
 import com.example.skill_ladder.model.JobField;
 import com.example.skill_ladder.model.JobTitle;
 import com.example.skill_ladder.model.Lesson;
 import com.example.skill_ladder.model.SQLiteHelper;
+import com.example.skill_ladder.model.customAlert;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class SearchActivity extends AppCompatActivity {
     RecyclerView searchRecyclerView;
@@ -45,7 +57,8 @@ public class SearchActivity extends AppCompatActivity {
     EditText searchEditText;
     ImageView SearchIcon;
     Spinner spinner01, spinner02;
-    String fieldName, titleName;
+    String fieldName, titleName,UserIdShared;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +70,9 @@ public class SearchActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        UserIdShared = sharedPreferences.getString("UserID", "");
 
         ImageView imageView01 = findViewById(R.id.SearchBackimageView01);
         imageView01.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +102,7 @@ public class SearchActivity extends AppCompatActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         searchRecyclerView.setLayoutManager(linearLayoutManager);
         SearchLessonTitle = new ArrayList<>();
-        SearchlessonAdapter01 = new SearchLessonAdapter(SearchLessonTitle);
+        SearchlessonAdapter01 = new SearchLessonAdapter(SearchLessonTitle,UserIdShared);
         searchRecyclerView.setAdapter(SearchlessonAdapter01);
 
         loadLesson();
@@ -288,8 +304,10 @@ public class SearchActivity extends AppCompatActivity {
 
 class SearchLessonAdapter extends RecyclerView.Adapter<SearchLessonAdapter.SearchLessonViewHolder> {
     private final List<Lesson> Searchlessondetails;
-    public SearchLessonAdapter(List<Lesson> Searchlessondetails) {
+    private final String userId;
+    public SearchLessonAdapter(List<Lesson> Searchlessondetails,String id) {
         this.Searchlessondetails = Searchlessondetails;
+        this.userId = id;
     }
 
     static class SearchLessonViewHolder extends RecyclerView.ViewHolder {
@@ -408,9 +426,58 @@ class SearchLessonAdapter extends RecyclerView.Adapter<SearchLessonAdapter.Searc
         holder.LessonCartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(holder.itemView.getContext(), "Added to Cart"+lessonDetails.getId(), Toast.LENGTH_SHORT).show();
+                if(userId!=null){
+                    addtoCart(userId,lessonDetails.getId(),holder);
+
+                }
             }
         });
+    }
+
+    private void addtoCart(String userId,String lessonId,RecyclerView.ViewHolder holder){
+        String UserId = userId;
+        String LessonId =lessonId;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    Gson gson = new Gson();
+                    JsonObject cartJson = new JsonObject();
+                    cartJson.addProperty("userId",UserId);
+                    cartJson.addProperty("lessonId",LessonId);
+
+                    RequestBody jsonRequestBody = RequestBody.create(gson.toJson(cartJson), MediaType.get("application/json"));
+                    // Make request
+                    Request request = new Request.Builder()
+                            .url(AppConfig.BASE_URL+"/AddToCart")
+                            .post(jsonRequestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseText = response.body().string();
+                    if (responseText.equals("Cart added successfully")){
+                        ((SearchActivity) holder.itemView.getContext()).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(holder.itemView.getContext(), "Response: " + responseText, Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }else{
+                        ((SearchActivity) holder.itemView.getContext()).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(holder.itemView.getContext(), "Response: " + responseText, Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
+
     }
 
     @Override
