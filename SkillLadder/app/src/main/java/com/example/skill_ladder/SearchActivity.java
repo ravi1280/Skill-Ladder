@@ -35,6 +35,7 @@ import com.example.skill_ladder.model.JobTitle;
 import com.example.skill_ladder.model.Lesson;
 import com.example.skill_ladder.model.SQLiteHelper;
 import com.example.skill_ladder.model.customAlert;
+import com.example.skill_ladder.model.showCustomToast;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -427,16 +428,18 @@ class SearchLessonAdapter extends RecyclerView.Adapter<SearchLessonAdapter.Searc
             @Override
             public void onClick(View view) {
                 if(userId!=null){
-                    addtoCart(userId,lessonDetails.getId(),holder);
+                    addtoCart(userId,lessonDetails.getId(),lessonDetails.getLessonName(),lessonDetails.getPrice().toString(),holder);
 
                 }
             }
         });
     }
 
-    private void addtoCart(String userId,String lessonId,RecyclerView.ViewHolder holder){
+    private void addtoCart(String userId,String lessonId,String lessonName,String lessonPrice,RecyclerView.ViewHolder holder){
         String UserId = userId;
         String LessonId =lessonId;
+        String LessonName =lessonName;
+        String LessonPrice =lessonPrice;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -446,6 +449,8 @@ class SearchLessonAdapter extends RecyclerView.Adapter<SearchLessonAdapter.Searc
                     JsonObject cartJson = new JsonObject();
                     cartJson.addProperty("userId",UserId);
                     cartJson.addProperty("lessonId",LessonId);
+                    cartJson.addProperty("lessonName",LessonName);
+                    cartJson.addProperty("lessonPrice",LessonPrice);
 
                     RequestBody jsonRequestBody = RequestBody.create(gson.toJson(cartJson), MediaType.get("application/json"));
                     // Make request
@@ -459,14 +464,15 @@ class SearchLessonAdapter extends RecyclerView.Adapter<SearchLessonAdapter.Searc
                         ((SearchActivity) holder.itemView.getContext()).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(holder.itemView.getContext(), "Response: " + responseText, Toast.LENGTH_LONG).show();
+
+                                showCustomToast.showToast(holder.itemView.getContext(), responseText, R.drawable.checked);
                             }
                         });
                     }else{
                         ((SearchActivity) holder.itemView.getContext()).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(holder.itemView.getContext(), "Response: " + responseText, Toast.LENGTH_LONG).show();
+                                showCustomToast.showToast(holder.itemView.getContext(), responseText, R.drawable.checked);
                             }
                         });
                     }
