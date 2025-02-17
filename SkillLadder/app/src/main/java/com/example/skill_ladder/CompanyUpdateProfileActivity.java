@@ -303,7 +303,6 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
                     customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Old Password Not Matched!", R.drawable.cancel);
                 }
 
-
             }
         });
         bottomSheetDialog.show();

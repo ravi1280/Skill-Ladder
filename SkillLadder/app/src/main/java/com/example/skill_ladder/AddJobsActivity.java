@@ -80,10 +80,9 @@ public class AddJobsActivity extends AppCompatActivity {
             }
         });
 
-
     }
     private void loadCompanyData() {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("CompanyPrefs", MODE_PRIVATE);
         String email = sharedPreferences.getString("companyEmail", "");
 
         firestore = FirebaseFirestore.getInstance();
