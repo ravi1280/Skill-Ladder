@@ -22,6 +22,7 @@ import com.example.skill_ladder.model.customAlert;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
@@ -45,15 +46,6 @@ public class CompanyLogInActivity extends AppCompatActivity {
         button01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                String companyEmail = sharedPreferences.getString("companyEmail", ""); // Default is empty string
-
-                if (companyEmail.isEmpty()) {
-                    customAlert.showCustomAlert(CompanyLogInActivity.this,"Error ","Please Sign Up First",R.drawable.cancel);
-                    return;
-                }
-                Log.d("companyEmail", "companyEmail " + companyEmail);
-
 
                 EditText editText01 =findViewById(R.id.CompanyLogineditText01);
                 EditText editText02 =findViewById(R.id.CompanyLogineditText02);
@@ -76,6 +68,19 @@ public class CompanyLogInActivity extends AppCompatActivity {
                                     if (queryDocumentSnapshots.isEmpty()) {
                                         customAlert.showCustomAlert(CompanyLogInActivity.this,"Error ","Invalid UserName or Password",R.drawable.cancel);
                                     } else {
+                                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+
+                                            String documentId = document.getId();
+                                            String email = document.getString("email");
+
+                                            SharedPreferences sharedPreferences = getSharedPreferences("CompanyPrefs", MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                                            editor.putString("companyID", documentId);
+                                            editor.putString("companyEmail", email);
+                                            editor.apply();
+
+                                        }
                                         Intent intent01 = new Intent(CompanyLogInActivity.this, JobCompanyHomeActivity.class);
                                         startActivity(intent01);
                                     }
@@ -103,4 +108,6 @@ public class CompanyLogInActivity extends AppCompatActivity {
 
 
     }
+
+
 }

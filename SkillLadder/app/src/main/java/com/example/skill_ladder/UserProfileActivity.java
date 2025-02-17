@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,13 +13,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.skill_ladder.model.customAlert;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -26,6 +36,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     EditText text01,text02,text03,text04;
     TextView tv01,tv02;
+    private FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +48,7 @@ public class UserProfileActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        firestore = FirebaseFirestore.getInstance();
 
         tv01 = findViewById(R.id.UserProfiletextView01);
         tv02 = findViewById(R.id.UserProfiletexview02);
@@ -84,16 +95,14 @@ public class UserProfileActivity extends AppCompatActivity {
     }
     private void updateUserProfile() {
         String fullName = text01.getText().toString().trim();
-//        String email = text02.getText().toString().trim();
         String mobile = text03.getText().toString().trim();
-//        String password = text04.getText().toString().trim();
 
         if (fullName.isEmpty()) {
             customAlert.showCustomAlert(this, "Error", "Please Fill The Full Name!", R.drawable.cancel);
         } else if (mobile.isEmpty()) {
             customAlert.showCustomAlert(this, "Error", "Please Fill The Mobile!", R.drawable.cancel);
         } else {
-            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("UserFullName", fullName);
             editor.putString("UserMobile", mobile);
@@ -103,9 +112,40 @@ public class UserProfileActivity extends AppCompatActivity {
             tv01.setText(fullName);
             text03.setText(mobile);
 
+            updateFireBase();
 
-            customAlert.showCustomAlert(this, "Success", "Profile Updated Successfully!", R.drawable.checked);
         }
+    }
+    private void updateFireBase(){
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        String UserId = sharedPreferences.getString("UserID", "");
+
+        String fullName = text01.getText().toString().trim();
+        String mobile = text03.getText().toString().trim();
+
+        Map<String, Object> updatedData = new HashMap<>();
+        updatedData.put("fullName", fullName);
+        updatedData.put("mobile", mobile);
+
+        firestore.collection("user")
+                .document(UserId)
+                .update(updatedData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        recreate();
+                        customAlert.showCustomAlert(UserProfileActivity.this, "Success", "Successfully Update !", R.drawable.checked);
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        customAlert.showCustomAlert(UserProfileActivity.this, "Error", "Can not  Update !", R.drawable.cancel);
+
+                    }
+                });
+
     }
     private void bottomSheetProcess(){
         View bottomSheetView = getLayoutInflater().inflate(R.layout.update_password_bottom, null);
@@ -133,14 +173,34 @@ public class UserProfileActivity extends AppCompatActivity {
             } else if (!oldpassword.equals(text04.getText().toString())) {
                 customAlert.showCustomAlert(UserProfileActivity.this, "Error", "Old Password Doesn't Match !", R.drawable.cancel);
             }else {
-                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("UserPassword", newPassword);
                 editor.apply();
 
                 text04.setText(newPassword);
 
-                customAlert.showCustomAlert(UserProfileActivity.this, "Success", "Password Updated Successfully!", R.drawable.checked);
+                String UserId = sharedPreferences.getString("UserID", "");
+
+                Map<String, Object> updatedData = new HashMap<>();
+                updatedData.put("password", newPassword);
+                firestore.collection("user")
+                        .document(UserId)
+                        .update(updatedData)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                customAlert.showCustomAlert(UserProfileActivity.this, "Success", "Password Updated Successfully!", R.drawable.checked);
+                                bottomSheetDialog.dismiss();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                customAlert.showCustomAlert(UserProfileActivity.this, "Error", "Password Not Updated!", R.drawable.cancel);
+                            }
+                        });
+
                 bottomSheetDialog.dismiss();
             }
         });
@@ -148,7 +208,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
     private void setData(){
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         String UserName = sharedPreferences.getString("UserFullName", "");
         String UserEmail = sharedPreferences.getString("UserEmail", "");
         String UserMobile = sharedPreferences.getString("UserMobile", "");
@@ -179,7 +239,7 @@ public class UserProfileActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove("UserFullName");
                 editor.remove("UserEmail");

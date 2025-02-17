@@ -1,5 +1,7 @@
 package com.example.skill_ladder;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -69,6 +71,14 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
             }
         });
 
+        ImageView logout =findViewById(R.id.CompanyLogOut);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                companyLogout();
+            }
+        });
+
         Button updateButton = findViewById(R.id.CompanyProfileBtn01);
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,91 +87,18 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
             }
         });
 
-
         Button showBottomSheetButton = findViewById(R.id.CompanyProfileBtn02);
 
-        showBottomSheetButton.setOnClickListener(v -> {
-
-            View bottomSheetView = getLayoutInflater().inflate(R.layout.update_password_bottom, null);
-            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(CompanyUpdateProfileActivity.this);
-            bottomSheetDialog.setContentView(bottomSheetView);
-
-
-            Button actionOne = bottomSheetView.findViewById(R.id.UserUpdatePasswordBtn);
-            EditText text01 = bottomSheetView.findViewById(R.id.UserOldPassword);
-            EditText text02 = bottomSheetView.findViewById(R.id.UserNewPassword);
-            EditText text03 = bottomSheetView.findViewById(R.id.UserReTypePassword);
-
-            actionOne.setOnClickListener(view -> {
-                String oldpassword = text01.getText().toString().trim();
-                String newPassword = text02.getText().toString().trim();
-                String reNewPassword = text03.getText().toString().trim();
-
-                if (oldpassword.isEmpty()) {
-                    customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Please Fill Old Password!", R.drawable.cancel);
-                } else if (newPassword.isEmpty()) {
-                    customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Please Fill New Password!", R.drawable.cancel);
-                } else if (reNewPassword.isEmpty()) {
-                    customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Please Fill Re-Type Password!", R.drawable.cancel);
-                } else {
-                    if (oldpassword.equals(CompanyPasswordEdit.getText().toString().trim())){
-
-                        if(newPassword.equals(reNewPassword)){
-                            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                            String companyEmail = sharedPreferences.getString("companyEmail", "");
-                            firestore = FirebaseFirestore.getInstance();
-                            firestore.collection("company")
-                                    .whereEqualTo("email", companyEmail)
-                                    .whereEqualTo("password", oldpassword)
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                                    String documentId = document.getId();
-                                                    Map<String, Object> updatedData = new HashMap<>();
-                                                    updatedData.put("password", newPassword);
-                                                    firestore.collection("company")
-                                                            .document(documentId)
-                                                            .update(updatedData)
-                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                @Override
-                                                                public void onSuccess(Void unused) {
-                                                                    customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Success", "Password Updated Successfully!", R.drawable.checked);
-                                                                    bottomSheetDialog.dismiss();
-                                                                }
-                                                            })
-                                                            .addOnFailureListener(new OnFailureListener() {
-                                                                @Override
-                                                                public void onFailure(@NonNull Exception e) {
-                                                                    customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Password Not Updated!", R.drawable.cancel);
-                                                                }
-                                                            });
-                                                }
-                                            } else {
-                                                customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Old Password Not Matched!", R.drawable.cancel);
-                                            }
-                                        }
-                                    });
-
-                        }else {
-                            customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Retype Password Not Matched!", R.drawable.cancel);
-                        }
-
-                    }else {
-                        customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Old Password Not Matched!", R.drawable.cancel);
-                    }
-
-
-                }
-            });
-            bottomSheetDialog.show();
+        showBottomSheetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updatePassword();
+            }
         });
     }
 
     private void fillProfileDetails (){
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("CompanyPrefs", MODE_PRIVATE);
         String companyEmail = sharedPreferences.getString("companyEmail", "");
 
         if (companyEmail.isEmpty()) {
@@ -198,62 +135,178 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
                 });
     }
     private void profileUpdateDetails(){
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        String companyEmail = sharedPreferences.getString("companyEmail", "");
+        String name= CompanyNameEdit.getText().toString();
+        String mobile= CompanyMobileEdit.getText().toString();
+        if (name.isEmpty()){
+            customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Name Field is Empty !", R.drawable.cancel);
 
-        if (companyEmail.isEmpty()) {
-            Log.e("companyEmail", "No companyEmail found in SharedPreferences");
-            return;
+        }else if(mobile.isEmpty()){
+            customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Mobile Field is Empty!", R.drawable.cancel);
+
+        }else {
+            SharedPreferences sharedPreferences = getSharedPreferences("CompanyPrefs", MODE_PRIVATE);
+            String companyEmail = sharedPreferences.getString("companyEmail", "");
+
+            if (companyEmail.isEmpty()) {
+                customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Data Lost from mobile !", R.drawable.cancel);
+
+                return;
+            }
+            Log.d("companyEmail", "companyEmail " + companyEmail);
+
+            firestore = FirebaseFirestore.getInstance();
+            firestore.collection("company")
+                    .whereEqualTo("email", companyEmail)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            if (queryDocumentSnapshots.isEmpty()) {
+                                Log.d("Firestore", "No company found with email: " + companyEmail);
+                                return;
+                            }
+
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                String documentId = document.getId();
+
+
+                                Map<String, Object> updatedData = new HashMap<>();
+                                updatedData.put("name", name);
+                                updatedData.put("mobile", mobile);
+
+                                firestore.collection("company")
+                                        .document(documentId)
+                                        .update(updatedData)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                recreate();
+                                                customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Success", "Successfully Update !", R.drawable.checked);
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Error updating company profile!", R.drawable.cancel);
+
+                                            }
+                                        });
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("Firestore", "Error fetching company data", e);
+                        }
+                    });
         }
-        Log.d("companyEmail", "companyEmail " + companyEmail);
 
-        firestore = FirebaseFirestore.getInstance();
-        firestore.collection("company")
-                .whereEqualTo("email", companyEmail)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (queryDocumentSnapshots.isEmpty()) {
-                            Log.d("Firestore", "No company found with email: " + companyEmail);
-                            return;
-                        }
+    }
+    private void companyLogout(){
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.logout_bottom, null);
+        BottomSheetDialog bottomSheetDialog02 = new BottomSheetDialog(CompanyUpdateProfileActivity.this);
+        bottomSheetDialog02.setContentView(bottomSheetView);
 
-                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                            String documentId = document.getId();
+        Button logout = bottomSheetView.findViewById(R.id.LogoutButton);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sharedPreferences = getSharedPreferences("CompanyPrefs", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove("companyEmail");
+                editor.remove("companyID");
+                editor.apply();
 
-                            String name= CompanyNameEdit.getText().toString();
-                            String mobile= CompanyMobileEdit.getText().toString();
+                customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Success", "Logout Successfully!", R.drawable.checked);
+                bottomSheetDialog02.dismiss();
 
-                            Map<String, Object> updatedData = new HashMap<>();
-                            updatedData.put("name", name);
-                            updatedData.put("mobile", mobile);
+                Intent intent = new Intent(CompanyUpdateProfileActivity.this,CompanyLogInActivity.class);
+                startActivity(intent);
 
-                            firestore.collection("company")
-                                    .document(documentId)
-                                    .update(updatedData)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            recreate();
-                                            Log.i("Firestore", "Company profile updated successfully.");
+            }
+        });
+        bottomSheetDialog02.show();
+
+    }
+    private void updatePassword(){
+
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.update_password_bottom, null);
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(CompanyUpdateProfileActivity.this);
+        bottomSheetDialog.setContentView(bottomSheetView);
+
+
+        Button actionOne = bottomSheetView.findViewById(R.id.UserUpdatePasswordBtn);
+        EditText text01 = bottomSheetView.findViewById(R.id.UserOldPassword);
+        EditText text02 = bottomSheetView.findViewById(R.id.UserNewPassword);
+        EditText text03 = bottomSheetView.findViewById(R.id.UserReTypePassword);
+
+        actionOne.setOnClickListener(view -> {
+            String oldpassword = text01.getText().toString().trim();
+            String newPassword = text02.getText().toString().trim();
+            String reNewPassword = text03.getText().toString().trim();
+
+            if (oldpassword.isEmpty()) {
+                customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Please Fill Old Password!", R.drawable.cancel);
+            } else if (newPassword.isEmpty()) {
+                customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Please Fill New Password!", R.drawable.cancel);
+            } else if (reNewPassword.isEmpty()) {
+                customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Please Fill Re-Type Password!", R.drawable.cancel);
+            } else {
+                if (oldpassword.equals(CompanyPasswordEdit.getText().toString().trim())){
+
+                    if(newPassword.equals(reNewPassword)){
+                        SharedPreferences sharedPreferences = getSharedPreferences("CompanyPrefs", MODE_PRIVATE);
+                        String companyEmail = sharedPreferences.getString("companyEmail", "");
+                        firestore = FirebaseFirestore.getInstance();
+                        firestore.collection("company")
+                                .whereEqualTo("email", companyEmail)
+                                .whereEqualTo("password", oldpassword)
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                String documentId = document.getId();
+                                                Map<String, Object> updatedData = new HashMap<>();
+                                                updatedData.put("password", newPassword);
+                                                firestore.collection("company")
+                                                        .document(documentId)
+                                                        .update(updatedData)
+                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void unused) {
+                                                                CompanyPasswordEdit.setText(newPassword);
+                                                                customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Success", "Password Updated Successfully!", R.drawable.checked);
+                                                                bottomSheetDialog.dismiss();
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Password Not Updated!", R.drawable.cancel);
+                                                            }
+                                                        });
+                                            }
+                                        } else {
+                                            customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Old Password Not Matched!", R.drawable.cancel);
                                         }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.e("Firestore", "Error updating company profile", e);
-                                        }
-                                    });
-                        }
+                                    }
+                                });
+
+                    }else {
+                        customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Retype Password Not Matched!", R.drawable.cancel);
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("Firestore", "Error fetching company data", e);
-                    }
-                });
+
+                }else {
+                    customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Old Password Not Matched!", R.drawable.cancel);
+                }
+
+
+            }
+        });
+        bottomSheetDialog.show();
 
     }
 }

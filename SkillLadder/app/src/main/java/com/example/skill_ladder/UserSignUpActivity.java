@@ -27,7 +27,7 @@ import java.util.Map;
 
 public class UserSignUpActivity extends AppCompatActivity {
 
-    String documentId,fullName,mobile,email,password;
+    String fullName,mobile,email,password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +85,7 @@ public class UserSignUpActivity extends AppCompatActivity {
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {
-                                                        documentId = documentReference.getId();
-                                                        setSharedPreferences();
+
 
                                                         Intent intent = new Intent(UserSignUpActivity.this, UserLoginActivity.class);
                                                         startActivity(intent);
@@ -119,17 +118,5 @@ public class UserSignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void setSharedPreferences() {
 
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.putString("UserID", documentId);
-        editor.putString("UserEmail", email);
-        editor.putString("UserMobile", mobile);
-        editor.putString("UserFullName", fullName);
-        editor.putString("UserPassword", password);
-        editor.apply();
-
-    }
 }
