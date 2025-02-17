@@ -2,6 +2,7 @@ package com.example.skill_ladder;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
@@ -32,21 +33,35 @@ public class GetStartActivity extends AppCompatActivity {
         if(!isConnected()){
             customAlert.showCustomAlert(GetStartActivity.this,"Connection Error ","Please Check Your Network Connection !",R.drawable.no_wifi);
         }else {
-//            Toast.makeText(GetStartActivity.this,"Welcome to app",Toast.LENGTH_SHORT).show();
             CardView cardView01 = findViewById(R.id.getStartCardView01);
             cardView01.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+                    Boolean islogin = sharedPreferences.getBoolean("UserIsLoggedIn", false);
+                    if(islogin){
+                        Intent intent01 = new Intent(GetStartActivity.this,UserHomeActivity.class);
+                        startActivity(intent01);
+                    }else {
+
                     Intent intent01 = new Intent(GetStartActivity.this,UserLoginActivity.class);
                     startActivity(intent01);
+                    }
                 }
             });
             CardView cardView02 = findViewById(R.id.getStartCardView02);
             cardView02.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    SharedPreferences sharedPreferences = getSharedPreferences("CompanyPrefs", Context.MODE_PRIVATE);
+                    Boolean islogin = sharedPreferences.getBoolean("companyIsLoggedIn", false);
+                    if(islogin){
+                        Intent intent02 = new Intent(GetStartActivity.this,JobCompanyHomeActivity.class);
+                        startActivity(intent02);
+                    }else {
                     Intent intent02 = new Intent(GetStartActivity.this,CompanyLogInActivity.class);
                     startActivity(intent02);
+                    }
                 }
             });
         }

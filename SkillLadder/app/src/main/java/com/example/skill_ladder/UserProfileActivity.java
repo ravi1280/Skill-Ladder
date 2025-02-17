@@ -246,6 +246,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 editor.remove("UserMobile");
                 editor.remove("UserPassword");
                 editor.remove("UserID");
+                editor.remove("UserIsLoggedIn");
                 editor.apply();
 
                 customAlert.showCustomAlert(UserProfileActivity.this, "Success", "Logout Successfully!", R.drawable.checked);
@@ -253,6 +254,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(UserProfileActivity.this,UserLoginActivity.class);
                 startActivity(intent);
+                finish();
 
             }
         });

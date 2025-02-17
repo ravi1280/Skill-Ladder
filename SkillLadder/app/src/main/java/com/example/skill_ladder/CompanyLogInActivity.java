@@ -78,6 +78,7 @@ public class CompanyLogInActivity extends AppCompatActivity {
 
                                             editor.putString("companyID", documentId);
                                             editor.putString("companyEmail", email);
+                                            editor.putBoolean("companyIsLoggedIn", true);
                                             editor.apply();
 
                                         }

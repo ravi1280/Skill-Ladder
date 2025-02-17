@@ -1,5 +1,6 @@
 package com.example.skill_ladder;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +27,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +36,7 @@ public class AddJobsActivity extends AppCompatActivity {
 
     EditText companyName, companyMobile, companyEmail,jobTitle;
     TextView jobDate;
+    String IntendJobId,IntentJobTitle,jobClosingDate;
 
     FirebaseFirestore firestore;
 
@@ -46,11 +50,19 @@ public class AddJobsActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Intent intent = getIntent();
+        IntendJobId = intent.getStringExtra("jobId");
+        IntentJobTitle = intent.getStringExtra("jobTitle");
+        jobClosingDate = intent.getStringExtra("jobClosingDate");
+
         companyName = findViewById(R.id.AddJobEditText01);
         companyEmail = findViewById(R.id.AddJobEditText02);
         companyMobile = findViewById(R.id.AddJobEditText03);
         jobTitle = findViewById(R.id.AddJobEditText04);
         jobDate = findViewById(R.id.AddjobDateText);
+
+
 
         loadCompanyData();
 
@@ -67,15 +79,29 @@ public class AddJobsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 addJob();
-
             }
         });
 
         CalendarView calendarView = findViewById(R.id.calendarView01);
+
+        if(IntendJobId!=null){
+            jobTitle.setText(IntentJobTitle);
+            jobDate.setText(jobClosingDate);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            try {
+                Date date = dateFormat.parse(jobClosingDate);
+                if (date != null) {
+                    calendarView.setDate(date.getTime());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int y, int m, int d) {
-                jobDate.setText(String.valueOf(y)+"/"+String.valueOf(m)+"/"+String.valueOf(d));
+                jobDate.setText(String.valueOf(y)+"/"+String.valueOf(m+1)+"/"+String.valueOf(d));
 
             }
         });
@@ -130,28 +156,50 @@ public class AddJobsActivity extends AppCompatActivity {
         } else if (date.isEmpty()) {
             customAlert.showCustomAlert(AddJobsActivity.this, "Error", "Please Select the job date", R.drawable.cancel);
         } else {
-            Map<String, Object> jobData = new HashMap<>();
-            jobData.put("CompanyName", name);
-            jobData.put("CompanyMobile", mobile);
-            jobData.put("CompanyEmail", email);
-            jobData.put("JobTitle", title);
-            jobData.put("ClosingDate", date);
+            if(IntendJobId!=null){
+                Map<String, Object> jobData = new HashMap<>();
+                jobData.put("JobTitle", title);
+                jobData.put("ClosingDate", date);
+                firestore = FirebaseFirestore.getInstance();
+                firestore.collection("jobs").document(IntendJobId)
+                        .update(jobData)
+                        .addOnSuccessListener(new OnSuccessListener() {
+                            @Override
+                            public void onSuccess(Object o) {
+                                customAlert.showCustomAlert(AddJobsActivity.this, "Success", "Job Update successfully", R.drawable.checked);
+                                jobTitle.setText("");
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                customAlert.showCustomAlert(AddJobsActivity.this, "Error", "Error adding job", R.drawable.cancel);
+                            }
+                        });
 
-            firestore = FirebaseFirestore.getInstance();
-            firestore.collection("jobs")
-                    .add(jobData)
-                    .addOnSuccessListener(new OnSuccessListener() {
-                        @Override
-                        public void onSuccess(Object o) {
-                            customAlert.showCustomAlert(AddJobsActivity.this, "Success", "Job added successfully", R.drawable.checked);
-                            jobTitle.setText("");
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    customAlert.showCustomAlert(AddJobsActivity.this, "Error", "Error adding job", R.drawable.cancel);
-                }
-            });
+            } else {
+                Map<String, Object> jobData = new HashMap<>();
+                jobData.put("CompanyName", name);
+                jobData.put("CompanyMobile", mobile);
+                jobData.put("CompanyEmail", email);
+                jobData.put("JobTitle", title);
+                jobData.put("ClosingDate", date);
+
+                firestore = FirebaseFirestore.getInstance();
+                firestore.collection("jobs")
+                        .add(jobData)
+                        .addOnSuccessListener(new OnSuccessListener() {
+                            @Override
+                            public void onSuccess(Object o) {
+                                customAlert.showCustomAlert(AddJobsActivity.this, "Success", "Job added successfully", R.drawable.checked);
+                                jobTitle.setText("");
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                customAlert.showCustomAlert(AddJobsActivity.this, "Error", "Error adding job", R.drawable.cancel);
+                            }
+                        });
+            }
         }
 
     }

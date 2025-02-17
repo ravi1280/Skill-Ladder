@@ -60,8 +60,10 @@ public class JobCompanyHomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent02 = new Intent(JobCompanyHomeActivity.this,CompanyUpdateProfileActivity.class);
                 startActivity(intent02);
+//                finish();
             }
         });
+
 
         FloatingActionButton fab = findViewById(R.id.CompanyHomeAddButton01);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +90,6 @@ public class JobCompanyHomeActivity extends AppCompatActivity {
                             Log.e("Firestore", "Error fetching job fields", e);
                         });
 
-
             }
         });
 
@@ -103,7 +104,6 @@ public class JobCompanyHomeActivity extends AppCompatActivity {
         companyJobListAdapter = new CompanyJobListAdapter(jobdetails);
         recyclerView.setAdapter(companyJobListAdapter);
 
-//        loadJobs();
     }
 
     @Override
@@ -135,11 +135,12 @@ public class JobCompanyHomeActivity extends AppCompatActivity {
                         jobdetails.clear();
 
                         for (QueryDocumentSnapshot doc : value) {
+                            String id = doc.getId();
                             String jobTitle = doc.getString("JobTitle");
                             String date = doc.getString("ClosingDate");
 
                             if (jobTitle != null && date != null) {
-                                jobdetails.add(new CompanyJob(jobTitle, date));
+                                jobdetails.add(new CompanyJob(jobTitle, date,id));
                             }
                         }
 
@@ -155,21 +156,21 @@ public class JobCompanyHomeActivity extends AppCompatActivity {
                             companyJobListAdapter.notifyDataSetChanged();
                         });
 
-
                     }
                 });
-
     }
 }
 class CompanyJob {
 
+    String JobId;
     String Jobtitle;
     String Jobclosedate;
 
-    public CompanyJob(String jobtitle,String jobclosedate ) {
+    public CompanyJob(String jobtitle,String jobclosedate,String jobId ) {
 
         this.Jobclosedate = jobclosedate;
         this.Jobtitle = jobtitle;
+        this.JobId = jobId;
     }
 }
 class CompanyJobListAdapter extends RecyclerView.Adapter<CompanyJobListAdapter.CompanyJobViewHolder> {
@@ -207,12 +208,19 @@ class CompanyJobListAdapter extends RecyclerView.Adapter<CompanyJobListAdapter.C
         CompanyJob jobDetails = jobdetails.get(position);
         holder.CompanyJobTitle.setText(jobDetails.Jobtitle);
         holder.CompanyJobClosingDate.setText(jobDetails.Jobclosedate);
-        String company = jobDetails.Jobtitle.toString();
+//        String company = jobDetails.Jobtitle.toString();
+        String jobId = jobDetails.JobId.toString();
 
         holder.ContainerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(holder.itemView.getContext(),company,Toast.LENGTH_SHORT).show();
+                Intent intent= new Intent(holder.itemView.getContext(),AddJobsActivity.class);
+                intent.putExtra("jobId",jobId);
+                intent.putExtra("jobTitle",jobDetails.Jobtitle);
+                intent.putExtra("jobClosingDate",jobDetails.Jobclosedate);
+                holder.itemView.getContext().startActivity(intent);
+
+//                Toast.makeText(holder.itemView.getContext(),jobId,Toast.LENGTH_SHORT).show();
             }
         });
     }
