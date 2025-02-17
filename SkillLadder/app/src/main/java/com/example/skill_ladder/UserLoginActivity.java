@@ -96,6 +96,7 @@ public class UserLoginActivity extends AppCompatActivity {
                                 editor.putString("UserEmail", email);
                                 editor.putString("UserMobile", mobile);
                                 editor.putString("UserPassword", password);
+                                editor.putBoolean("UserIsLoggedIn", true);
                                 editor.apply();
 
                                 Intent intent01 = new Intent(UserLoginActivity.this, UserHomeActivity.class);

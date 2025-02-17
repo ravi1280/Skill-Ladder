@@ -216,6 +216,7 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove("companyEmail");
                 editor.remove("companyID");
+                editor.remove("companyIsLoggedIn");
                 editor.apply();
 
                 customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Success", "Logout Successfully!", R.drawable.checked);
@@ -223,6 +224,7 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(CompanyUpdateProfileActivity.this,CompanyLogInActivity.class);
                 startActivity(intent);
+                finish();
 
             }
         });
