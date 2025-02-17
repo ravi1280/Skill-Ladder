@@ -13,12 +13,12 @@
       android:strokeAlpha="0.5"
       android:strokeWidth="1.5"
       android:fillColor="#00000000"
-      android:strokeColor="#1C274C"
+      android:strokeColor="#FF5252"
       android:fillAlpha="0.5"
       android:strokeLineCap="round"/>
   <path
       android:pathData="M2,5C2,4.057 2,3.586 2.293,3.293C2.586,3 3.057,3 4,3H20C20.943,3 21.414,3 21.707,3.293C22,3.586 22,4.057 22,5C22,5.943 22,6.414 21.707,6.707C21.414,7 20.943,7 20,7H4C3.057,7 2.586,7 2.293,6.707C2,6.414 2,5.943 2,5Z"
       android:strokeWidth="1.5"
       android:fillColor="#00000000"
-      android:strokeColor="#1C274C"/>
+      android:strokeColor="#FF5252"/>
 </vector>

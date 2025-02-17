@@ -1,5 +1,7 @@
 package com.example.skill_ladder;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +19,28 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.skill_ladder.model.AppConfig;
+import com.example.skill_ladder.model.Cart;
+import com.example.skill_ladder.model.showCustomToast;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserCartActivity extends AppCompatActivity {
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
+public class UserCartActivity extends AppCompatActivity {
+String UserIdShared;
+    List<Cart> catdetails;
+    CartAdapter cartListAdapter;
+    RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +51,10 @@ public class UserCartActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        UserIdShared = sharedPreferences.getString("UserID", "");
+        loadCartDetails(UserIdShared);
+
         ImageView imageViewprofile = findViewById(R.id.CartBackIcon01);
         imageViewprofile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,55 +63,84 @@ public class UserCartActivity extends AppCompatActivity {
             }
         });
 
-        RecyclerView recyclerView = findViewById(R.id.CartRV01);
+        recyclerView = findViewById(R.id.CartRV01);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(UserCartActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
+        catdetails = new ArrayList<>();
+        cartListAdapter = new CartAdapter(catdetails,UserIdShared);
+        recyclerView.setAdapter(cartListAdapter);
 
-        List<Cart> catdetails = new ArrayList<>();
-        catdetails.add(new Cart("Software Engineer"));
-        catdetails.add(new Cart("Software Engineer"));
-        catdetails.add(new Cart("Software Engineer"));
-        catdetails.add(new Cart("Software Engineer"));
-        catdetails.add(new Cart("Software Engineer"));
-        catdetails.add(new Cart("Software Engineer"));
-        catdetails.add(new Cart("Software Engineer"));
-        catdetails.add(new Cart("Software Engineer"));
-        catdetails.add(new Cart("Software Engineer"));
-        catdetails.add(new Cart("Software Engineer"));
-        catdetails.add(new Cart("Software Engineer"));
-        catdetails.add(new Cart("Software Engineer"));
-        catdetails.add(new Cart("Software Engineer"));
+    }
 
-        CartAdapter jobListAdapter = new CartAdapter(catdetails);
-        recyclerView.setAdapter(jobListAdapter);
+    private void loadCartDetails(String id){
+        String userId = id;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    OkHttpClient okHttpClient = new OkHttpClient();
+                    String url = AppConfig.BASE_URL + "/LoadCart?id=" + userId;
+
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .get()
+                            .build();
+
+                    Response response = okHttpClient.newCall(request).execute();
+                    String responseText = response.body().string();
+
+                    Gson gson= new Gson();
+                    JsonObject jsonObject = gson.fromJson(responseText, JsonObject.class);
+
+
+                    if (jsonObject.has("cartItem")) {
+                        Type listType01 = new TypeToken<List<Cart>>() {}.getType();
+                        List<Cart> cartItems01 = gson.fromJson(jsonObject.get("cartItem"), listType01);
+
+                        if (cartItems01 != null) {
+                            runOnUiThread(() -> {
+                                catdetails.clear();  // Clear existing data
+                                catdetails.addAll(cartItems01);  // Add new data
+                                cartListAdapter.notifyDataSetChanged();  // Refresh RecyclerView
+                            });
+                        }
+                    } else {
+                        runOnUiThread(() -> showCustomToast.showToast(UserCartActivity.this, "Cart is Empty", R.drawable.cancel));
+                    }
+
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+        }).start();
 
     }
 }
 
-class  Cart{
-
-    String Cartitle;
-
-    public Cart(String carttitle ) {
-        this.Cartitle = carttitle;
-    }
-}
 
 class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
     private final List<Cart> cartdetails;
+    private final String userId;
 
-    public CartAdapter(List<Cart> cartdetails) {
+    public CartAdapter(List<Cart> cartdetails,String userid) {
         this.cartdetails = cartdetails;
+        this.userId = userid;
     }
 
     static class CartViewHolder extends RecyclerView.ViewHolder {
 
-        TextView CartTitle;
+        TextView CartTitle, CartPrice;
+        ImageView CartDeleteIcon;
         View ContainerView;
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
             CartTitle = itemView.findViewById(R.id.CartItemTV01);
+            CartPrice = itemView.findViewById(R.id.CartItemTV02);
+            CartDeleteIcon = itemView.findViewById(R.id.CartDeleteIcon);
             ContainerView = itemView;
         }
     }
@@ -105,15 +157,68 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
 
         Cart cartDetails = cartdetails.get(position);
-        holder.CartTitle.setText(cartDetails.Cartitle);
-        String company = cartDetails.Cartitle.toString();
+        holder.CartTitle.setText(cartDetails.getLessonName());
+        holder.CartPrice.setText("$"+cartDetails.getLessonPrice());
+        String company = cartDetails.getLessonName().toString();
 
-        holder.ContainerView.setOnClickListener(new View.OnClickListener() {
+        holder.CartDeleteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(holder.itemView.getContext(),company,Toast.LENGTH_SHORT).show();
+               String lessonId = cartDetails.getLessonId();
+               String UserId = userId;
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            OkHttpClient client = new OkHttpClient();
+                            Gson gson = new Gson();
+                            JsonObject cartJson = new JsonObject();
+                            cartJson.addProperty("userId",UserId);
+                            cartJson.addProperty("lessonId",lessonId);
+
+                            RequestBody jsonRequestBody = RequestBody.create(gson.toJson(cartJson), MediaType.get("application/json"));
+                            // Make request
+                            Request request = new Request.Builder()
+                                    .url(AppConfig.BASE_URL+"/DeleteCart")
+                                    .post(jsonRequestBody)
+                                    .build();
+                            Response response = client.newCall(request).execute();
+                            String responseText = response.body().string();
+
+                            if (responseText.equals("Cart item deleted successfully !")){
+                                ((UserCartActivity) holder.itemView.getContext()).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        cartdetails.remove(holder.getAdapterPosition());
+                                        // Notify adapter
+                                        notifyItemRemoved(holder.getAdapterPosition());
+                                        notifyItemRangeChanged(holder.getAdapterPosition(), cartdetails.size());
+
+                                        showCustomToast.showToast(holder.itemView.getContext(),"Item Deleted", R.drawable.checked);
+
+                                    }
+                                });
+                            }else{
+                                ((UserCartActivity) holder.itemView.getContext()).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        showCustomToast.showToast(holder.itemView.getContext(), responseText, R.drawable.cancel);
+                                    }
+                                });
+                            }
+
+                        }catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }).start();
+
             }
         });
+
+
     }
 
     @Override
