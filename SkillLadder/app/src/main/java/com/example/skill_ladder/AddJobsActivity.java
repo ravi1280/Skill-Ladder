@@ -19,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.skill_ladder.model.customAlert;
 import com.example.skill_ladder.model.job;
+import com.example.skill_ladder.model.showCustomToast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -190,6 +191,7 @@ public class AddJobsActivity extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener() {
                             @Override
                             public void onSuccess(Object o) {
+//                                showCustomToast.showToast(AddJobsActivity.this,"Success",R.drawable.checked);
                                 customAlert.showCustomAlert(AddJobsActivity.this, "Success", "Job added successfully", R.drawable.checked);
                                 jobTitle.setText("");
                             }
