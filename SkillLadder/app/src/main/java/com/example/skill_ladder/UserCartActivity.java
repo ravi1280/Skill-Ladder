@@ -149,9 +149,13 @@ String UserIdShared;
         bottomSheetDialog.setContentView(bottomSheetView);
 
         Button actionOne = bottomSheetView.findViewById(R.id.CartBottomSheetPayBtn);
-        actionOne.setOnClickListener(view -> {
+        actionOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 bottomSheetDialog.dismiss();
+            }
         });
+
         bottomSheetDialog.show();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.skill_ladder;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,6 +25,8 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.skill_ladder.model.JobField;
 import com.example.skill_ladder.model.customAlert;
 import com.example.skill_ladder.model.job;
+import com.example.skill_ladder.model.showCustomToast;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -187,7 +190,6 @@ class CompanyJobListAdapter extends RecyclerView.Adapter<CompanyJobListAdapter.C
         View ContainerView;
         public CompanyJobViewHolder(@NonNull View itemView) {
             super(itemView);
-
             CompanyJobTitle = itemView.findViewById(R.id.CompanyJobViewTV01);
             CompanyJobClosingDate = itemView.findViewById(R.id.CompanyJobViewTV02);
             ContainerView = itemView;
@@ -208,7 +210,6 @@ class CompanyJobListAdapter extends RecyclerView.Adapter<CompanyJobListAdapter.C
         CompanyJob jobDetails = jobdetails.get(position);
         holder.CompanyJobTitle.setText(jobDetails.Jobtitle);
         holder.CompanyJobClosingDate.setText(jobDetails.Jobclosedate);
-//        String company = jobDetails.Jobtitle.toString();
         String jobId = jobDetails.JobId.toString();
 
         holder.ContainerView.setOnClickListener(new View.OnClickListener() {
@@ -219,10 +220,28 @@ class CompanyJobListAdapter extends RecyclerView.Adapter<CompanyJobListAdapter.C
                 intent.putExtra("jobTitle",jobDetails.Jobtitle);
                 intent.putExtra("jobClosingDate",jobDetails.Jobclosedate);
                 holder.itemView.getContext().startActivity(intent);
-
-//                Toast.makeText(holder.itemView.getContext(),jobId,Toast.LENGTH_SHORT).show();
             }
         });
+        holder.ContainerView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                showCustomToast.showToast(holder.ContainerView.getContext(),"Loong Press",R.drawable.checked);
+                OpenBottomSheet(view.getContext());
+
+                return true;
+            }
+        });
+    }
+
+    private void OpenBottomSheet(Context context) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+        View bottomSheetView = LayoutInflater.from(context).inflate(
+                R.layout.job_delete_bottom,
+                null
+        );
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
     }
 
     @Override
