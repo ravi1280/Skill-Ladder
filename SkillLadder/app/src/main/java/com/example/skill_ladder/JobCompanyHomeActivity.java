@@ -67,7 +67,7 @@ public class JobCompanyHomeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                SharedPreferences sharedPreferences = getSharedPreferences("CompanyPrefs", MODE_PRIVATE);
                 String companyEmail = sharedPreferences.getString("companyEmail", "");
 
                 firestore = FirebaseFirestore.getInstance();
@@ -114,7 +114,7 @@ public class JobCompanyHomeActivity extends AppCompatActivity {
     }
 
     private void loadJobs() {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("CompanyPrefs", MODE_PRIVATE);
         String companyEmail = sharedPreferences.getString("companyEmail", "");
 
         if (companyEmail.isEmpty()) {
