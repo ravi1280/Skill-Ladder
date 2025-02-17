@@ -68,8 +68,6 @@ public class LessonContentActivity extends AppCompatActivity {
         boolean isLastSubtopic = i.getBooleanExtra("is_last_subtopic", false);
         progressPercentage = getIntent().getIntExtra("subtopic_progress", 0);
 
-        Toast.makeText(LessonContentActivity.this, "Percentage"+String.valueOf(progressPercentage), Toast.LENGTH_SHORT).show();
-
         textView01.setText(subTopic);
         textView02.setText(subTopic);
         textView03.setText(contentText);
@@ -85,12 +83,9 @@ public class LessonContentActivity extends AppCompatActivity {
         });
 
 
-            Toast.makeText(this, "Last Subtopic", Toast.LENGTH_SHORT).show();
-
             fab.setOnClickListener(view -> {
 
                 if(isLastSubtopic){
-                    Toast.makeText(this, "Last Subtopic", Toast.LENGTH_SHORT).show();
                     updateLessonProgress(lessonId, 100);
 
                     Intent intent = new Intent(LessonContentActivity.this, LessonSuccessActivity.class);
@@ -101,8 +96,6 @@ public class LessonContentActivity extends AppCompatActivity {
                     finish();
             }
             });
-
-
     }
     private void updateLessonProgress(String lessonId01, int progress) {
 
@@ -141,11 +134,8 @@ public class LessonContentActivity extends AppCompatActivity {
                             Toast.makeText(LessonContentActivity.this, "No Lesson Id To Update Lesson Progress", Toast.LENGTH_SHORT).show();
                         }
                     });
-
                 }
-
             }
         }).start();
     }
-
 }

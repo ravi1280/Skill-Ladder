@@ -50,6 +50,9 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.1")
 
+    implementation ("com.github.PayHereDevs:payhere-android-sdk:v3.0.17")
+    implementation ("androidx.appcompat:appcompat:1.6.0")
+
 
 
 }
