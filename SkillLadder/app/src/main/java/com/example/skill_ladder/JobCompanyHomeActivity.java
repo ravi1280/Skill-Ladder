@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +27,8 @@ import com.example.skill_ladder.model.JobField;
 import com.example.skill_ladder.model.customAlert;
 import com.example.skill_ladder.model.job;
 import com.example.skill_ladder.model.showCustomToast;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -225,22 +228,58 @@ class CompanyJobListAdapter extends RecyclerView.Adapter<CompanyJobListAdapter.C
         holder.ContainerView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                showCustomToast.showToast(holder.ContainerView.getContext(),"Loong Press",R.drawable.checked);
-                OpenBottomSheet(view.getContext());
+                OpenBottomSheet(view.getContext(),jobDetails.JobId,holder.getAdapterPosition());
 
                 return true;
             }
         });
     }
 
-    private void OpenBottomSheet(Context context) {
+    private void OpenBottomSheet(Context context,String id,int position) {
+        String jobId = id;
+        View bottomSheetView = LayoutInflater.from(context).inflate( R.layout.job_delete_bottom,null );
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-        View bottomSheetView = LayoutInflater.from(context).inflate(
-                R.layout.job_delete_bottom,
-                null
-        );
-
         bottomSheetDialog.setContentView(bottomSheetView);
+
+        Button button = bottomSheetView.findViewById(R.id.DeleteJobBtn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (position == RecyclerView.NO_POSITION) {
+                    return;
+                }
+
+                FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+                firestore.collection("jobs").document(jobId)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                if (position >= jobdetails.size() || position < 0) {
+                                    Log.e("Delete Job", "Invalid position after deletion");
+                                    bottomSheetDialog.dismiss();
+                                    showCustomToast.showToast(context,"Job deleted successfully",R.drawable.checked);
+                                    return;
+                                }
+
+                                jobdetails.remove(position);
+                                notifyItemRemoved(position);
+                                notifyItemRangeChanged(position, jobdetails.size());
+
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                                showCustomToast.showToast(context,"Error to Delete job !",R.drawable.cancel);
+                                bottomSheetDialog.dismiss();
+                            }
+                        });
+            }
+        });
+
         bottomSheetDialog.show();
     }
 

@@ -22,7 +22,7 @@
         app:srcCompat="@drawable/delete" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/DeleteJobBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"

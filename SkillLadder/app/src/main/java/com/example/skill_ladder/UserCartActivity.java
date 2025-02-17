@@ -235,6 +235,7 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
                                         // Notify adapter
                                         notifyItemRemoved(holder.getAdapterPosition());
                                         notifyItemRangeChanged(holder.getAdapterPosition(), cartdetails.size());
+
                                         showCustomToast.showToast(holder.itemView.getContext(),"Item Deleted", R.drawable.checked);
 
                                     }
