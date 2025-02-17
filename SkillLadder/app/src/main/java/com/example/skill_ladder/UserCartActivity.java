@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,14 +24,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.skill_ladder.model.AppConfig;
 import com.example.skill_ladder.model.Cart;
+import com.example.skill_ladder.model.customAlert;
 import com.example.skill_ladder.model.showCustomToast;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -41,6 +50,7 @@ String UserIdShared;
     List<Cart> catdetails;
     CartAdapter cartListAdapter;
     RecyclerView recyclerView;
+    Integer price;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,11 +65,23 @@ String UserIdShared;
         UserIdShared = sharedPreferences.getString("UserID", "");
         loadCartDetails(UserIdShared);
 
+
+
         ImageView imageViewprofile = findViewById(R.id.CartBackIcon01);
         imageViewprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        Button checkOut = findViewById(R.id.CartCheckOutBtn);
+        checkOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                price=0;
+
+                CheckOutBottomsheet(price);
             }
         });
 
@@ -119,6 +141,19 @@ String UserIdShared;
         }).start();
 
     }
+    private void CheckOutBottomsheet(Integer price){
+        Integer Price = price;
+
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.cart_checkout_bottom, null);
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(UserCartActivity.this);
+        bottomSheetDialog.setContentView(bottomSheetView);
+
+        Button actionOne = bottomSheetView.findViewById(R.id.CartBottomSheetPayBtn);
+        actionOne.setOnClickListener(view -> {
+                bottomSheetDialog.dismiss();
+        });
+        bottomSheetDialog.show();
+    }
 }
 
 
@@ -135,12 +170,14 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
 
         TextView CartTitle, CartPrice;
         ImageView CartDeleteIcon;
+        RadioButton radio;
         View ContainerView;
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
             CartTitle = itemView.findViewById(R.id.CartItemTV01);
             CartPrice = itemView.findViewById(R.id.CartItemTV02);
             CartDeleteIcon = itemView.findViewById(R.id.CartDeleteIcon);
+            radio = itemView.findViewById(R.id.CartradioButton01);
             ContainerView = itemView;
         }
     }
@@ -194,7 +231,6 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
                                         // Notify adapter
                                         notifyItemRemoved(holder.getAdapterPosition());
                                         notifyItemRangeChanged(holder.getAdapterPosition(), cartdetails.size());
-
                                         showCustomToast.showToast(holder.itemView.getContext(),"Item Deleted", R.drawable.checked);
 
                                     }
@@ -217,7 +253,6 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
 
             }
         });
-
 
     }
 
