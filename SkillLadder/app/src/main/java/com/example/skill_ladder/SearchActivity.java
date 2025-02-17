@@ -480,7 +480,6 @@ class SearchLessonAdapter extends RecyclerView.Adapter<SearchLessonAdapter.Searc
                 }catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
         }).start();
 
