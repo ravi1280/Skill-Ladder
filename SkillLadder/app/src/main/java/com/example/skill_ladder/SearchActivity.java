@@ -36,6 +36,7 @@ import com.example.skill_ladder.model.Lesson;
 import com.example.skill_ladder.model.SQLiteHelper;
 import com.example.skill_ladder.model.customAlert;
 import com.example.skill_ladder.model.showCustomToast;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -133,8 +134,12 @@ public class SearchActivity extends AppCompatActivity {
                     updateSpinner01(fieldNames, jobFieldList);
 
                 })
-                .addOnFailureListener(e -> {
-                    Log.e("Firestore", "Error fetching job fields", e);
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showCustomToast.showToast(SearchActivity.this,"Error fetching job fields",R.drawable.cancel);
+
+                    }
                 });
     }
 
@@ -150,6 +155,7 @@ public class SearchActivity extends AppCompatActivity {
                 Log.d("Spinner", "Selected Job Field ID: " + selectedField.getId());
                 fieldName = selectedField.getName();
                 loadSpinner02();
+                loadfieldLesson();
             }
 
             @Override
@@ -183,10 +189,15 @@ public class SearchActivity extends AppCompatActivity {
                     }
 
                     updateSpinner02(titleNames, JobTitleList);
+
                 })
-                .addOnFailureListener(e -> {
-                    Log.e("Firestore", "Error fetching job fields", e);
-                });
+                .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                showCustomToast.showToast(SearchActivity.this,"Error fetching job fields",R.drawable.cancel);
+
+            }
+        });
 
     }
 
@@ -236,14 +247,22 @@ public class SearchActivity extends AppCompatActivity {
                     SearchlessonAdapter01.notifyDataSetChanged();
 
                 })
-                .addOnFailureListener(e -> {
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showCustomToast.showToast(SearchActivity.this,"Error fetching lessons",R.drawable.cancel);
 
+                    }
                 });
     }
     private void loadTitleLesson(){
+        String fieldName01 = spinner01.getSelectedItem().toString();
         String titleName01 = spinner02.getSelectedItem().toString();
-        if(titleName01.equals("Select Title ---")){
+        if(fieldName01.equals("Select Title ---")||titleName01.equals("Select Field ---")){
             loadLesson();
+            return;
+        }else if(titleName01.equals("Select Title ---")){
+            loadfieldLesson();
             return;
         }
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -265,8 +284,45 @@ public class SearchActivity extends AppCompatActivity {
                     SearchlessonAdapter01.notifyDataSetChanged();
 
                 })
-                .addOnFailureListener(e -> {
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showCustomToast.showToast(SearchActivity.this,"Error fetching job Titles",R.drawable.cancel);
 
+                    }
+                });
+    }
+    private void loadfieldLesson(){
+        String fieldName01 = spinner01.getSelectedItem().toString();
+        if(fieldName01.equals("Select Field ---")){
+            loadLesson();
+            return;
+        }
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("lessons")
+                .whereEqualTo("active", true)
+                .whereEqualTo("jobField", fieldName01)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    SearchLessonTitle.clear();
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        String id = documentSnapshot.getId();
+                        String lessonName = documentSnapshot.getString("lessonName");
+                        Integer lessonPrice = documentSnapshot.getLong("price").intValue();
+                        boolean isActive = Boolean.TRUE.equals(documentSnapshot.getBoolean("active"));
+
+                        SearchLessonTitle.add(new Lesson(id,lessonName,lessonPrice,isActive));
+                    }
+                    SearchlessonAdapter01.notifyDataSetChanged();
+
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showCustomToast.showToast(SearchActivity.this, "Error fetching Job Field Lesson", R.drawable.cancel);
+
+                    }
                 });
     }
 
@@ -297,8 +353,12 @@ public class SearchActivity extends AppCompatActivity {
                     SearchlessonAdapter01.notifyDataSetChanged();
 
                 })
-                .addOnFailureListener(e -> {
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showCustomToast.showToast(SearchActivity.this, "Error fetching Search Lesson", R.drawable.cancel);
 
+                    }
                 });
     }
 }
@@ -407,9 +467,6 @@ class SearchLessonAdapter extends RecyclerView.Adapter<SearchLessonAdapter.Searc
                         });
                     }
                 }).start();
-
-
-
 
                 buyButton.setOnClickListener(new View.OnClickListener() {
                     @Override

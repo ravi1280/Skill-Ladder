@@ -59,7 +59,7 @@ String UserIdShared;
     List<Cart> catdetails;
     CartAdapter cartListAdapter;
     RecyclerView recyclerView;
-    Integer price;
+
 
     private static final int PAYHERE_REQUEST = 11001;
     private static final String TAG = "UserCartActivity";
@@ -81,7 +81,6 @@ String UserIdShared;
 
         textView = findViewById(R.id.payheretv);
 
-
         ImageView imageViewprofile = findViewById(R.id.CartBackIcon01);
         imageViewprofile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,11 +93,12 @@ String UserIdShared;
         checkOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                price=1000;
 
-                CheckOutBottomsheet(price);
+                CheckOutBottomsheet();
             }
         });
+
+
 
         recyclerView = findViewById(R.id.CartRV01);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(UserCartActivity.this);
@@ -107,6 +107,8 @@ String UserIdShared;
         catdetails = new ArrayList<>();
         cartListAdapter = new CartAdapter(catdetails,UserIdShared);
         recyclerView.setAdapter(cartListAdapter);
+
+
 
     }
 
@@ -137,10 +139,18 @@ String UserIdShared;
                         List<Cart> cartItems01 = gson.fromJson(jsonObject.get("cartItem"), listType01);
 
                         if (cartItems01 != null) {
+                            int totalPrice = 0;
+                            for (Cart item : cartItems01) {
+                                totalPrice += item.getLessonPrice();
+                            }
+                            final int finalTotalPrice = totalPrice;
                             runOnUiThread(() -> {
-                                catdetails.clear();  // Clear existing data
-                                catdetails.addAll(cartItems01);  // Add new data
-                                cartListAdapter.notifyDataSetChanged();  // Refresh RecyclerView
+                                catdetails.clear();
+                                catdetails.addAll(cartItems01);
+                                cartListAdapter.notifyDataSetChanged();
+
+                                TextView cartCheckOutPrice = findViewById(R.id.CartCheckOutPriceTV);
+                                cartCheckOutPrice.setText("$" + finalTotalPrice);
                             });
                         }
                     } else {
@@ -156,9 +166,9 @@ String UserIdShared;
         }).start();
 
     }
-    private void CheckOutBottomsheet(Integer price){
-        Integer Price = price;
-
+    private void CheckOutBottomsheet(){
+        TextView CheckOutPrice = findViewById(R.id.CartCheckOutPriceTV);
+        Integer CPrice = Integer.parseInt(CheckOutPrice.getText().toString().replaceAll("[^\\d]", ""));
         View bottomSheetView = getLayoutInflater().inflate(R.layout.cart_checkout_bottom, null);
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(UserCartActivity.this);
         bottomSheetDialog.setContentView(bottomSheetView);
@@ -170,9 +180,9 @@ String UserIdShared;
                 InitRequest req = new InitRequest();
                 req.setMerchantId("1221660");       // Merchant ID
                 req.setCurrency("LKR");             // Currency code LKR/USD/GBP/EUR/AUD
-                req.setAmount(Price);             // Final Amount to be charged
+                req.setAmount(CPrice);             // Final Amount to be charged
                 req.setOrderId("230000123");        // Unique Reference ID
-                req.setItemsDescription("Door bell wireless");  // Item description title
+                req.setItemsDescription("Cart Item Check Out");  // Item description title
                 req.setCustom1("This is the custom message 1");
                 req.setCustom2("This is the custom message 2");
                 req.getCustomer().setFirstName("Saman");
@@ -221,8 +231,6 @@ String UserIdShared;
         }
     }
 }
-
-
 class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
     private final List<Cart> cartdetails;
     private final String userId;
@@ -281,7 +289,7 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
                             cartJson.addProperty("lessonId",lessonId);
 
                             RequestBody jsonRequestBody = RequestBody.create(gson.toJson(cartJson), MediaType.get("application/json"));
-                            // Make request
+
                             Request request = new Request.Builder()
                                     .url(AppConfig.BASE_URL+"/DeleteCart")
                                     .post(jsonRequestBody)
@@ -294,9 +302,16 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
                                     @Override
                                     public void run() {
                                         cartdetails.remove(holder.getAdapterPosition());
-                                        // Notify adapter
                                         notifyItemRemoved(holder.getAdapterPosition());
                                         notifyItemRangeChanged(holder.getAdapterPosition(), cartdetails.size());
+                                        int newTotalPrice = 0;
+                                        for (Cart item : cartdetails) {
+                                            newTotalPrice += item.getLessonPrice();
+                                        }
+
+
+                                        TextView cartCheckOutPrice = ((Activity) holder.itemView.getContext()).findViewById(R.id.CartCheckOutPriceTV);
+                                        cartCheckOutPrice.setText("$" + newTotalPrice);
 
                                         showCustomToast.showToast(holder.itemView.getContext(),"Item Deleted", R.drawable.checked);
 
@@ -314,13 +329,10 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
                         }catch (Exception e) {
                             e.printStackTrace();
                         }
-
                     }
                 }).start();
-
             }
         });
-
     }
 
     @Override
