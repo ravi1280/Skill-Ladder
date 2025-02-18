@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,11 +37,15 @@ public class ManageUsersFragment extends Fragment {
     RecyclerView ManageUserRecyclerView;
     List<User> userDetails;
     UserListAdapter userListAdapter;
+    EditText searchtext ;
+    ImageView search;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =inflater.inflate(R.layout.fragment_manage_users, container, false);
+
+
 
         ManageUserRecyclerView = view.findViewById(R.id.manageUserRV01);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireActivity());
@@ -50,6 +55,47 @@ public class ManageUsersFragment extends Fragment {
         userListAdapter = new UserListAdapter(userDetails);
         ManageUserRecyclerView.setAdapter(userListAdapter);
         loadUsers();
+
+        searchtext= view.findViewById(R.id.manageUsereditText01);
+        search = view.findViewById(R.id.manageUserSearch);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String searchtxt = searchtext.getText().toString();
+                if(searchtxt.isEmpty()){
+                    loadUsers();
+                }else {
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("user")
+                            .whereGreaterThanOrEqualTo("fullName", searchtxt)
+                            .whereLessThanOrEqualTo("fullName", searchtxt + "\uf8ff")
+                            .get()
+                            .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                                userDetails.clear();
+                                for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                                    String userId =  doc.getId();
+                                    String fullName =  doc.getString("fullName");
+                                    String email =  doc.getString("email");
+                                    String mobile =  doc.getString("mobile");
+                                    boolean isActive = Boolean.TRUE.equals(doc.getBoolean("isActive"));
+
+                                    userDetails.add(new User(userId,fullName,email,mobile,isActive));
+                                }
+                                userListAdapter.notifyDataSetChanged();
+
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    showCustomToast.showToast(requireActivity(),"Can't Load User Data !",R.drawable.cancel);
+                                }
+                            });
+
+                }
+
+            }
+        });
 
         return view;
     }
