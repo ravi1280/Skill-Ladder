@@ -1,6 +1,7 @@
 package com.example.skill_ladder.navigation;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -14,10 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.skill_ladder.CompanyUpdateProfileActivity;
 import com.example.skill_ladder.R;
+import com.example.skill_ladder.admin.AdminSendMessageActivity;
 import com.example.skill_ladder.model.Admin;
 import com.example.skill_ladder.model.customAlert;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -55,6 +58,15 @@ public class AdminProfileFragment extends Fragment {
         AdminPasswordED = view.findViewById(R.id.AdminProfileDataText04);
         AdminName = view.findViewById(R.id.AdminProfiletextView01);
         AdminEmail = view.findViewById(R.id.AdminProfiletexview02);
+
+        ImageView message = view.findViewById(R.id.AdminProfileMessage);
+        message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), AdminSendMessageActivity.class);
+                startActivity(intent);
+            }
+        });
 
         loadAdminProfile();
 

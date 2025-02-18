@@ -208,7 +208,6 @@ String UserIdShared;
                 PHConfigs.setBaseUrl(PHConfigs.SANDBOX_URL);
                 startActivityForResult(intent, PAYHERE_REQUEST); //unique request ID e.g. "11001"
 
-
                 bottomSheetDialog.dismiss();
             }
         });
@@ -262,7 +261,6 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
 
         TextView CartTitle, CartPrice;
         ImageView CartDeleteIcon;
-
         View ContainerView;
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -325,7 +323,6 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
                                         for (Cart item : cartdetails) {
                                             newTotalPrice += item.getLessonPrice();
                                         }
-
 
                                         TextView cartCheckOutPrice = ((Activity) holder.itemView.getContext()).findViewById(R.id.CartCheckOutPriceTV);
                                         cartCheckOutPrice.setText("$" + newTotalPrice);
