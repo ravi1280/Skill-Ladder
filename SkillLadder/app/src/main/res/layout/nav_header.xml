@@ -11,14 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="126dp"
         android:layout_margin="20dp"
-        app:srcCompat="@drawable/checked" />
+        app:srcCompat="@drawable/light_bulb" />
 
     <TextView
         android:id="@+id/adminNameTv01"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="Admin Name"
+        android:text="Skill-Ladder"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textSize="18sp" />
@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:text="admin@gmail.com"
+        android:text="Admin Controller"
         android:textAlignment="center"
         android:textAllCaps="false" />
 </LinearLayout>
