@@ -59,6 +59,7 @@ String UserIdShared;
     List<Cart> catdetails;
     CartAdapter cartListAdapter;
     RecyclerView recyclerView;
+    Boolean haveItem;
 
 
     private static final int PAYHERE_REQUEST = 11001;
@@ -81,8 +82,8 @@ String UserIdShared;
 
         textView = findViewById(R.id.payheretv);
 
-        ImageView imageViewprofile = findViewById(R.id.CartBackIcon01);
-        imageViewprofile.setOnClickListener(new View.OnClickListener() {
+        ImageView imageViewpback = findViewById(R.id.CartBackIcon01);
+        imageViewpback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -93,11 +94,13 @@ String UserIdShared;
         checkOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                CheckOutBottomsheet();
+                if(haveItem){
+                    CheckOutBottomsheet();
+                }else {
+                    showCustomToast.showToast(UserCartActivity.this,"No Items To CheckOut !",R.drawable.cancel);
+                }
             }
         });
-
 
 
         recyclerView = findViewById(R.id.CartRV01);
@@ -107,8 +110,6 @@ String UserIdShared;
         catdetails = new ArrayList<>();
         cartListAdapter = new CartAdapter(catdetails,UserIdShared);
         recyclerView.setAdapter(cartListAdapter);
-
-
 
     }
 
@@ -152,11 +153,19 @@ String UserIdShared;
                                 TextView cartCheckOutPrice = findViewById(R.id.CartCheckOutPriceTV);
                                 cartCheckOutPrice.setText("$" + finalTotalPrice);
                             });
+                            haveItem=true;
                         }
                     } else {
-                        runOnUiThread(() -> showCustomToast.showToast(UserCartActivity.this, "Cart is Empty", R.drawable.cancel));
-                    }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showCustomToast.showToast(UserCartActivity.this, "Cart is Empty", R.drawable.cancel);
+                                haveItem=false;
 
+
+                            }
+                        });
+                    }
 
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -169,6 +178,7 @@ String UserIdShared;
     private void CheckOutBottomsheet(){
         TextView CheckOutPrice = findViewById(R.id.CartCheckOutPriceTV);
         Integer CPrice = Integer.parseInt(CheckOutPrice.getText().toString().replaceAll("[^\\d]", ""));
+
         View bottomSheetView = getLayoutInflater().inflate(R.layout.cart_checkout_bottom, null);
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(UserCartActivity.this);
         bottomSheetDialog.setContentView(bottomSheetView);
@@ -209,27 +219,35 @@ String UserIdShared;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == PAYHERE_REQUEST && data != null && data.hasExtra(PHConstants.INTENT_EXTRA_RESULT)) {
             PHResponse<StatusResponse> response = (PHResponse<StatusResponse>) data.getSerializableExtra(PHConstants.INTENT_EXTRA_RESULT);
+
             if (resultCode == Activity.RESULT_OK) {
-                String msg;
-                if (response != null)
-                    if (response.isSuccess())
-                        msg = "Activity result:" + response.getData().toString();
-                    else
-                        msg = "Result:" + response.toString();
-                else
-                    msg = "Result: no response";
-                Log.d(TAG, msg);
-                textView.setText(msg);
+                if (response != null && response.isSuccess()) {
+                    Log.d(TAG, "Payment Successful: " + response.getData().toString());
+
+                    ArrayList<String> lessonIds01 = new ArrayList<>();
+                    for (Cart item : catdetails) {
+                        lessonIds01.add(item.getLessonId());
+                    }
+                    Intent intent = new Intent(UserCartActivity.this, PaymentSuccessActivity.class);
+                    intent.putExtra("UserId", UserIdShared);
+                    intent.putStringArrayListExtra("lessonIds", lessonIds01);
+                    startActivity(intent);
+                    finish();
+
+                } else {
+                    Log.d(TAG, "Payment Failed: " + (response != null ? response.toString() : "No response"));
+                    textView.setText("Payment failed. Please try again.");
+                }
             } else if (resultCode == Activity.RESULT_CANCELED) {
-                if (response != null)
-                    textView.setText(response.toString());
-                else
-                    textView.setText("User canceled the request");
+                Log.d(TAG, "Payment Canceled: " + (response != null ? response.toString() : "User canceled the request"));
+                textView.setText("User canceled the payment.");
             }
         }
     }
+
 }
 class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
     private final List<Cart> cartdetails;
@@ -244,14 +262,13 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
 
         TextView CartTitle, CartPrice;
         ImageView CartDeleteIcon;
-        RadioButton radio;
+
         View ContainerView;
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
             CartTitle = itemView.findViewById(R.id.CartItemTV01);
             CartPrice = itemView.findViewById(R.id.CartItemTV02);
             CartDeleteIcon = itemView.findViewById(R.id.CartDeleteIcon);
-            radio = itemView.findViewById(R.id.CartradioButton01);
             ContainerView = itemView;
         }
     }
