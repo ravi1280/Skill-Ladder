@@ -53,6 +53,8 @@ dependencies {
     implementation ("com.github.PayHereDevs:payhere-android-sdk:v3.0.17")
     implementation ("androidx.appcompat:appcompat:1.6.0")
 
+    implementation("androidx.biometric:biometric:1.2.0-alpha04")
+
 
 
 }
