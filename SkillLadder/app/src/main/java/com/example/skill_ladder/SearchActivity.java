@@ -1,5 +1,8 @@
 package com.example.skill_ladder;
 
+import static androidx.core.app.ActivityCompat.startActivityForResult;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.skill_ladder.admin.AdminAddLessonActivity;
 import com.example.skill_ladder.model.AppConfig;
+import com.example.skill_ladder.model.Cart;
 import com.example.skill_ladder.model.JobField;
 import com.example.skill_ladder.model.JobTitle;
 import com.example.skill_ladder.model.Lesson;
@@ -46,6 +50,12 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import lk.payhere.androidsdk.PHConfigs;
+import lk.payhere.androidsdk.PHConstants;
+import lk.payhere.androidsdk.PHMainActivity;
+import lk.payhere.androidsdk.PHResponse;
+import lk.payhere.androidsdk.model.InitRequest;
+import lk.payhere.androidsdk.model.StatusResponse;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -60,6 +70,11 @@ public class SearchActivity extends AppCompatActivity {
     ImageView SearchIcon;
     Spinner spinner01, spinner02;
     String fieldName, titleName,UserIdShared;
+    private static final int PAYHERE_REQUEST = 11001;
+    private static final String TAG = "UserCartActivity";
+
+    Integer lessonPrice;
+    String lessonId01;
 
 
     @Override
@@ -104,10 +119,64 @@ public class SearchActivity extends AppCompatActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         searchRecyclerView.setLayoutManager(linearLayoutManager);
         SearchLessonTitle = new ArrayList<>();
-        SearchlessonAdapter01 = new SearchLessonAdapter(SearchLessonTitle,UserIdShared);
+        SearchlessonAdapter01 = new SearchLessonAdapter(SearchLessonTitle,UserIdShared,this);
         searchRecyclerView.setAdapter(SearchlessonAdapter01);
 
         loadLesson();
+    }
+    public void PaymentPayHere(String id, Integer price) {
+        lessonId01=id;
+        lessonPrice=price;
+
+        // Your existing payment logic here
+        InitRequest req = new InitRequest();
+        req.setMerchantId("1221660");       // Merchant ID
+        req.setCurrency("LKR");             // Currency code LKR/USD/GBP/EUR/AUD
+        req.setAmount(lessonPrice);             // Final Amount to be charged
+        req.setOrderId("230000123");        // Unique Reference ID
+        req.setItemsDescription("Cart Item Check Out");  // Item description title
+        req.setCustom1("This is the custom message 1");
+        req.setCustom2("This is the custom message 2");
+        req.getCustomer().setFirstName("Saman");
+        req.getCustomer().setLastName("Perera");
+        req.getCustomer().setEmail("samanp@gmail.com");
+        req.getCustomer().setPhone("+94771234567");
+        req.getCustomer().getAddress().setAddress("No.1, Galle Road");
+        req.getCustomer().getAddress().setCity("Colombo");
+        req.getCustomer().getAddress().setCountry("Sri Lanka");
+
+        Intent intent = new Intent(SearchActivity.this, PHMainActivity.class);
+        intent.putExtra(PHConstants.INTENT_EXTRA_DATA, req);
+        PHConfigs.setBaseUrl(PHConfigs.SANDBOX_URL);
+        startActivityForResult(intent, PAYHERE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PAYHERE_REQUEST && data != null && data.hasExtra(PHConstants.INTENT_EXTRA_RESULT)) {
+            PHResponse<StatusResponse> response = (PHResponse<StatusResponse>) data.getSerializableExtra(PHConstants.INTENT_EXTRA_RESULT);
+
+            if (resultCode == Activity.RESULT_OK) {
+                if (response != null && response.isSuccess()) {
+                    Log.d(TAG, "Payment Successful: " + response.getData().toString());
+
+
+                    Intent intent = new Intent(SearchActivity.this, PaymentSuccessActivity.class);
+                    intent.putExtra("lessonId", lessonId01);
+                    startActivity(intent);
+                    finish();
+
+                } else {
+                    Log.d(TAG, "Payment Failed: " + (response != null ? response.toString() : "No response"));
+//                    textView.setText("Payment failed. Please try again.");
+                }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.d(TAG, "Payment Canceled: " + (response != null ? response.toString() : "User canceled the request"));
+//                textView.setText("User canceled the payment.");
+            }
+        }
     }
 
     public void loadSpinner01() {
@@ -366,9 +435,11 @@ public class SearchActivity extends AppCompatActivity {
 class SearchLessonAdapter extends RecyclerView.Adapter<SearchLessonAdapter.SearchLessonViewHolder> {
     private final List<Lesson> Searchlessondetails;
     private final String userId;
-    public SearchLessonAdapter(List<Lesson> Searchlessondetails,String id) {
+    private final SearchActivity searchActivity;
+    public SearchLessonAdapter(List<Lesson> Searchlessondetails,String id,SearchActivity searchActivity) {
         this.Searchlessondetails = Searchlessondetails;
         this.userId = id;
+        this.searchActivity = searchActivity;
     }
 
     static class SearchLessonViewHolder extends RecyclerView.ViewHolder {
@@ -406,6 +477,7 @@ class SearchLessonAdapter extends RecyclerView.Adapter<SearchLessonAdapter.Searc
 
         String lessonName = lessonDetails.getLessonName();
         String lessonId = lessonDetails.getId();
+        Integer lessonPrice =lessonDetails.getPrice();
 
         holder.LessonBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -457,9 +529,12 @@ class SearchLessonAdapter extends RecyclerView.Adapter<SearchLessonAdapter.Searc
                                 } else {
                                     buyButton.setText("Buy Lesson");
                                     buyButton.setOnClickListener(v -> {
-                                        Intent intent = new Intent(holder.itemView.getContext(), PaymentSuccessActivity.class);
-                                        intent.putExtra("lessonId", lessonId);
-                                        holder.itemView.getContext().startActivity(intent);
+                                        searchActivity.PaymentPayHere(lessonId, lessonPrice);
+
+
+//                                        Intent intent = new Intent(holder.itemView.getContext(), PaymentSuccessActivity.class);
+//                                        intent.putExtra("lessonId", lessonId);
+//                                        holder.itemView.getContext().startActivity(intent);
                                         bottomSheetDialog.dismiss();
                                     });
                                 }
@@ -486,7 +561,6 @@ class SearchLessonAdapter extends RecyclerView.Adapter<SearchLessonAdapter.Searc
             public void onClick(View view) {
                 if(userId!=null){
                     addtoCart(userId,lessonDetails.getId(),lessonDetails.getLessonName(),lessonDetails.getPrice().toString(),holder);
-
                 }
             }
         });
@@ -539,9 +613,7 @@ class SearchLessonAdapter extends RecyclerView.Adapter<SearchLessonAdapter.Searc
                 }
             }
         }).start();
-
     }
-
     @Override
     public int getItemCount() {
         return Searchlessondetails.size();
