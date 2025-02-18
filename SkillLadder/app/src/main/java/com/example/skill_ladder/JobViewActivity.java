@@ -19,10 +19,20 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.skill_ladder.model.job;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class JobViewActivity extends AppCompatActivity {
+    List<job> jobdetails;
+    JobListAdapter jobListAdapter;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,46 +53,49 @@ public class JobViewActivity extends AppCompatActivity {
             }
         });
 
-        RecyclerView recyclerView = findViewById(R.id.jobviewRecyclerview);
+        recyclerView = findViewById(R.id.jobviewRecyclerview);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(JobViewActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
-
-        List<jobDetails> jobdetails = new ArrayList<>();
-        jobdetails.add(new jobDetails("Java institute01", "javainstitute01@gmail.com","0719681816","Software Engineer","2025-02-13"));
-        jobdetails.add(new jobDetails("Java institute02", "javainstitute02@gmail.com","0719681815","Software Engineer","2025-02-13"));
-        jobdetails.add(new jobDetails("Java institute03", "javainstitute03@gmail.com","0719681814","Software Engineer","2025-02-13"));
-        jobdetails.add(new jobDetails("Java institute04", "javainstitute04@gmail.com","0719681817","Software Engineer","2025-02-13"));
-        jobdetails.add(new jobDetails("Java institute05", "javainstitute05@gmail.com","0719681818","Software Engineer","2025-02-13"));
-        jobdetails.add(new jobDetails("Java institute06", "javainstitute06@gmail.com","0719681819","Software Engineer","2025-02-13"));
-
-        JobListAdapter jobListAdapter = new JobListAdapter(jobdetails);
+        jobdetails = new ArrayList<>();
+        jobListAdapter = new JobListAdapter(jobdetails);
         recyclerView.setAdapter(jobListAdapter);
+
+        loadJobs();
+    }
+    private void loadJobs(){
+        FirebaseFirestore firestore= FirebaseFirestore.getInstance();
+        firestore.collection("jobs").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                jobdetails.clear();
+                for (QueryDocumentSnapshot doc: queryDocumentSnapshots){
+                    String cname = doc.getString("CompanyName");
+                    String cmobile = doc.getString("CompanyMobile");
+                    String cemail = doc.getString("CompanyEmail");
+                    String jtitle = doc.getString("JobTitle");
+                    String jclosingDate = doc.getString("ClosingDate");
+                    jobdetails.add(new job(cname,cemail,cmobile,jtitle,jclosingDate));
+                }
+                jobListAdapter.notifyDataSetChanged();
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
     }
 }
 
-class jobDetails {
-    String companyName;
-    String companyEmail;
-    String companyNumber;
-    String Jobtitle;
-    String Jobclosedate;
 
-
-    public jobDetails(String name, String email,String number,String jobtitle,String jobclosedate ) {
-        this.companyName = name;
-        this.companyEmail = email;
-        this.companyNumber = number;
-        this.Jobclosedate = jobclosedate;
-        this.Jobtitle = jobtitle;
-
-    }
-}
 
 class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewHolder> {
-    private final List<jobDetails> jobdetails;
+    private final List<job> jobdetails;
 
-    public JobListAdapter(List<jobDetails> jobdetails) {
+    public JobListAdapter(List<job> jobdetails) {
         this.jobdetails = jobdetails;
     }
 
@@ -119,20 +132,20 @@ class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull JobViewHolder holder, int position) {
 
-        jobDetails jobDetails = jobdetails.get(position);
-        holder.CompanyName.setText(jobDetails.companyName);
-        holder.CompanyEmail.setText(jobDetails.companyEmail);
-        holder.CompanyJobTitle.setText(jobDetails.Jobtitle);
-        holder.CompanyJobClosingDate.setText(jobDetails.Jobclosedate);
+        job jobDetails = jobdetails.get(position);
+        holder.CompanyName.setText(jobDetails.getCompanyName());
+        holder.CompanyEmail.setText(jobDetails.getCompanyEmail());
+        holder.CompanyJobTitle.setText(jobDetails.getJobTitle());
+        holder.CompanyJobClosingDate.setText(jobDetails.getJobDate());
 
-        String cname = jobDetails.companyName;
-        String cnumber = jobDetails.companyNumber;
+        String cname = jobDetails.getCompanyName();
+        String cnumber = jobDetails.getCompanyMobile();
 
         holder.callImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(Intent.ACTION_DIAL);
-                i.setData(Uri.parse("tel:"+jobDetails.companyNumber));
+                i.setData(Uri.parse("tel:"+jobDetails.getCompanyMobile()));
                 view.getContext().startActivity(i);
 
             }
@@ -141,12 +154,10 @@ class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewHolder> 
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_SENDTO);
-                intent.setData(Uri.parse("smsto:" + jobDetails.companyNumber)); // Replace contact.getMobile() with the desired phone number
+                intent.setData(Uri.parse("smsto:" + jobDetails.getCompanyMobile())); // Replace contact.getMobile() with the desired phone number
                 intent.putExtra("sms_body", "Hello! Start Your Conversation."); // Optional: Pre-fill the SMS body
 
                 view.getContext().startActivity(intent);
-
-
             }
         });
 
