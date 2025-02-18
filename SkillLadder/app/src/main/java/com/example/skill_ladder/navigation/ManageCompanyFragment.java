@@ -1,5 +1,6 @@
 package com.example.skill_ladder.navigation;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ import com.example.skill_ladder.model.Company;
 import com.example.skill_ladder.model.JobField;
 import com.example.skill_ladder.model.showCustomToast;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -131,14 +133,12 @@ class MCompanyListAdapter extends RecyclerView.Adapter<MCompanyListAdapter.MComp
 
     static class MCompanyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView CompanyName,CompanyMobile,CompanyEmail;
+        TextView CompanyName;
         Button active;
         View ContainerView;
         public MCompanyViewHolder(@NonNull View itemView) {
             super(itemView);
             CompanyName = itemView.findViewById(R.id.ManageCompanyTV01);
-            CompanyMobile = itemView.findViewById(R.id.ManageCompanyTV02);
-            CompanyEmail = itemView.findViewById(R.id.ManageCompanyTV03);
             active = itemView.findViewById(R.id.ManageCompanyBtn01);
             ContainerView = itemView;
         }
@@ -157,8 +157,6 @@ class MCompanyListAdapter extends RecyclerView.Adapter<MCompanyListAdapter.MComp
 
         Company CDetails = mcompanydetails.get(position);
         holder.CompanyName.setText(CDetails.getName());
-        holder.CompanyMobile.setText(CDetails.getMobile());
-        holder.CompanyEmail.setText(CDetails.getEmail());
         holder.active.setText(CDetails.isActive() ? "Deactivate" : "Activate");
         if(CDetails.isActive()){
             holder.active.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.chart03));
@@ -173,7 +171,17 @@ class MCompanyListAdapter extends RecyclerView.Adapter<MCompanyListAdapter.MComp
 
             }
         });
+
+        holder.ContainerView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                companyBottomSheet(view.getContext() ,CDetails.getName(),CDetails.getEmail(),CDetails.getMobile(),CDetails.isActive());
+
+                return true;
+            }
+        });
     }
+
 
     private void toggleCompanyStatus(Company company, MCompanyListAdapter.MCompanyViewHolder holder) {
         boolean newStatus = !company.isActive();
@@ -199,6 +207,35 @@ class MCompanyListAdapter extends RecyclerView.Adapter<MCompanyListAdapter.MComp
                 .addOnFailureListener(e -> {
                     Toast.makeText(holder.itemView.getContext(), "Failed to update", Toast.LENGTH_SHORT).show();
                 });
+    }
+    private void companyBottomSheet(Context context,String name,String email,String mobile,Boolean status){
+        View bottomSheetView = LayoutInflater.from(context).inflate( R.layout.company_details_botton,null );
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+        bottomSheetDialog.setContentView(bottomSheetView);
+
+        EditText Cfname = bottomSheetView.findViewById(R.id.ManageCompanED01);
+        EditText Cemail = bottomSheetView.findViewById(R.id.ManageCompanED02);
+        EditText Cmobile = bottomSheetView.findViewById(R.id.ManageCompanED03);
+        EditText Cstatus = bottomSheetView.findViewById(R.id.ManageCompanED04);
+        Button btn01 = bottomSheetView.findViewById(R.id.ManageCompantBtn1);
+
+        Cfname.setText(name);
+        Cemail.setText(email);
+        Cmobile.setText(mobile);
+        if(status){
+            Cstatus.setText("Active");
+        }else {
+            Cstatus.setText("Deactive");
+
+        }
+        btn01.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bottomSheetDialog.dismiss();
+            }
+        });
+        bottomSheetDialog.show();
+
     }
 
     @Override
