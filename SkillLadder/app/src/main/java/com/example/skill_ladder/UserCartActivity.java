@@ -1,8 +1,11 @@
 package com.example.skill_ladder;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +42,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lk.payhere.androidsdk.PHConfigs;
+import lk.payhere.androidsdk.PHConstants;
+import lk.payhere.androidsdk.PHMainActivity;
+import lk.payhere.androidsdk.PHResponse;
+import lk.payhere.androidsdk.model.InitRequest;
+import lk.payhere.androidsdk.model.StatusResponse;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -51,6 +60,11 @@ String UserIdShared;
     CartAdapter cartListAdapter;
     RecyclerView recyclerView;
     Integer price;
+
+    private static final int PAYHERE_REQUEST = 11001;
+    private static final String TAG = "UserCartActivity";
+    private TextView textView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +79,7 @@ String UserIdShared;
         UserIdShared = sharedPreferences.getString("UserID", "");
         loadCartDetails(UserIdShared);
 
+        textView = findViewById(R.id.payheretv);
 
 
         ImageView imageViewprofile = findViewById(R.id.CartBackIcon01);
@@ -79,7 +94,7 @@ String UserIdShared;
         checkOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                price=0;
+                price=1000;
 
                 CheckOutBottomsheet(price);
             }
@@ -152,11 +167,58 @@ String UserIdShared;
         actionOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                InitRequest req = new InitRequest();
+                req.setMerchantId("1221660");       // Merchant ID
+                req.setCurrency("LKR");             // Currency code LKR/USD/GBP/EUR/AUD
+                req.setAmount(Price);             // Final Amount to be charged
+                req.setOrderId("230000123");        // Unique Reference ID
+                req.setItemsDescription("Door bell wireless");  // Item description title
+                req.setCustom1("This is the custom message 1");
+                req.setCustom2("This is the custom message 2");
+                req.getCustomer().setFirstName("Saman");
+                req.getCustomer().setLastName("Perera");
+                req.getCustomer().setEmail("samanp@gmail.com");
+                req.getCustomer().setPhone("+94771234567");
+                req.getCustomer().getAddress().setAddress("No.1, Galle Road");
+                req.getCustomer().getAddress().setCity("Colombo");
+                req.getCustomer().getAddress().setCountry("Sri Lanka");
+
+                Intent intent = new Intent(UserCartActivity.this, PHMainActivity.class);
+                intent.putExtra(PHConstants.INTENT_EXTRA_DATA, req);
+                PHConfigs.setBaseUrl(PHConfigs.SANDBOX_URL);
+                startActivityForResult(intent, PAYHERE_REQUEST); //unique request ID e.g. "11001"
+
+
                 bottomSheetDialog.dismiss();
             }
         });
 
         bottomSheetDialog.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PAYHERE_REQUEST && data != null && data.hasExtra(PHConstants.INTENT_EXTRA_RESULT)) {
+            PHResponse<StatusResponse> response = (PHResponse<StatusResponse>) data.getSerializableExtra(PHConstants.INTENT_EXTRA_RESULT);
+            if (resultCode == Activity.RESULT_OK) {
+                String msg;
+                if (response != null)
+                    if (response.isSuccess())
+                        msg = "Activity result:" + response.getData().toString();
+                    else
+                        msg = "Result:" + response.toString();
+                else
+                    msg = "Result: no response";
+                Log.d(TAG, msg);
+                textView.setText(msg);
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                if (response != null)
+                    textView.setText(response.toString());
+                else
+                    textView.setText("User canceled the request");
+            }
+        }
     }
 }
 

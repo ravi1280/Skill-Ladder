@@ -21,6 +21,8 @@ import android.widget.Toast;
 import com.example.skill_ladder.R;
 import com.example.skill_ladder.model.Company;
 import com.example.skill_ladder.model.JobField;
+import com.example.skill_ladder.model.showCustomToast;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -109,7 +111,11 @@ public class ManageCompanyFragment extends Fragment {
                     companyListAdapter.notifyDataSetChanged();
 
                 })
-                .addOnFailureListener(e -> {
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showCustomToast.showToast(requireActivity(),"Can't load Company Data !",R.drawable.cancel);
+                    }
                 });
     }
 }
