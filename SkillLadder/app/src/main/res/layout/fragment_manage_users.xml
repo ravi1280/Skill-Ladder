@@ -32,7 +32,7 @@
                 android:background="@color/glassWhite"
                 android:ems="10"
                 android:hint="Search..."
-                android:inputType="text"
+                android:inputType="text|textCapWords"
                 android:padding="8dp"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -42,8 +42,8 @@
 
             <ImageView
                 android:id="@+id/manageUserSearch"
-                android:layout_width="25dp"
-                android:layout_height="28dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginEnd="8dp"
                 android:src="@drawable/searchfill"
                 app:layout_constraintBottom_toBottomOf="@+id/manageUsereditText01"

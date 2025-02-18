@@ -41,5 +41,5 @@
         android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/left" />
+        app:srcCompat="@drawable/left_arrow" />
 </androidx.constraintlayout.widget.ConstraintLayout>
