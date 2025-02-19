@@ -10,12 +10,13 @@
 
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/UserProfileImageView"
         android:layout_width="123dp"
         android:layout_height="133dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/round_image"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/man" />
 
@@ -30,7 +31,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/UserProfileImageView" />
 
     <TextView
         android:id="@+id/UserProfiletexview02"
