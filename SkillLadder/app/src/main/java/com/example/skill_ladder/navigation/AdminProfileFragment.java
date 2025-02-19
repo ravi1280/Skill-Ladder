@@ -7,7 +7,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,9 +17,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.skill_ladder.CompanyUpdateProfileActivity;
+import com.example.skill_ladder.LocationGetActivity;
 import com.example.skill_ladder.R;
-import com.example.skill_ladder.admin.AdminSendMessageActivity;
+import com.example.skill_ladder.TestActivity;
 import com.example.skill_ladder.model.Admin;
 import com.example.skill_ladder.model.customAlert;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,7 +27,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -63,8 +61,9 @@ public class AdminProfileFragment extends Fragment {
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), AdminSendMessageActivity.class);
+                Intent intent = new Intent(getContext(), TestActivity.class);
                 startActivity(intent);
+
             }
         });
 

@@ -150,6 +150,12 @@
             android:backgroundTint="@color/UserLoginBtn"
             android:text="@string/UserProfileBtn02" />
 
+        <Button
+            android:id="@+id/CompanyLocationBtn01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="location" />
+
     </LinearLayout>
 
     <ImageView
