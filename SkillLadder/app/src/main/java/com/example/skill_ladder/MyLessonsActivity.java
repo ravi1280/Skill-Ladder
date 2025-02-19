@@ -1,6 +1,8 @@
 package com.example.skill_ladder;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +22,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.skill_ladder.model.Lesson;
+import com.example.skill_ladder.model.SQLiteHelper;
+import com.example.skill_ladder.model.showCustomToast;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -59,33 +64,91 @@ public class MyLessonsActivity extends AppCompatActivity {
         mylessonAdapter01 = new MyLessonAdapter(myLessonTitle);
         recyclerView01.setAdapter(mylessonAdapter01);
 
-        loadMylesson();
+        List<String> lessonIdsSQLite = getLessonIdsFromSQLite();
+        if (!lessonIdsSQLite.isEmpty()) {
+
+                    loadMylesson(lessonIdsSQLite);
+        }else {
+            showCustomToast.showToast(MyLessonsActivity.this,"No Lessons !",R.drawable.cancel);
+        }
+
+
 
     }
-    private void loadMylesson(){
+    private List<String> getLessonIdsFromSQLite(){
+        List<String> lessonIds = new ArrayList<>();
+        SQLiteHelper sqLiteHelper = new SQLiteHelper(
+                MyLessonsActivity.this,
+                "lessonProgress.db",
+                null,
+                1
+        );
+
+                SQLiteDatabase sqLiteDatabase = sqLiteHelper.getReadableDatabase();
+                Cursor  cursor =sqLiteDatabase.query(
+                        "MyLessonProgress",   // Table Name
+                        new String[]{"lesson_id"},  // Columns to retrieve
+                        null,  // WHERE clause
+                        null,  // Selection arguments
+                        null,
+                        null,
+                        null);
+                if (cursor.moveToFirst()) {
+                    do {
+                        int columnIndex = cursor.getColumnIndex("lesson_id"); // Ensure correct column index
+                        if (columnIndex != -1) {
+                            lessonIds.add(cursor.getString(columnIndex));
+                        }
+                    } while (cursor.moveToNext());
+                }
+                cursor.close();
+                sqLiteDatabase.close();
+                
+                return lessonIds;
+
+    }
+    private void loadMylesson(List<String> lessonIds){
+
+        List<Lesson> lessonList = new ArrayList<>();
+
+        if (lessonIds.isEmpty()) {
+            showCustomToast.showToast(MyLessonsActivity.this, "No lessons found in SQLite!", R.drawable.cancel);
+            return;
+        }
+        List<List<String>> lessonBatches = splitList(lessonIds, 10);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("lessons")
-                .whereEqualTo("active", true)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
+        for (List<String> batch : lessonBatches) {
+            db.collection("lessons")
+                    .whereIn(FieldPath.documentId(), batch) // Filter by lesson ID
+                    .whereEqualTo("active", true) // Only fetch active lessons
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        myLessonTitle.clear();
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            String id = documentSnapshot.getId();
+                            String lessonName = documentSnapshot.getString("lessonName");
+                            Integer lessonPrice = documentSnapshot.getLong("price").intValue();
+                            boolean isActive = Boolean.TRUE.equals(documentSnapshot.getBoolean("active"));
 
-                    myLessonTitle.clear();
-                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        String id = documentSnapshot.getId();
-                        String lessonName = documentSnapshot.getString("lessonName");
-                        Integer lessonPrice = documentSnapshot.getLong("price").intValue();
-                        boolean isActive = Boolean.TRUE.equals(documentSnapshot.getBoolean("active"));
+                            myLessonTitle.add(new Lesson(id, lessonName, lessonPrice, isActive));
+                        }
+                        mylessonAdapter01.notifyDataSetChanged();
+                    })
+                    .addOnFailureListener(e -> {
+                        showCustomToast.showToast(MyLessonsActivity.this, "Failed to load lessons!", R.drawable.cancel);
+                    });
 
-                        myLessonTitle.add(new Lesson(id,lessonName,lessonPrice,isActive));
-                    }
-                    mylessonAdapter01.notifyDataSetChanged();
-
-                })
-                .addOnFailureListener(e -> {
-
-                });
+        }
     }
+    private List<List<String>> splitList(List<String> list, int chunkSize) {
+        List<List<String>> chunks = new ArrayList<>();
+        for (int i = 0; i < list.size(); i += chunkSize) {
+            chunks.add(list.subList(i, Math.min(list.size(), i + chunkSize)));
+        }
+        return chunks;
+    }
+
 }
 
 class MyLessonAdapter extends RecyclerView.Adapter<MyLessonAdapter.MyLessonViewHolder> {

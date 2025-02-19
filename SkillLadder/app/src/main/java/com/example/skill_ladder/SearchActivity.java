@@ -71,7 +71,7 @@ public class SearchActivity extends AppCompatActivity {
     Spinner spinner01, spinner02;
     String fieldName, titleName,UserIdShared;
     private static final int PAYHERE_REQUEST = 11001;
-    private static final String TAG = "UserCartActivity";
+    private static final String TAG = "SearchActivity";
 
     Integer lessonPrice;
     String lessonId01;
@@ -134,7 +134,7 @@ public class SearchActivity extends AppCompatActivity {
         req.setCurrency("LKR");             // Currency code LKR/USD/GBP/EUR/AUD
         req.setAmount(lessonPrice);             // Final Amount to be charged
         req.setOrderId("230000123");        // Unique Reference ID
-        req.setItemsDescription("Cart Item Check Out");  // Item description title
+        req.setItemsDescription("Buy Product");  // Item description title
         req.setCustom1("This is the custom message 1");
         req.setCustom2("This is the custom message 2");
         req.getCustomer().setFirstName("Saman");
@@ -170,11 +170,11 @@ public class SearchActivity extends AppCompatActivity {
 
                 } else {
                     Log.d(TAG, "Payment Failed: " + (response != null ? response.toString() : "No response"));
-//                    textView.setText("Payment failed. Please try again.");
+
                 }
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Log.d(TAG, "Payment Canceled: " + (response != null ? response.toString() : "User canceled the request"));
-//                textView.setText("User canceled the payment.");
+
             }
         }
     }

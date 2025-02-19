@@ -87,6 +87,15 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
             }
         });
 
+        Button buttonlocation = findViewById(R.id.CompanyLocationBtn01);
+        buttonlocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CompanyUpdateProfileActivity.this, LocationGetActivity.class);
+                startActivity(intent);
+            }
+        });
+
         Button showBottomSheetButton = findViewById(R.id.CompanyProfileBtn02);
 
         showBottomSheetButton.setOnClickListener(new View.OnClickListener() {
