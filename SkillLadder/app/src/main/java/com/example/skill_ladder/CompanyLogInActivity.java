@@ -84,6 +84,7 @@ public class CompanyLogInActivity extends AppCompatActivity {
                                         }
                                         Intent intent01 = new Intent(CompanyLogInActivity.this, JobCompanyHomeActivity.class);
                                         startActivity(intent01);
+                                        finish();
                                     }
                                 }
                             }).addOnFailureListener(new OnFailureListener() {

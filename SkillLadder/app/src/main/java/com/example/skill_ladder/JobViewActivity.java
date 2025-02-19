@@ -105,7 +105,7 @@ class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewHolder> 
         TextView CompanyJobTitle;
         TextView CompanyJobClosingDate;
 
-        ImageView callImage, smsImage;
+        ImageView callImage, smsImage,mapImage;
 
         View ContainerView;
 
@@ -117,6 +117,7 @@ class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewHolder> 
             CompanyJobClosingDate = itemView.findViewById(R.id.jobCompanyTV02);
             callImage = itemView.findViewById(R.id.CompanyCallImageView);
             smsImage = itemView.findViewById(R.id.CompanySmsImageView);
+            mapImage = itemView.findViewById(R.id.CompanyMapImageView);
             ContainerView = itemView;
         }
     }
@@ -165,6 +166,13 @@ class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewHolder> 
             @Override
             public void onClick(View view) {
                 Toast.makeText(holder.itemView.getContext(),cnumber,Toast.LENGTH_SHORT).show();
+
+            }
+        });holder.mapImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent01= new Intent(holder.itemView.getContext(),MapActivity.class);
+                view.getContext().startActivity(intent01);
 
             }
         });
