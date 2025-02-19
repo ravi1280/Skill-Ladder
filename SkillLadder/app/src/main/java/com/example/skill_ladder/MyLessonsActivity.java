@@ -72,8 +72,6 @@ public class MyLessonsActivity extends AppCompatActivity {
             showCustomToast.showToast(MyLessonsActivity.this,"No Lessons !",R.drawable.cancel);
         }
 
-
-
     }
     private List<String> getLessonIdsFromSQLite(){
         List<String> lessonIds = new ArrayList<>();
@@ -86,16 +84,16 @@ public class MyLessonsActivity extends AppCompatActivity {
 
                 SQLiteDatabase sqLiteDatabase = sqLiteHelper.getReadableDatabase();
                 Cursor  cursor =sqLiteDatabase.query(
-                        "MyLessonProgress",   // Table Name
-                        new String[]{"lesson_id"},  // Columns to retrieve
-                        null,  // WHERE clause
-                        null,  // Selection arguments
+                        "MyLessonProgress",
+                        new String[]{"lesson_id"},
+                        null,
+                        null,
                         null,
                         null,
                         null);
                 if (cursor.moveToFirst()) {
                     do {
-                        int columnIndex = cursor.getColumnIndex("lesson_id"); // Ensure correct column index
+                        int columnIndex = cursor.getColumnIndex("lesson_id");
                         if (columnIndex != -1) {
                             lessonIds.add(cursor.getString(columnIndex));
                         }
@@ -103,7 +101,7 @@ public class MyLessonsActivity extends AppCompatActivity {
                 }
                 cursor.close();
                 sqLiteDatabase.close();
-                
+
                 return lessonIds;
 
     }
@@ -120,8 +118,8 @@ public class MyLessonsActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         for (List<String> batch : lessonBatches) {
             db.collection("lessons")
-                    .whereIn(FieldPath.documentId(), batch) // Filter by lesson ID
-                    .whereEqualTo("active", true) // Only fetch active lessons
+                    .whereIn(FieldPath.documentId(), batch)
+                    .whereEqualTo("active", true)
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         myLessonTitle.clear();
@@ -148,7 +146,6 @@ public class MyLessonsActivity extends AppCompatActivity {
         }
         return chunks;
     }
-
 }
 
 class MyLessonAdapter extends RecyclerView.Adapter<MyLessonAdapter.MyLessonViewHolder> {

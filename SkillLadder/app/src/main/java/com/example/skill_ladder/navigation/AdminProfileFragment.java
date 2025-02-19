@@ -1,13 +1,18 @@
 package com.example.skill_ladder.navigation;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.skill_ladder.LocationGetActivity;
 import com.example.skill_ladder.R;
@@ -31,6 +37,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,6 +55,7 @@ public class AdminProfileFragment extends Fragment {
 
     private Button passwordChangeButton, updateButton;
     private FirebaseFirestore firestore;
+
 
 
     @Override
@@ -67,6 +79,8 @@ public class AdminProfileFragment extends Fragment {
             }
         });
 
+
+
         loadAdminProfile();
 
         passwordChangeButton = view.findViewById(R.id.AdminProfileBtn02);
@@ -85,6 +99,8 @@ public class AdminProfileFragment extends Fragment {
         return view;
 
     }
+
+
 
     private void loadAdminProfile() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
