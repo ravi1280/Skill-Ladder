@@ -104,6 +104,14 @@ public class UserProfileActivity extends AppCompatActivity {
         });
         loadImageFromInternalStorage();
 
+        userImage.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                deleteImageFromInternalStorage();
+                return true;
+            }
+        });
+
         Button showBottomSheetButton = findViewById(R.id.UserProfileBtn02);
         showBottomSheetButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,7 +149,7 @@ public class UserProfileActivity extends AppCompatActivity {
             InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
 
             // Define the output file in internal storage
-            File outputFile = new File(getFilesDir(), "profile_image.jpg");
+            File outputFile = new File(getFilesDir(), "User_profile_image.jpg");
 
             // Create an output stream to write the file
             FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
@@ -166,7 +174,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private void loadImageFromInternalStorage() {
         try {
             // Define the path of the saved image in internal storage
-            File imageFile = new File(getFilesDir(), "profile_image.jpg");
+            File imageFile = new File(getFilesDir(), "User_profile_image.jpg");
 
             if (imageFile.exists()) {
                 // Read the image from the internal storage
@@ -186,6 +194,33 @@ public class UserProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
         }
     }
+    private void deleteImageFromInternalStorage() {
+        try {
+            // Define the path of the saved image in internal storage
+            File imageFile = new File(getFilesDir(), "User_profile_image.jpg");
+
+            // Check if the file exists
+            if (imageFile.exists()) {
+                // Delete the file
+                boolean isDeleted = imageFile.delete();
+
+                if (isDeleted) {
+                    Toast.makeText(this, "Image deleted from internal storage", Toast.LENGTH_SHORT).show();
+                    // Optionally, you can clear the ImageView as well
+                    userImage.setImageBitmap(null);
+                } else {
+                    Toast.makeText(this, "Failed to delete image", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "Image not found", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error deleting image", Toast.LENGTH_SHORT).show();
+        }
+        recreate();
+    }
+
     private void updateUserProfile() {
         String fullName = text01.getText().toString().trim();
         String mobile = text03.getText().toString().trim();
@@ -345,6 +380,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 customAlert.showCustomAlert(UserProfileActivity.this, "Success", "Logout Successfully!", R.drawable.checked);
                 bottomSheetDialog02.dismiss();
 
+                deleteImageFromInternalStorage();
                 Intent intent = new Intent(UserProfileActivity.this,UserLoginActivity.class);
                 startActivity(intent);
                 finish();

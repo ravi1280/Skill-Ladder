@@ -136,6 +136,9 @@
                 <action android:name="com. google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyB21jQe9R-5KVW9Knk_NNkzsVs0VN5PR-Y" />
     </application>
 
 </manifest>

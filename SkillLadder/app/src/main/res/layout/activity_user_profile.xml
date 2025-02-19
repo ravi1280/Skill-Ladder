@@ -14,11 +14,12 @@
         android:layout_width="123dp"
         android:layout_height="133dp"
         android:layout_marginTop="16dp"
+        android:background="@drawable/round_image"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:background="@drawable/round_image"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/man" />
+        app:srcCompat="@drawable/add_user" />
 
     <TextView
         android:id="@+id/UserProfiletextView01"

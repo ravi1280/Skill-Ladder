@@ -83,6 +83,13 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
 
 
         fillProfileDetails();
+        companyImage.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                deleteImageFromInternalStorage();
+                return true;
+            }
+        });
 
         ImageView imageView01 = findViewById(R.id.CompanyProfileBackIcon);
         imageView01.setOnClickListener(new View.OnClickListener() {
@@ -177,6 +184,32 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(this, "Failed to save image", Toast.LENGTH_SHORT).show();
         }
+    }
+    private void deleteImageFromInternalStorage() {
+        try {
+            // Define the path of the saved image in internal storage
+            File imageFile = new File(getFilesDir(), "User_profile_image.jpg");
+
+            // Check if the file exists
+            if (imageFile.exists()) {
+                // Delete the file
+                boolean isDeleted = imageFile.delete();
+
+                if (isDeleted) {
+                    Toast.makeText(this, "Image deleted from internal storage", Toast.LENGTH_SHORT).show();
+                    // Optionally, you can clear the ImageView as well
+                    companyImage.setImageBitmap(null);
+                } else {
+                    Toast.makeText(this, "Failed to delete image", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "Image not found", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error deleting image", Toast.LENGTH_SHORT).show();
+        }
+        recreate();
     }
     private void loadImageFromInternalStorage() {
         try {
@@ -326,6 +359,7 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
 
                 customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Success", "Logout Successfully!", R.drawable.checked);
                 bottomSheetDialog02.dismiss();
+                deleteImageFromInternalStorage();
 
                 Intent intent = new Intent(CompanyUpdateProfileActivity.this,CompanyLogInActivity.class);
                 startActivity(intent);
