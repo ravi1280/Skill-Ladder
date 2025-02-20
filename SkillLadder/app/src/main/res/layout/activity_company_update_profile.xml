@@ -156,7 +156,11 @@
             android:id="@+id/CompanyLocationBtn01"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="location" />
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            android:backgroundTint="@color/UserLoginBtn"
+            android:text="Save Location" />
 
     </LinearLayout>
 

@@ -75,6 +75,7 @@ public class JobViewActivity extends AppCompatActivity {
                     String cemail = doc.getString("CompanyEmail");
                     String jtitle = doc.getString("JobTitle");
                     String jclosingDate = doc.getString("ClosingDate");
+
                     jobdetails.add(new job(cname,cemail,cmobile,jtitle,jclosingDate));
                 }
                 jobListAdapter.notifyDataSetChanged();
@@ -172,6 +173,7 @@ class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.JobViewHolder> 
             @Override
             public void onClick(View view) {
                 Intent intent01= new Intent(holder.itemView.getContext(),MapActivity.class);
+                intent01.putExtra("companyEmail",jobDetails.getCompanyEmail());
                 view.getContext().startActivity(intent01);
 
             }

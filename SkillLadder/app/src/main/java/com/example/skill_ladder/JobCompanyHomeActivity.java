@@ -77,24 +77,30 @@ public class JobCompanyHomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 SharedPreferences sharedPreferences = getSharedPreferences("CompanyPrefs", MODE_PRIVATE);
                 String companyEmail = sharedPreferences.getString("companyEmail", "");
+                String companyLocation = sharedPreferences.getString("companyLocation", "");
+                if(!companyLocation.isEmpty()) {
 
-                firestore = FirebaseFirestore.getInstance();
-                firestore.collection("company")
-                        .whereEqualTo("email", companyEmail)
-                        .whereEqualTo("isActive", true)
-                        .get()
-                        .addOnSuccessListener(queryDocumentSnapshots -> {
-                            if (!queryDocumentSnapshots.isEmpty()) {
-                                Intent intent02 = new Intent(JobCompanyHomeActivity.this, AddJobsActivity.class);
-                                startActivity(intent02);
-                            } else {
-                                customAlert.showCustomAlert(JobCompanyHomeActivity.this, "Error",
-                                        "You do not have access to add a job. Please ensure your company is active.", R.drawable.cancel);
-                            }
-                        })
-                        .addOnFailureListener(e -> {
-                            Log.e("Firestore", "Error fetching job fields", e);
-                        });
+                    firestore = FirebaseFirestore.getInstance();
+                    firestore.collection("company")
+                            .whereEqualTo("email", companyEmail)
+                            .whereEqualTo("isActive", true)
+                            .get()
+                            .addOnSuccessListener(queryDocumentSnapshots -> {
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    Intent intent02 = new Intent(JobCompanyHomeActivity.this, AddJobsActivity.class);
+                                    startActivity(intent02);
+                                } else {
+                                    customAlert.showCustomAlert(JobCompanyHomeActivity.this, "Error",
+                                            "You do not have access to add a job. Please ensure your company is active.", R.drawable.cancel);
+                                }
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("Firestore", "Error fetching job fields", e);
+                            });
+                }else {
+                    customAlert.showCustomAlert(JobCompanyHomeActivity.this, "Update ",
+                            "Please Update Company Location Using Account Setting !", R.drawable.cancel);
+                }
 
             }
         });
