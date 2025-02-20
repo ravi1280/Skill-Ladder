@@ -74,7 +74,7 @@ public class SearchActivity extends AppCompatActivity {
     private static final String TAG = "SearchActivity";
 
     Integer lessonPrice;
-    String lessonId01;
+    String lessonId01,jobTitle0001,lessonID001;
 
 
     @Override
@@ -99,6 +99,20 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
+        Intent intent = getIntent();
+        jobTitle0001 = intent.getStringExtra("JobTitleName");
+        lessonID001 = intent.getStringExtra("lessonId001");
+
+        if(jobTitle0001!= null){
+            showCustomToast.showToast(SearchActivity.this,"Have Job title",R.drawable.checked);
+            loadHomeJobtitleData(jobTitle0001);
+        }
+
+        if(lessonID001!= null){
+            showCustomToast.showToast(SearchActivity.this,"Have lesson id",R.drawable.checked);
+            loadHomeLessonIdData(lessonID001);
+        }
+
         searchEditText = findViewById(R.id.SearcheditTextText01);
         SearchIcon = findViewById(R.id.SearchIcon01);
         SearchIcon.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +136,7 @@ public class SearchActivity extends AppCompatActivity {
         SearchlessonAdapter01 = new SearchLessonAdapter(SearchLessonTitle,UserIdShared,this);
         searchRecyclerView.setAdapter(SearchlessonAdapter01);
 
-        loadLesson();
+//        loadLesson();
     }
     public void PaymentPayHere(String id, Integer price) {
         lessonId01=id;
@@ -177,6 +191,61 @@ public class SearchActivity extends AppCompatActivity {
 
             }
         }
+    }
+    public void loadHomeJobtitleData(String title01){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("lessons")
+                .whereEqualTo("active", true)
+                .whereEqualTo("jobTitle", title01)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    SearchLessonTitle.clear();
+                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        String id = documentSnapshot.getId();
+                        String lessonName = documentSnapshot.getString("lessonName");
+                        Integer lessonPrice = documentSnapshot.getLong("price").intValue();
+                        boolean isActive = Boolean.TRUE.equals(documentSnapshot.getBoolean("active"));
+
+                        SearchLessonTitle.add(new Lesson(id,lessonName,lessonPrice,isActive));
+                    }
+                    SearchlessonAdapter01.notifyDataSetChanged();
+
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showCustomToast.showToast(SearchActivity.this,"Error fetching lessons",R.drawable.cancel);
+
+                    }
+                });
+
+    }
+    public void loadHomeLessonIdData(String id01){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("lessons")
+                .document(id01)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    SearchLessonTitle.clear();
+                        String id = queryDocumentSnapshots.getId();
+                        String lessonName = queryDocumentSnapshots.getString("lessonName");
+                        Integer lessonPrice = queryDocumentSnapshots.getLong("price").intValue();
+                        boolean isActive = Boolean.TRUE.equals(queryDocumentSnapshots.getBoolean("active"));
+
+                        SearchLessonTitle.add(new Lesson(id,lessonName,lessonPrice,isActive));
+
+                    SearchlessonAdapter01.notifyDataSetChanged();
+
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showCustomToast.showToast(SearchActivity.this,"Error fetching lessons",R.drawable.cancel);
+
+                    }
+                });
     }
 
     public void loadSpinner01() {
@@ -327,7 +396,7 @@ public class SearchActivity extends AppCompatActivity {
     private void loadTitleLesson(){
         String fieldName01 = spinner01.getSelectedItem().toString();
         String titleName01 = spinner02.getSelectedItem().toString();
-        if(fieldName01.equals("Select Title ---")||titleName01.equals("Select Field ---")){
+        if(fieldName01.equals("Select Field ---")&&titleName01.equals("Select Title ---")&&lessonID001==null&&jobTitle0001==null){
             loadLesson();
             return;
         }else if(titleName01.equals("Select Title ---")){
@@ -364,7 +433,7 @@ public class SearchActivity extends AppCompatActivity {
     private void loadfieldLesson(){
         String fieldName01 = spinner01.getSelectedItem().toString();
         if(fieldName01.equals("Select Field ---")){
-            loadLesson();
+//            loadLesson();
             return;
         }
         FirebaseFirestore db = FirebaseFirestore.getInstance();
