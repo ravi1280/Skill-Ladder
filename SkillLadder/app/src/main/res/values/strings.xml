@@ -75,5 +75,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="HomeName">Hello Ravishka Indraji</string>
+    <string name="HomeLatest">Latest Lessons</string>
+
 
 </resources>
