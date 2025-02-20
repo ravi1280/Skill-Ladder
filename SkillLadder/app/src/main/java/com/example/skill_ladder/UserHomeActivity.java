@@ -130,7 +130,8 @@ public class UserHomeActivity extends AppCompatActivity {
     }
     private void loadLatestLeson(){
         FirebaseFirestore firestore= FirebaseFirestore.getInstance();
-        firestore.collection("lessons").limit(5)
+        firestore.collection("lessons")
+                .limit(5)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -213,9 +214,11 @@ class LessonAdapter01 extends RecyclerView.Adapter<LessonAdapter01.LessonHolder>
             @Override
             public void onClick(View view) {
                 showCustomToast.showToast(holder.itemView.getContext(),lessondetailss.getLessonName(),R.drawable.checked);
-//                        Intent intent = new Intent(holder.itemView.getContext(),SearchActivity.class);
-//                        intent.putExtra("lessonId",lessondetailss.getId());
-//                        holder.itemView.getContext().startActivity(intent);
+
+                Intent intent01 = new Intent(holder.itemView.getContext(),SearchActivity.class);
+                        intent01.putExtra("lessonId001",lessondetailss.getId());
+                        holder.itemView.getContext().startActivity(intent01);
+
             }
         });
     }
@@ -269,9 +272,9 @@ class jobTitleAdapter01 extends RecyclerView.Adapter<jobTitleAdapter01.jobTitleH
             @Override
             public void onClick(View view) {
                         showCustomToast.showToast(holder.itemView.getContext(),jobTdetailss.getTitleName(),R.drawable.checked);
-//                        Intent intent = new Intent(holder.itemView.getContext(),SearchActivity.class);
-//                        intent.putExtra("JobTitleName",jobTdetailss.getTitleName());
-//                        holder.itemView.getContext().startActivity(intent);
+                        Intent intent = new Intent(holder.itemView.getContext(),SearchActivity.class);
+                        intent.putExtra("JobTitleName",jobTdetailss.getTitleName());
+                        holder.itemView.getContext().startActivity(intent);
             }
         });
     }
@@ -284,20 +287,14 @@ class jobTitleAdapter01 extends RecyclerView.Adapter<jobTitleAdapter01.jobTitleH
 }
 class JobField01 {
     private String fieldName;
-//    private List<JobTitle01> jobTitles;
 
     public JobField01(String fieldName) {
         this.fieldName = fieldName;
-//        this.jobTitles = jobTitles;
     }
-
     public String getFieldName() {
         return fieldName;
     }
 
-//    public List<JobTitle01> getJobTitles() {
-//        return jobTitles;
-//    }
 }
 
 class JobFieldAdapter01 extends RecyclerView.Adapter<JobFieldAdapter01.ViewHolder> {
@@ -331,6 +328,7 @@ class JobFieldAdapter01 extends RecyclerView.Adapter<JobFieldAdapter01.ViewHolde
         FirebaseFirestore firestore= FirebaseFirestore.getInstance();
         firestore.collection("JobTitles")
                 .whereEqualTo("fieldName",jobField.getFieldName())
+                .whereEqualTo("isActive", true)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -349,7 +347,6 @@ class JobFieldAdapter01 extends RecyclerView.Adapter<JobFieldAdapter01.ViewHolde
                 Log.e("Firestore", "Error fetching job titles", e);
             }
         });
-        // Setup horizontal RecyclerView for job titles
 
     }
 
