@@ -1,13 +1,18 @@
 package com.example.skill_ladder;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +24,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -26,6 +32,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.skill_ladder.model.Admin;
 import com.example.skill_ladder.model.Company;
 import com.example.skill_ladder.model.customAlert;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -51,6 +59,9 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
     private ImageView companyImage;
     private static final int REQUEST_CODE_SELECT_IMAGE = 1;
 
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
+    private FusedLocationProviderClient fusedLocationClient;
+
 
 
     @Override
@@ -63,6 +74,7 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         CompanyNameView = findViewById(R.id.CompanyProfiletextView01);
         CompanyEmailView = findViewById(R.id.CompanyProfiletexview02);
@@ -81,8 +93,8 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
             }
         });
 
-
         fillProfileDetails();
+
         companyImage.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -132,6 +144,15 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
                 updatePassword();
             }
         });
+
+        Button getLoction = findViewById(R.id.CompanyLocationBtn01);
+        getLoction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                getLocationBottomsheet();
+                requestLocationPermission();
+            }
+        });
         loadImageFromInternalStorage();
     }
 
@@ -159,13 +180,9 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
     }
     private void saveImageToInternalStorage(Uri selectedImageUri) {
         try {
-            // Open the input stream of the selected image
+
             InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
-
-            // Define the output file in internal storage
             File outputFile = new File(getFilesDir(), "Company_profile_image.jpg");
-
-            // Create an output stream to write the file
             FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
 
             byte[] buffer = new byte[1024];
@@ -178,7 +195,6 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
             fileOutputStream.close();
             inputStream.close();
 
-            // Show a message indicating the image was saved
             Toast.makeText(this, "Image saved to internal storage", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -187,17 +203,12 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
     }
     private void deleteImageFromInternalStorage() {
         try {
-            // Define the path of the saved image in internal storage
             File imageFile = new File(getFilesDir(), "User_profile_image.jpg");
 
-            // Check if the file exists
             if (imageFile.exists()) {
-                // Delete the file
                 boolean isDeleted = imageFile.delete();
-
                 if (isDeleted) {
                     Toast.makeText(this, "Image deleted from internal storage", Toast.LENGTH_SHORT).show();
-                    // Optionally, you can clear the ImageView as well
                     companyImage.setImageBitmap(null);
                 } else {
                     Toast.makeText(this, "Failed to delete image", Toast.LENGTH_SHORT).show();
@@ -213,18 +224,15 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
     }
     private void loadImageFromInternalStorage() {
         try {
-            // Define the path of the saved image in internal storage
+
             File imageFile = new File(getFilesDir(), "Company_profile_image.jpg");
 
             if (imageFile.exists()) {
-                // Read the image from the internal storage
+
                 FileInputStream fileInputStream = new FileInputStream(imageFile);
                 Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
-
-                // Set the bitmap to the ImageView
                 companyImage.setImageBitmap(bitmap);
 
-                // Close the input stream
                 fileInputStream.close();
             } else {
                 Toast.makeText(this, "Image not found", Toast.LENGTH_SHORT).show();
@@ -448,5 +456,143 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
         });
         bottomSheetDialog.show();
 
+    }
+
+
+    private void requestLocationPermission() {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ||
+                    ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)) {
+
+                // Show a dialog explaining why the permission is needed
+                new AlertDialog.Builder(this)
+                        .setTitle("Location Permission Needed")
+                        .setMessage("This app requires location access to fetch your current location. Please allow it.")
+                        .setPositiveButton("OK", (dialog, which) ->
+                                ActivityCompat.requestPermissions(CompanyUpdateProfileActivity.this,
+                                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION},
+                                        LOCATION_PERMISSION_REQUEST_CODE))
+                        .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                        .show();
+            } else {
+                // Directly request the permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION},
+                        LOCATION_PERMISSION_REQUEST_CODE);
+            }
+        } else {
+            getLocationBottomsheet();
+        }
+    }
+
+    private void getLocationBottomsheet(){
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.get_location_bottom, null);
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(CompanyUpdateProfileActivity.this);
+        bottomSheetDialog.setContentView(bottomSheetView);
+
+
+        Button getbtn = bottomSheetView.findViewById(R.id.getLctBottomBtn);
+        EditText text01 = bottomSheetView.findViewById(R.id.LatitudeED01);
+        EditText text02 = bottomSheetView.findViewById(R.id.LongitudeED01);
+
+            if (ActivityCompat.checkSelfPermission(CompanyUpdateProfileActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+
+                fusedLocationClient.getLastLocation()
+                        .addOnSuccessListener(new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                if (location != null) {
+                                    double latitude = location.getLatitude();
+                                    double longitude = location.getLongitude();
+                                    text01.setText(String.valueOf(latitude));
+                                    text02.setText(String.valueOf(longitude));
+                                } else {
+                                    Toast.makeText(CompanyUpdateProfileActivity.this, "Failed to get location! Active GPS", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+
+        getbtn.setOnClickListener(view -> {
+            String latitude = text01.getText().toString().trim();
+            String longitude = text02.getText().toString().trim();
+
+            SharedPreferences sharedPreferences = getSharedPreferences("CompanyPrefs", MODE_PRIVATE);
+            String companyEmail = sharedPreferences.getString("companyEmail", "");
+            firestore = FirebaseFirestore.getInstance();
+            firestore.collection("company")
+                    .whereEqualTo("email", companyEmail)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    String documentId = document.getId();
+                                    Map<String, Object> updatedData = new HashMap<>();
+                                    updatedData.put("latitude", latitude);
+                                    updatedData.put("longitude", longitude);
+                                    firestore.collection("company")
+                                            .document(documentId)
+                                            .update(updatedData)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                    editor.putString("companyLocation","Active");
+                                                    editor.apply();
+                                                    customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Success", "Get Location Successfully!", R.drawable.checked);
+                                                    bottomSheetDialog.dismiss();
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Location Not Updated!", R.drawable.cancel);
+                                                }
+                                            });
+                                }
+                            } else {
+                                customAlert.showCustomAlert(CompanyUpdateProfileActivity.this, "Error", "Old Password Not Matched!", R.drawable.cancel);
+                            }
+                        }
+                    });
+
+
+        });
+        bottomSheetDialog.show();
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    new AlertDialog.Builder(this)
+                            .setTitle("Permission Required")
+                            .setMessage("Location permission is required to use this feature. Please enable it in Settings.")
+                            .setPositiveButton("Open Settings", (dialog, which) -> {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                                intent.setData(uri);
+                                startActivity(intent);
+                            })
+                            .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                            .show();
+                } else {
+                    Toast.makeText(this, "Location permission denied!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        }
     }
 }

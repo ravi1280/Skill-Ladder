@@ -60,20 +60,7 @@ public class LocationGetActivity extends AppCompatActivity {
 
 
     }
-//    private void requestLocationPermission() {
-//        if (ActivityCompat.checkSelfPermission(LocationGetActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-//                != PackageManager.PERMISSION_GRANTED &&
-//                ActivityCompat.checkSelfPermission(LocationGetActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION)
-//                        != PackageManager.PERMISSION_GRANTED) {
-//
-//            ActivityCompat.requestPermissions(LocationGetActivity.this,
-//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-//                            Manifest.permission.ACCESS_COARSE_LOCATION},
-//                    LOCATION_PERMISSION_REQUEST_CODE);
-//        } else {
-//            getCurrentLocation();
-//        }
-//    }
+
 private void requestLocationPermission() {
     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED &&

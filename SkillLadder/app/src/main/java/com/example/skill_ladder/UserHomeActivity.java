@@ -78,9 +78,6 @@ public class UserHomeActivity extends AppCompatActivity {
 
         imageSlider.setImageList(imagelist,ScaleTypes.CENTER_INSIDE);
 
-
-
-
         latestLesson= findViewById(R.id.LatestLessonrecyclerView);
         LinearLayoutManager linearLayoutManager01 =new LinearLayoutManager(UserHomeActivity.this);
         linearLayoutManager01.setOrientation(RecyclerView.HORIZONTAL);

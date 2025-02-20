@@ -34,8 +34,8 @@ public class WebViewActivity extends AppCompatActivity {
         webView01.setWebViewClient(new WebViewClient());
         String url=webUrl;
         webView01.loadUrl(url);
-        ImageView imageView01 = findViewById(R.id.webBackIcon01);
 
+        ImageView imageView01 = findViewById(R.id.webBackIcon01);
         imageView01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

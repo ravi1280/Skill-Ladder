@@ -51,8 +51,6 @@ public class AdminDashboardFragment extends Fragment {
         pieChart01.setCenterTextColor(getResources().getColor(R.color.UserLoginBtn));
 
 
-
-
         pieChart01.getDescription().setEnabled(false);
         pieChart01.invalidate(); // Refresh Chart
         return view;

@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,11 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -40,6 +46,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class TestActivity extends AppCompatActivity {
@@ -52,90 +61,45 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-        imageView = findViewById(R.id.testimageView);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Open gallery to select an image
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, REQUEST_CODE_SELECT_IMAGE);
-            }
-        });
-        loadImageFromInternalStorage();
+
+        generatePDF();
 
 
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_SELECT_IMAGE) {
-            if (data != null) {
-                Uri selectedImageUri = data.getData();
-
-                try {
-                    // Convert the URI to a Bitmap to display it in the ImageView
-                    Bitmap selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                    imageView.setImageBitmap(selectedImageBitmap);
-
-                    // Save the image to internal storage
-                    saveImageToInternalStorage(selectedImageUri);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
-    private void saveImageToInternalStorage(Uri selectedImageUri) {
+    private void generatePDF() {
         try {
-            // Open the input stream of the selected image
-            InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
+            String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/Report.pdf";
+            PdfWriter writer = new PdfWriter(path);
+            PdfDocument pdfDocument = new PdfDocument(writer);
+            Document document = new Document(pdfDocument);
 
-            // Define the output file in internal storage
-            File outputFile = new File(getFilesDir(), "profile_image.jpg");
+            document.add(new Paragraph("SkillLadder Report"));
+            document.add(new Paragraph("Generated on: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date())));
 
-            // Create an output stream to write the file
-            FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
+            // Add table data
+            Table table = new Table(3);
+            table.addCell("User Name");
+            table.addCell("Lesson Purchased");
+            table.addCell("Date");
 
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = inputStream.read(buffer)) != -1) {
-                fileOutputStream.write(buffer, 0, length);
-            }
+            table.addCell("John Doe");
+            table.addCell("Android Development");
+            table.addCell("2025-02-21");
 
-            fileOutputStream.flush();
-            fileOutputStream.close();
-            inputStream.close();
+            table.addCell("John Doe");
+            table.addCell("Android Development");
+            table.addCell("2025-02-21");
 
-            // Show a message indicating the image was saved
-            Toast.makeText(this, "Image saved to internal storage", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
+            table.addCell("John Doe");
+            table.addCell("Android Development");
+            table.addCell("2025-02-21");
+
+            document.add(table);
+            document.close();
+
+            Toast.makeText(this, "PDF saved in Downloads", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Failed to save image", Toast.LENGTH_SHORT).show();
-        }
-    }
-    private void loadImageFromInternalStorage() {
-        try {
-            // Define the path of the saved image in internal storage
-            File imageFile = new File(getFilesDir(), "profile_image.jpg");
-
-            if (imageFile.exists()) {
-                // Read the image from the internal storage
-                FileInputStream fileInputStream = new FileInputStream(imageFile);
-                Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
-
-                // Set the bitmap to the ImageView
-                imageView.setImageBitmap(bitmap);
-
-                // Close the input stream
-                fileInputStream.close();
-            } else {
-                Toast.makeText(this, "Image not found", Toast.LENGTH_SHORT).show();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
         }
     }
 
