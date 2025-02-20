@@ -35,7 +35,7 @@
                     app:srcCompat="@drawable/userimage" />
 
                 <TextView
-                    android:id="@+id/textView20"
+                    android:id="@+id/UserHomeNameTV001"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -44,6 +44,7 @@
                     android:textColor="@color/HimeTxt"
                     android:textSize="25sp"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imageView"
                     app:layout_constraintTop_toTopOf="@+id/imageView" />
 
@@ -54,54 +55,43 @@
                     android:layout_marginTop="5dp"
                     android:text="Welcome to Skill-Ladder"
                     android:textColor="@color/HimeTxt"
-                    app:layout_constraintEnd_toEndOf="@+id/textView20"
-                    app:layout_constraintStart_toStartOf="@+id/textView20"
-                    app:layout_constraintTop_toBottomOf="@+id/textView20" />
+                    app:layout_constraintEnd_toEndOf="@+id/UserHomeNameTV001"
+                    app:layout_constraintStart_toStartOf="@+id/UserHomeNameTV001"
+                    app:layout_constraintTop_toBottomOf="@+id/UserHomeNameTV001" />
 
-                <ImageView
-                    android:id="@+id/imageView7"
-                    android:layout_width="0dp"
-                    android:layout_height="202dp"
-                    android:layout_marginTop="32dp"
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="45dp"
+                    app:cardCornerRadius="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView21"
-                    app:srcCompat="@drawable/blue_gradient" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView21">
 
-<!--                <androidx.viewpager2.widget.ViewPager2-->
-<!--                    android:id="@+id/cardSlider"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="300dp"-->
-<!--                    android:clipToPadding="false"-->
-<!--                    android:clipChildren="false"-->
-<!--                    android:paddingStart="40dp"-->
-<!--                    android:paddingEnd="40dp"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/textView21"-->
-<!--                    />-->
+                    <com.denzcoskun.imageslider.ImageSlider
+                        android:id="@+id/ImageSlider001"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:padding="10dp"
+                        app:iss_corner_radius="30"
+                        app:iss_delay="2000"
+                        app:iss_title_background="@color/gcenter" />
+
+                </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:id="@+id/textView23"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="45dp"
                     android:fontFamily="@font/nunito_bold"
                     android:text="@string/HomeLatest"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView7" />
-
-                <ImageView
-                    android:id="@+id/imageView15"
-                    android:layout_width="0dp"
-                    android:layout_height="708dp"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/nestedRecyclerView"
-                    app:srcCompat="@drawable/background_user01" />
+                    app:layout_constraintTop_toBottomOf="@+id/cardView4" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/nestedRecyclerView"

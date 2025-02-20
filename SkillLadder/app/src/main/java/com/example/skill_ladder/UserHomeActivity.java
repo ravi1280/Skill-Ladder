@@ -3,6 +3,7 @@ package com.example.skill_ladder;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,9 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.skill_ladder.model.Lesson;
 import com.example.skill_ladder.model.job;
 import com.example.skill_ladder.model.showCustomToast;
@@ -60,6 +64,22 @@ public class UserHomeActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        String UserName = sharedPreferences.getString("UserFullName", "");
+        TextView name =findViewById(R.id.UserHomeNameTV001);
+        name.setText("Hello "+UserName);
+
+        ImageSlider imageSlider= findViewById(R.id.ImageSlider001);
+        ArrayList<SlideModel> imagelist = new ArrayList<>();
+        imagelist.add(new SlideModel(R.drawable.image1, ScaleTypes.CENTER_INSIDE));
+        imagelist.add(new SlideModel(R.drawable.image2, ScaleTypes.CENTER_INSIDE));
+        imagelist.add(new SlideModel(R.drawable.image3, ScaleTypes.CENTER_INSIDE));
+        imagelist.add(new SlideModel(R.drawable.image4, ScaleTypes.CENTER_INSIDE));
+
+        imageSlider.setImageList(imagelist,ScaleTypes.CENTER_INSIDE);
+
+
+
 
         latestLesson= findViewById(R.id.LatestLessonrecyclerView);
         LinearLayoutManager linearLayoutManager01 =new LinearLayoutManager(UserHomeActivity.this);
@@ -213,7 +233,7 @@ class LessonAdapter01 extends RecyclerView.Adapter<LessonAdapter01.LessonHolder>
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showCustomToast.showToast(holder.itemView.getContext(),lessondetailss.getLessonName(),R.drawable.checked);
+
 
                 Intent intent01 = new Intent(holder.itemView.getContext(),SearchActivity.class);
                         intent01.putExtra("lessonId001",lessondetailss.getId());
@@ -271,7 +291,6 @@ class jobTitleAdapter01 extends RecyclerView.Adapter<jobTitleAdapter01.jobTitleH
         holder.ContainerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                        showCustomToast.showToast(holder.itemView.getContext(),jobTdetailss.getTitleName(),R.drawable.checked);
                         Intent intent = new Intent(holder.itemView.getContext(),SearchActivity.class);
                         intent.putExtra("JobTitleName",jobTdetailss.getTitleName());
                         holder.itemView.getContext().startActivity(intent);

@@ -104,12 +104,10 @@ public class SearchActivity extends AppCompatActivity {
         lessonID001 = intent.getStringExtra("lessonId001");
 
         if(jobTitle0001!= null){
-            showCustomToast.showToast(SearchActivity.this,"Have Job title",R.drawable.checked);
             loadHomeJobtitleData(jobTitle0001);
         }
 
         if(lessonID001!= null){
-            showCustomToast.showToast(SearchActivity.this,"Have lesson id",R.drawable.checked);
             loadHomeLessonIdData(lessonID001);
         }
 
