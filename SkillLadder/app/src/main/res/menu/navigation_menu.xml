@@ -24,6 +24,10 @@
         android:id="@+id/ManageOther"
         android:title="@string/mOther"
         android:icon="@drawable/other"/>
+    <item
+        android:id="@+id/getReport"
+        android:title="@string/getReport"
+        android:icon="@drawable/get_report"/>
 
 
 

@@ -85,7 +85,7 @@ public class UserHomeActivity extends AppCompatActivity {
         card.setTranslationY(-500);
         springAnimation.setSpring(springForce);
         springAnimation.start();
-        
+
 
         ImageSlider imageSlider= findViewById(R.id.ImageSlider001);
         ArrayList<SlideModel> imagelist = new ArrayList<>();

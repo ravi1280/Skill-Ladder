@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.skill_ladder.R;
 import com.example.skill_ladder.navigation.AdminDashboardFragment;
 import com.example.skill_ladder.navigation.AdminProfileFragment;
+import com.example.skill_ladder.navigation.GetReportsFragment;
 import com.example.skill_ladder.navigation.ManageCompanyFragment;
 import com.example.skill_ladder.navigation.ManageLessonsFragment;
 import com.example.skill_ladder.navigation.ManageOtherFragment;
@@ -69,6 +70,8 @@ public class AdminHomeActivity extends AppCompatActivity {
                     loadFragment(new AdminProfileFragment());
                 }else if (item.getItemId()==R.id.ManageOther) {
                     loadFragment(new ManageOtherFragment());
+                }else if (item.getItemId()==R.id.getReport) {
+                    loadFragment(new GetReportsFragment());
                 }
                 toolbar.setSubtitle(item.getTitle());
                 drawerLayout.closeDrawers();
