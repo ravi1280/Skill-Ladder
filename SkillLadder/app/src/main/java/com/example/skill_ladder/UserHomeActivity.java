@@ -4,9 +4,11 @@ package com.example.skill_ladder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,9 +18,13 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.dynamicanimation.animation.DynamicAnimation;
+import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.dynamicanimation.animation.SpringForce;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -68,6 +74,18 @@ public class UserHomeActivity extends AppCompatActivity {
         String UserName = sharedPreferences.getString("UserFullName", "");
         TextView name =findViewById(R.id.UserHomeNameTV001);
         name.setText("Hello "+UserName);
+
+        CardView card = findViewById(R.id.footer_card);
+
+        SpringAnimation springAnimation = new SpringAnimation(card, DynamicAnimation.TRANSLATION_Y, 0);
+        SpringForce springForce = new SpringForce();
+        springForce.setStiffness(SpringForce.STIFFNESS_VERY_LOW);
+        springForce.setDampingRatio(SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY);
+        springForce.setFinalPosition(0);
+        card.setTranslationY(-500);
+        springAnimation.setSpring(springForce);
+        springAnimation.start();
+        
 
         ImageSlider imageSlider= findViewById(R.id.ImageSlider001);
         ArrayList<SlideModel> imagelist = new ArrayList<>();
