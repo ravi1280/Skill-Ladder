@@ -66,7 +66,6 @@ public class MyLessonsActivity extends AppCompatActivity {
 
         List<String> lessonIdsSQLite = getLessonIdsFromSQLite();
         if (!lessonIdsSQLite.isEmpty()) {
-
                     loadMylesson(lessonIdsSQLite);
         }else {
             showCustomToast.showToast(MyLessonsActivity.this,"No Lessons !",R.drawable.cancel);
