@@ -242,7 +242,7 @@ public class UserLoginActivity extends AppCompatActivity {
             }else {
                 EditText editText01 = findViewById(R.id.UserLogineditText01);
                 String email001 = editText01.getText().toString();
-                
+
                 FirebaseFirestore firestore = FirebaseFirestore.getInstance();
                 firestore.collection("user")
                         .whereEqualTo("email", email001)
