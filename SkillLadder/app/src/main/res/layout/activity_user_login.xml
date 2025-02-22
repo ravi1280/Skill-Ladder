@@ -9,7 +9,7 @@
     tools:context=".UserLoginActivity">
 
     <TextView
-        android:id="@+id/CompanySignUpTV01"
+        android:id="@+id/UserSignUpTV01"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/CompanySignUpTV02"
+        android:id="@+id/UserSignUpTV02"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -33,10 +33,10 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CompanySignUpTV01" />
+        app:layout_constraintTop_toBottomOf="@+id/UserSignUpTV01" />
 
     <LinearLayout
-        android:id="@+id/CompanyLinierLayout01"
+        android:id="@+id/UserLinierLayout01"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="100dp"
@@ -45,10 +45,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CompanySignUpTV02">
+        app:layout_constraintTop_toBottomOf="@+id/UserSignUpTV02">
 
         <TextView
-            android:id="@+id/CompanySignUpTV03"
+            android:id="@+id/UserSignUpTV03"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="50dp"
@@ -57,7 +57,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/CompanyLogineditText01"
+            android:id="@+id/UserLogineditText01"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
@@ -72,7 +72,7 @@
             android:textSize="14sp" />
 
         <EditText
-            android:id="@+id/CompanyLogineditText02"
+            android:id="@+id/UserLogineditText02"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
@@ -88,7 +88,7 @@
             android:textSize="14sp" />
 
         <Button
-            android:id="@+id/CompanySignUpBtn01"
+            android:id="@+id/UserLoginBtn01"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="50dp"
@@ -103,12 +103,21 @@
             android:background="?android:attr/listDivider" />
 
         <TextView
-            android:id="@+id/CompanyLogInTV04"
+            android:id="@+id/UserLogInTV04"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:text="@string/GoSignUp"
             android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/UserLogInTV05"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:text="Forget Password !"
+            android:textAlignment="center"
+            android:textColor="#FF8A80" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

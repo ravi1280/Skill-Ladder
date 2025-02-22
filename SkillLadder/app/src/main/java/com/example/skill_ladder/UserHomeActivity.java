@@ -87,6 +87,7 @@ public class UserHomeActivity extends AppCompatActivity {
         springAnimation.start();
 
 
+
         ImageSlider imageSlider= findViewById(R.id.ImageSlider001);
         ArrayList<SlideModel> imagelist = new ArrayList<>();
         imagelist.add(new SlideModel(R.drawable.image1, ScaleTypes.CENTER_INSIDE));
