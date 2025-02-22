@@ -36,8 +36,15 @@ public class UserLoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        TextView textView1= findViewById(R.id.UserLogInTV05);
+        textView1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               forgetPassword();
+            }
+        });
 
-        TextView textView= findViewById(R.id.CompanyLogInTV04);
+        TextView textView= findViewById(R.id.UserLogInTV04);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -46,13 +53,13 @@ public class UserLoginActivity extends AppCompatActivity {
             }
         });
 
-        Button btn01 = findViewById(R.id.CompanySignUpBtn01);
+        Button btn01 = findViewById(R.id.UserLoginBtn01);
         btn01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                EditText editText01 = findViewById(R.id.CompanyLogineditText01);
-                EditText editText02 = findViewById(R.id.CompanyLogineditText02);
+                EditText editText01 = findViewById(R.id.UserLogineditText01);
+                EditText editText02 = findViewById(R.id.UserLogineditText02);
 
                  email = editText01.getText().toString();
                  password = editText02.getText().toString();
@@ -110,5 +117,9 @@ public class UserLoginActivity extends AppCompatActivity {
                         customAlert.showCustomAlert(UserLoginActivity.this,"Error ","Fail to load Data ! ",R.drawable.cancel);
                     }
                 });
+    }
+    private void forgetPassword() {
+
+
     }
 }
