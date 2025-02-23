@@ -10,9 +10,9 @@
     <color name="glassWhite">#99FFFFFF</color>
     <color name="red">#FF80AB</color>
 
-    <color name="gstart">#D1004A</color>
-    <color name="gcenter">#FF80AB</color>
-    <color name="gend">#E6E5E5</color>
+    <color name="gstart">#2980b9</color>
+    <color name="gcenter">#86a8e7</color>
+    <color name="gend">#ffff</color>
 
     <color name="chart01">#EA80FC</color>
     <color name="chart02">#FFE57F</color>
