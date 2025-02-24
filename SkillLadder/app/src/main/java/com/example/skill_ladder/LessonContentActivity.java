@@ -43,13 +43,7 @@ public class LessonContentActivity extends AppCompatActivity {
         getLifecycle().addObserver(youTubePlayerView);
 
 
-        youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
-            @Override
-            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                String videoId = "1KpaSQTq52w";
-                youTubePlayer.cueVideo(videoId, 0);
-            }
-        });
+
 
         FloatingActionButton fab = findViewById(R.id.LessonContendFAB);
 
@@ -68,6 +62,15 @@ public class LessonContentActivity extends AppCompatActivity {
         boolean isLastSubtopic = i.getBooleanExtra("is_last_subtopic", false);
         progressPercentage = getIntent().getIntExtra("subtopic_progress", 0);
 
+
+        youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+            @Override
+            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                String videoId = ytVideoUrl;
+                youTubePlayer.cueVideo(videoId, 0);
+            }
+        });
+
         textView01.setText(subTopic);
         textView02.setText(subTopic);
         textView03.setText(contentText);
@@ -77,7 +80,7 @@ public class LessonContentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LessonContentActivity.this, WebViewActivity.class);
-                intent.putExtra("WebUrl", "https://www.svgrepo.com/");
+                intent.putExtra("WebUrl", webUrl);
                 startActivity(intent);
             }
         });

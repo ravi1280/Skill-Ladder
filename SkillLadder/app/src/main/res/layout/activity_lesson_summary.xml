@@ -24,12 +24,12 @@
         android:id="@+id/LessonProgressDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="32dp"
         android:fontFamily="@font/nunito_bold"
         android:text="10%"
-        app:layout_constraintBottom_toBottomOf="@+id/LessonSummeryTV01"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBar01"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/LessonSummeryTV01" />
+        app:layout_constraintTop_toTopOf="@+id/progressBar01" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/LessonSummeryRecyclerView"
@@ -50,11 +50,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="24dp"
         android:progressDrawable="@drawable/progress_bar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/LessonProgressDetails"
         app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
