@@ -122,7 +122,7 @@ public class UserHomeActivity extends AppCompatActivity {
         buttonFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent01 = new Intent(UserHomeActivity.this,UserCartActivity.class);
+                Intent intent01 = new Intent(UserHomeActivity.this,SearchActivity.class);
                 startActivity(intent01);
             }
         });
@@ -130,7 +130,7 @@ public class UserHomeActivity extends AppCompatActivity {
         imageViewHome01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent01 = new Intent(UserHomeActivity.this,SearchActivity.class);
+                Intent intent01 = new Intent(UserHomeActivity.this,UserCartActivity.class);
                 startActivity(intent01);
 
             }

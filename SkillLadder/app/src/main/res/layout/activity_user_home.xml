@@ -165,7 +165,7 @@
                     android:id="@+id/HomeUserSearchImageView"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    app:srcCompat="@drawable/searchfill" />
+                    app:srcCompat="@drawable/ccart" />
 
             </LinearLayout>
 
@@ -180,12 +180,12 @@
                     android:id="@+id/floatingActionButton2"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    app:srcCompat="@drawable/homefill"
-                    app:backgroundTint="#80D8FF"
+                    android:layout_margin="10dp"
+                    app:backgroundTint="#82B1FF"
                     app:elevation="8dp"
                     app:pressedTranslationZ="12dp"
-                    android:layout_margin="10dp"
-                    app:rippleColor="@android:color/darker_gray" />
+                    app:rippleColor="@android:color/darker_gray"
+                    app:srcCompat="@drawable/analyse" />
 
 
             </LinearLayout>
