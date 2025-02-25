@@ -36,28 +36,7 @@ public class NestedActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-//        rvJobFields = findViewById(R.id.nesteddrr);
-//        rvJobFields.setLayoutManager(new LinearLayoutManager(this));
-//
-//        // Create sample data
-//        jobFieldList = new ArrayList<>();
-//        jobFieldList.add(new JobField("Software Engineering", Arrays.asList(
-//                new JobTitle("Frontend Developer"),
-//                new JobTitle("Backend Developer"),
-//                new JobTitle("Full Stack Developer"),
-//                new JobTitle("Mobile Developer"),
-//                new JobTitle("AI Engineer")
-//        )));
-//        jobFieldList.add(new JobField("Marketing", Arrays.asList(
-//                new JobTitle("SEO Specialist"),
-//                new JobTitle("Content Marketer"),
-//                new JobTitle("Social Media Manager"),
-//                new JobTitle("Email Marketer"),
-//                new JobTitle("PPC Specialist")
-//        )));
-//
-//        jobFieldAdapter = new JobFieldAdapter(this, jobFieldList);
-//        rvJobFields.setAdapter(jobFieldAdapter);
+
     }
 }
  class JobField {

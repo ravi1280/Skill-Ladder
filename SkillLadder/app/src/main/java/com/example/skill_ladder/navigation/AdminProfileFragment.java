@@ -69,15 +69,7 @@ public class AdminProfileFragment extends Fragment {
         AdminName = view.findViewById(R.id.AdminProfiletextView01);
         AdminEmail = view.findViewById(R.id.AdminProfiletexview02);
 
-        ImageView message = view.findViewById(R.id.AdminProfileMessage);
-        message.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), TestActivity.class);
-                startActivity(intent);
 
-            }
-        });
 
 
 

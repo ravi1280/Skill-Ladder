@@ -26,7 +26,6 @@ public class LessonContentActivity extends AppCompatActivity {
     String  subTopic, contentText, webUrl, ytVideoUrl,lessonId;
     int progressPercentage;
 
-//    private String ytAPIKey = "AIzaSyCGEAN5HBQyUpH_ijZoInsvqDupSEGtmMc";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -9,7 +9,7 @@
     android:padding="16dp"
     tools:context=".navigation.AdminDashboardFragment">
 
-    <!-- Pie Chart -->
+
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/adminpieChart01"
         android:layout_width="0dp"
@@ -19,9 +19,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Row 1 - Two Cards -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/AdminDashBoadConstraint01"
         android:layout_width="0dp"
         android:layout_height="150dp"
         android:layout_marginHorizontal="8dp"
@@ -61,11 +61,11 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView25"
+                    android:id="@+id/AdminDashBoardC01"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_bold"
-                    android:text="34"
+                    android:text="0"
                     android:textColor="@android:color/holo_blue_dark"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -107,11 +107,11 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView20"
+                    android:id="@+id/AdminDashBoardC02"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_bold"
-                    android:text="56"
+                    android:text="0"
                     android:textColor="@android:color/holo_red_dark"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -122,15 +122,16 @@
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Row 2 - Two Cards -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/AdminDashBoadConstraint02"
         android:layout_width="0dp"
         android:layout_height="150dp"
         android:layout_marginHorizontal="8dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+        app:layout_constraintTop_toBottomOf="@+id/AdminDashBoadConstraint01">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView7"
@@ -163,11 +164,11 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView29"
+                    android:id="@+id/AdminDashBoardC03"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_bold"
-                    android:text="10"
+                    android:text="0"
                     android:textColor="@android:color/holo_green_dark"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -208,11 +209,11 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView27"
+                    android:id="@+id/AdminDashBoardC04"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/nunito_regular"
-                    android:text="12"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="0"
                     android:textColor="@android:color/holo_orange_dark"
                     android:textSize="20sp"
                     android:textStyle="bold"
