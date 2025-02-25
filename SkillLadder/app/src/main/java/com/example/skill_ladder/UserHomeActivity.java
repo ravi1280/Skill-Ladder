@@ -91,8 +91,6 @@ public class UserHomeActivity extends AppCompatActivity {
         ImageSlider imageSlider= findViewById(R.id.ImageSlider001);
         ArrayList<SlideModel> imagelist = new ArrayList<>();
         imagelist.add(new SlideModel(R.drawable.image1, ScaleTypes.CENTER_INSIDE));
-        imagelist.add(new SlideModel(R.drawable.image2, ScaleTypes.CENTER_INSIDE));
-        imagelist.add(new SlideModel(R.drawable.image3, ScaleTypes.CENTER_INSIDE));
         imagelist.add(new SlideModel(R.drawable.image4, ScaleTypes.CENTER_INSIDE));
 
         imageSlider.setImageList(imagelist,ScaleTypes.CENTER_INSIDE);
