@@ -103,7 +103,7 @@ public class MapActivity extends AppCompatActivity {
                 ));
                 googleMap
                         .addMarker(new MarkerOptions().position(latLng).title("rider")
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.cclocation)));
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.locationmark)));
 
                 googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override

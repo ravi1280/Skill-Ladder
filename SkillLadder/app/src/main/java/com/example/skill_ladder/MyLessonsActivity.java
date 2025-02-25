@@ -184,7 +184,6 @@ class MyLessonAdapter extends RecyclerView.Adapter<MyLessonAdapter.MyLessonViewH
         holder.myLessonbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(holder.itemView.getContext(), "Lesson Success"+myLessondetailss.getId(), Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(holder.itemView.getContext(), LessonSummaryActivity.class);
                 intent.putExtra("lessonId", myLessondetailss.getId());

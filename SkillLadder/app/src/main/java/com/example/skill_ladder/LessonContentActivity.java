@@ -16,6 +16,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.skill_ladder.model.SQLiteHelper;
+import com.example.skill_ladder.model.showCustomToast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
@@ -125,7 +126,7 @@ public class LessonContentActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(LessonContentActivity.this, "Update Progress "+count, Toast.LENGTH_SHORT).show();
+                            showCustomToast.showToast(LessonContentActivity.this, "Lesson Progress Updated", R.drawable.checked);
                         }
                     });
 
@@ -133,7 +134,7 @@ public class LessonContentActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(LessonContentActivity.this, "No Lesson Id To Update Lesson Progress", Toast.LENGTH_SHORT).show();
+                            showCustomToast.showToast(LessonContentActivity.this, "No Lesson Id To Update Lesson Progress", R.drawable.cancel);
                         }
                     });
                 }

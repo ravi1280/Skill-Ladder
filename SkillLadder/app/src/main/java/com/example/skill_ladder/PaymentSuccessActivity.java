@@ -86,7 +86,7 @@ public class PaymentSuccessActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(PaymentSuccessActivity.this, "Add to My lessons", Toast.LENGTH_SHORT).show();
+                                showCustomToast.showToast(PaymentSuccessActivity.this, "Add to My lessons !", R.drawable.checked);
                             }
                         });
                         sqLiteDatabase.close();

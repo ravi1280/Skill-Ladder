@@ -44,6 +44,9 @@ public class AdminAddLessonActivity extends AppCompatActivity {
 
     private String SelectedJobFiledID,SelectedJobFieldName,SelectedJobTitleName;
     private FirebaseFirestore db;
+    private static final int SHAKE_THRESHOLD = 800;
+    private long lastShakeTime = 0;
+    private float lastX = 0, lastY = 0, lastZ = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,19 +100,13 @@ public class AdminAddLessonActivity extends AppCompatActivity {
                 finish();
             }
         });
-
         sensors();
-
     }
     private void sensors() {
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         SensorEventListener sensorEventListener = new SensorEventListener() {
-            private static final int SHAKE_THRESHOLD = 800;
-            private long lastShakeTime = 0;
-            private float lastX = 0, lastY = 0, lastZ = 0;
-
             @Override
             public void onSensorChanged(SensorEvent event) {
                 float[] values = event.values;
@@ -117,15 +114,15 @@ public class AdminAddLessonActivity extends AppCompatActivity {
                 float y = values[1];
                 float z = values[2];
 
-                float deltaX = x - lastX;
-                float deltaY = y - lastY;
-                float deltaZ = z - lastZ;
+                float X = x - lastX;
+                float Y = y - lastY;
+                float Z = z - lastZ;
 
-                float shake = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
+                float shake = X * X + Y * Y + Z * Z;
 
                 if (shake > SHAKE_THRESHOLD && (System.currentTimeMillis() - lastShakeTime) > 500) {
 
-                    showCustomToast.showToast(AdminAddLessonActivity.this, "Shake detected!", R.drawable.checked);
+                    showCustomToast.showToast(AdminAddLessonActivity.this, "Refresh Field !", R.drawable.checked);
                     if (lessonNameEditText.getText().toString().isEmpty() && subTopicNameEditText.getText().toString().isEmpty() && contentTextEditText.getText().toString().isEmpty() && webUrlEditText.getText().toString().isEmpty() && ytVideoUrlEditText.getText().toString().isEmpty() && lessonPriceEditText.getText().toString().isEmpty()) {
                         return;
                     }
@@ -197,11 +194,7 @@ public class AdminAddLessonActivity extends AppCompatActivity {
                 SelectedJobFieldName =selectedField.getName();
 
                 loadJobTitleSpinner();
-
-
-
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
@@ -257,15 +250,12 @@ public class AdminAddLessonActivity extends AppCompatActivity {
 //                SelectedJobFiledID = selectedTitle.getId();
                 SelectedJobTitleName =selectedTitle.getName();
 
-
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
     }
-
-
 
     private void addSubTopic() {
         String subTopicName = subTopicNameEditText.getText().toString().trim();
@@ -275,21 +265,19 @@ public class AdminAddLessonActivity extends AppCompatActivity {
 
 
         if (subTopicName.isEmpty() || contentText.isEmpty() || webUrl.isEmpty() || ytVideoUrl.isEmpty()) {
-            Toast.makeText(AdminAddLessonActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            showCustomToast.showToast(AdminAddLessonActivity.this, "Please fill in all fields !", R.drawable.cancel);
+
             return;
         }
 
-
         SubTopic newSubTopic = new SubTopic(subTopicName, contentText, webUrl, ytVideoUrl);
         subTopics.add(newSubTopic);
-
-
         subTopicNameEditText.setText("");
         contentTextEditText.setText("");
         webUrlEditText.setText("");
         ytVideoUrlEditText.setText("");
 
-        Toast.makeText(AdminAddLessonActivity.this, "Subtopic added!", Toast.LENGTH_SHORT).show();
+        showCustomToast.showToast(AdminAddLessonActivity.this, "Subtopic added !", R.drawable.checked);
     }
 
     private void saveLessonToFirestore() {
@@ -298,15 +286,15 @@ public class AdminAddLessonActivity extends AppCompatActivity {
         String lessonPrice = lessonPriceEditText.getText().toString().trim();
 
         if (lessonName.isEmpty() || lessonPrice.isEmpty() || subTopics.isEmpty()) {
-            Toast.makeText(AdminAddLessonActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            showCustomToast.showToast(AdminAddLessonActivity.this, "Please fill in all fields !", R.drawable.cancel);
+
             return;
         }
-
         int lessonPrice01;
         try {
             lessonPrice01 = Integer.parseInt(lessonPrice);
         } catch (NumberFormatException e) {
-            Toast.makeText(AdminAddLessonActivity.this, "Invalid price! Please enter a valid number.", Toast.LENGTH_SHORT).show();
+            showCustomToast.showToast(AdminAddLessonActivity.this, "Invalid price! Please enter a valid number !", R.drawable.cancel);
             return;
         }
 
@@ -316,7 +304,8 @@ public class AdminAddLessonActivity extends AppCompatActivity {
                 .add(newLesson)
                 .addOnSuccessListener(newDocumentReference -> {
                     Log.d("Firestore", "DocumentSnapshot added with ID: " + newDocumentReference.getId());
-                    Toast.makeText(AdminAddLessonActivity.this, "Lesson added!", Toast.LENGTH_SHORT).show();
+                    showCustomToast.showToast(AdminAddLessonActivity.this, "Lesson added !", R.drawable.checked);
+
                     SpjobField.setSelection(0);
                     SpjobTitle.setSelection(0);
                     lessonNameEditText.setText("");
@@ -324,8 +313,8 @@ public class AdminAddLessonActivity extends AppCompatActivity {
                     subTopics.clear();
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("Firestore", "Error adding document", e);
-                    Toast.makeText(AdminAddLessonActivity.this, "Error adding lesson", Toast.LENGTH_SHORT).show();
+                    showCustomToast.showToast(AdminAddLessonActivity.this, "Error adding lesson", R.drawable.cancel);
+
                 });
     }
 

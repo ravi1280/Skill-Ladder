@@ -104,3 +104,197 @@ public class TestActivity extends AppCompatActivity {
     }
 
 }
+
+
+//    private GoogleMap googleMap;
+//    private FusedLocationProviderClient fusedLocationClient;
+//    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+//
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        EdgeToEdge.enable(this);
+//        setContentView(R.layout.activity_user_map_view);
+//
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+//            return insets;
+//        });
+//
+//        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+//
+//        // Retrieve the existing SupportMapFragment
+//        SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.user_map_framlayout_2);
+//
+//        // If fragment is not already added, create a new instance
+//        if (supportMapFragment == null) {
+//            supportMapFragment = SupportMapFragment.newInstance();
+//            FragmentManager fragmentManager = getSupportFragmentManager();
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            fragmentTransaction.add(R.id.user_map_framlayout_2, supportMapFragment);
+//            fragmentTransaction.commit();
+//        }
+//
+//        if (supportMapFragment != null) {
+//            supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+//                @Override
+//                public void onMapReady(@NonNull GoogleMap map) {
+//
+//
+//                    googleMap = map;
+//                    getCurrentLocation(); // Fetch and set user location
+//                    addDefaultLocation();
+//                }
+//            });
+//        }
+//    }
+//
+//    ////////////////////////////////////////////////////////////////////////////
+//
+//    private void drawRoute(LatLng userLocation, LatLng destination) {
+//        String apiKey = "AIzaSyBZGXPBpjrbfFct9SbqsGW5px4o_KIKOyY"; // Replace with your actual API key
+//
+//        String url = "https://maps.googleapis.com/maps/api/directions/json?"
+//                + "origin=" + userLocation.latitude + "," + userLocation.longitude
+//                + "&destination=" + destination.latitude + "," + destination.longitude
+//                + "&key=" + apiKey;
+//
+//        Log.d("Directions URL", "Request URL: " + url);  // Debugging line to check the URL
+//
+//        new Thread(() -> {
+//            try {
+//                URL connectionUrl = new URL(url);
+//                HttpURLConnection connection = (HttpURLConnection) connectionUrl.openConnection();
+//                connection.setRequestMethod("GET");
+//                connection.connect();
+//
+//                InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream());
+//                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+//                StringBuilder response = new StringBuilder();
+//                String line;
+//                while ((line = bufferedReader.readLine()) != null) {
+//                    response.append(line);
+//                }
+//                bufferedReader.close();
+//
+//                JSONObject jsonResponse = new JSONObject(response.toString());
+//                JSONArray routes = jsonResponse.getJSONArray("routes");
+//
+//                if (routes.length() > 0) {
+//                    JSONObject route = routes.getJSONObject(0);
+//                    JSONObject overviewPolyline = route.getJSONObject("overview_polyline");
+//                    String encodedPolyline = overviewPolyline.getString("points");
+//
+//                    Log.d("Polyline", "Encoded Polyline: " + encodedPolyline); // Debugging line to check the polyline
+//
+//                    runOnUiThread(() -> {
+//                        List<LatLng> points = decodePolyline(encodedPolyline);
+//                        googleMap.addPolyline(new PolylineOptions()
+//                                .addAll(points)
+//                                .width(10)
+//                                .color(Color.BLUE));
+//                    });
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }).start();
+//    }
+//
+//
+//
+//    private List<LatLng> decodePolyline(String encoded) {
+//        List<LatLng> polyline = new ArrayList<>();
+//        int index = 0, len = encoded.length();
+//        int lat = 0, lng = 0;
+//
+//        while (index < len) {
+//            int b, shift = 0, result = 0;
+//            do {
+//                b = encoded.charAt(index++) - 63;
+//                result |= (b & 0x1F) << shift;
+//                shift += 5;
+//            } while (b >= 0x20);
+//            int deltaLat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+//            lat += deltaLat;
+//
+//            shift = 0;
+//            result = 0;
+//            do {
+//                b = encoded.charAt(index++) - 63;
+//                result |= (b & 0x1F) << shift;
+//                shift += 5;
+//            } while (b >= 0x20);
+//            int deltaLng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+//            lng += deltaLng;
+//
+//            polyline.add(new LatLng(lat / 1E5, lng / 1E5));
+//        }
+//        return polyline;
+//    }
+//
+//    private void addDefaultLocation() {
+//        if (googleMap == null) return; // Avoid null pointer errors
+//
+//        // Define default location (TechknowLK Pvt Ltd)
+//        LatLng defaultLocation = new LatLng(6.87387284485117, 79.8879499245235);
+//
+//        // Add marker for default location
+//        googleMap.addMarker(new MarkerOptions()
+//                .position(defaultLocation)
+//                .title("TechknowLK Pvt Ltd")
+//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_shipped_order_icon)));
+//
+//        // Move camera to the default location
+//        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 15));
+//    }
+//
+//
+//
+//    private void getCurrentLocation() {
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+//                != PackageManager.PERMISSION_GRANTED &&
+//                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+//                        != PackageManager.PERMISSION_GRANTED) {
+//
+//            ActivityCompat.requestPermissions(this,
+//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+//                    LOCATION_PERMISSION_REQUEST_CODE);
+//            return;
+//        }
+//
+//        fusedLocationClient.getLastLocation().addOnSuccessListener(this, newLocation -> {
+//            if (newLocation != null && googleMap != null) {
+//                LatLng userLatLng = new LatLng(newLocation.getLatitude(), newLocation.getLongitude());
+//                LatLng defaultLocation = new LatLng(6.87387284485117, 79.8879499245235);
+//
+//                Log.i("muLocation",String.valueOf(userLatLng));
+//
+//                googleMap.addMarker(new MarkerOptions()
+//                        .position(userLatLng)
+//                        .title("Your Location")
+//                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_2)));
+//
+//                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
+//
+//                // Draw route to default location
+//                drawRoute(userLatLng, defaultLocation);
+//            }
+//        });
+//    }
+//
+//    // Handle permission request result
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                getCurrentLocation();
+//            } else {
+//                Log.e("PermissionError", "Location permission denied");
+//            }
+//        }
+//    }
+//}
