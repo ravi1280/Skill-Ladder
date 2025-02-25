@@ -22,7 +22,7 @@
                     android:id="@+id/lessonNameEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="lesson Name"
+                    android:hint="Lesson Name"
                     android:inputType="text|textCapWords" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -42,7 +42,7 @@
                     android:id="@+id/subTopicNameEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="subTopic Name"
+                    android:hint="SubTopic Name"
                     android:inputType="text|textCapWords" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,7 +61,7 @@
                     android:id="@+id/contentTextEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="content Text"
+                    android:hint="Content Text"
                     android:inputType="text|textCapSentences" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -80,7 +80,7 @@
                     android:id="@+id/webUrlEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="web Url" />
+                    android:hint="Web Url" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -98,7 +98,7 @@
                     android:id="@+id/ytVideoUrlEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="yt Video Url" />
+                    android:hint="YouTube Video ID" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

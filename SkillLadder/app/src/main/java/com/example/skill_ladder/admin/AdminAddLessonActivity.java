@@ -1,5 +1,10 @@
 package com.example.skill_ladder.admin;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +27,7 @@ import com.example.skill_ladder.model.JobField;
 import com.example.skill_ladder.model.JobTitle;
 import com.example.skill_ladder.model.Lesson;
 import com.example.skill_ladder.model.SubTopic;
+import com.example.skill_ladder.model.showCustomToast;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -92,6 +98,58 @@ public class AdminAddLessonActivity extends AppCompatActivity {
             }
         });
 
+        sensors();
+
+    }
+    private void sensors() {
+        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        SensorEventListener sensorEventListener = new SensorEventListener() {
+            private static final int SHAKE_THRESHOLD = 800;
+            private long lastShakeTime = 0;
+            private float lastX = 0, lastY = 0, lastZ = 0;
+
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                float[] values = event.values;
+                float x = values[0];
+                float y = values[1];
+                float z = values[2];
+
+                float deltaX = x - lastX;
+                float deltaY = y - lastY;
+                float deltaZ = z - lastZ;
+
+                float shake = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
+
+                if (shake > SHAKE_THRESHOLD && (System.currentTimeMillis() - lastShakeTime) > 500) {
+
+                    showCustomToast.showToast(AdminAddLessonActivity.this, "Shake detected!", R.drawable.checked);
+                    if (lessonNameEditText.getText().toString().isEmpty() && subTopicNameEditText.getText().toString().isEmpty() && contentTextEditText.getText().toString().isEmpty() && webUrlEditText.getText().toString().isEmpty() && ytVideoUrlEditText.getText().toString().isEmpty() && lessonPriceEditText.getText().toString().isEmpty()) {
+                        return;
+                    }
+                    lessonNameEditText.setText("");
+                    subTopicNameEditText.setText("");
+                    contentTextEditText.setText("");
+                    webUrlEditText.setText("");
+                    ytVideoUrlEditText.setText("");
+                    lessonPriceEditText .setText("");
+
+                    lastShakeTime = System.currentTimeMillis();
+                }
+                lastX = x;
+                lastY = y;
+                lastZ = z;
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        };
+
+        sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_UI);
     }
     private void loadJobFieldSpinner(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
