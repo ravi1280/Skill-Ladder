@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.skill_ladder.model.SQLiteHelper;
 import com.example.skill_ladder.model.SubTopic;
+import com.example.skill_ladder.model.showCustomToast;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -89,10 +91,10 @@ public class LessonSummaryActivity extends AppCompatActivity {
             public void run() {
                 SQLiteDatabase sqLiteDatabase = sqLiteHelper.getReadableDatabase();
                 Cursor cursor = sqLiteDatabase.query(
-                        "MyLessonProgress",   // Table Name
-                        new String[]{"lesson_progress"},  // Columns to retrieve
-                        "lesson_id = ?",  // WHERE clause
-                        new String[]{lessonId},  // Selection arguments
+                        "MyLessonProgress",
+                        new String[]{"lesson_progress"},
+                        "lesson_id = ?",
+                        new String[]{lessonId},
                         null,
                         null,
                         null
@@ -145,10 +147,15 @@ public class LessonSummaryActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        Toast.makeText(LessonSummaryActivity.this, "No lessons found with this name", Toast.LENGTH_SHORT).show();
+                        showCustomToast.showToast(LessonSummaryActivity.this, "No lessons found with this name", R.drawable.cancel);
                     }
                 })
-                .addOnFailureListener(e -> Log.e("Firebase", "Error fetching subtopics", e));
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                                showCustomToast.showToast(LessonSummaryActivity.this, "Error fetching subtopics", R.drawable.cancel);
+                    }
+                });
     }
 
     private void displaySubTopics() {
