@@ -69,10 +69,6 @@ public class AdminProfileFragment extends Fragment {
         AdminName = view.findViewById(R.id.AdminProfiletextView01);
         AdminEmail = view.findViewById(R.id.AdminProfiletexview02);
 
-
-
-
-
         loadAdminProfile();
 
         passwordChangeButton = view.findViewById(R.id.AdminProfileBtn02);
@@ -91,7 +87,6 @@ public class AdminProfileFragment extends Fragment {
         return view;
 
     }
-
 
 
     private void loadAdminProfile() {
@@ -182,7 +177,6 @@ public class AdminProfileFragment extends Fragment {
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
             bottomSheetDialog.setContentView(bottomSheetView);
 
-
             Button actionOne = bottomSheetView.findViewById(R.id.UserUpdatePasswordBtn);
             EditText text01 = bottomSheetView.findViewById(R.id.UserOldPassword);
             EditText text02 = bottomSheetView.findViewById(R.id.UserNewPassword);
@@ -244,16 +238,12 @@ public class AdminProfileFragment extends Fragment {
                         }else {
                             customAlert.showCustomAlert( getContext(), "Error", "Retype Password Not Matched!", R.drawable.cancel);
                         }
-
                     }else {
                         customAlert.showCustomAlert(getContext(), "Error", "Old Password Not Matched!", R.drawable.cancel);
                     }
 
-
                 }
             });
             bottomSheetDialog.show();
-
     }
-
 }

@@ -123,7 +123,7 @@
         android:id="@+id/footer_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_margin="10dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="8dp"
 
