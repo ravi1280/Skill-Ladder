@@ -9,17 +9,19 @@
     tools:context=".UserProfileActivity">
 
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/CompanyProfileimageView"
-        android:layout_width="123dp"
-        android:layout_height="133dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/round_image"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="32dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/add_user" />
+        app:shapeAppearanceOverlay="@style/ProfileImageStyle"
+        app:srcCompat="@drawable/add_user">
+
+    </com.google.android.material.imageview.ShapeableImageView>
 
     <TextView
         android:id="@+id/CompanyProfiletextView01"

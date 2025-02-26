@@ -24,6 +24,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.skill_ladder.model.customAlert;
+import com.example.skill_ladder.model.showCustomToast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -128,30 +129,21 @@ public class UserProfileActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_SELECT_IMAGE) {
             if (data != null) {
                 Uri selectedImageUri = data.getData();
-
                 try {
-                    // Convert the URI to a Bitmap to display it in the ImageView
                     Bitmap selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
                     userImage.setImageBitmap(selectedImageBitmap);
-
-                    // Save the image to internal storage
                     saveImageToInternalStorage(selectedImageUri);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
+                    showCustomToast.showToast(UserProfileActivity.this, "Failed to load image", R.drawable.cancel);
                 }
             }
         }
     }
     private void saveImageToInternalStorage(Uri selectedImageUri) {
         try {
-            // Open the input stream of the selected image
             InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
-
-            // Define the output file in internal storage
             File outputFile = new File(getFilesDir(), "User_profile_image.jpg");
-
-            // Create an output stream to write the file
             FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
 
             byte[] buffer = new byte[1024];
@@ -159,64 +151,51 @@ public class UserProfileActivity extends AppCompatActivity {
             while ((length = inputStream.read(buffer)) != -1) {
                 fileOutputStream.write(buffer, 0, length);
             }
-
             fileOutputStream.flush();
             fileOutputStream.close();
             inputStream.close();
 
-            // Show a message indicating the image was saved
-            Toast.makeText(this, "Image saved to internal storage", Toast.LENGTH_SHORT).show();
+            showCustomToast.showToast(UserProfileActivity.this, "Image Saved !", R.drawable.checked);
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(this, "Failed to save image", Toast.LENGTH_SHORT).show();
+            showCustomToast.showToast(UserProfileActivity.this, "Error Saving Image", R.drawable.cancel);
         }
     }
     private void loadImageFromInternalStorage() {
         try {
-            // Define the path of the saved image in internal storage
             File imageFile = new File(getFilesDir(), "User_profile_image.jpg");
-
             if (imageFile.exists()) {
-                // Read the image from the internal storage
                 FileInputStream fileInputStream = new FileInputStream(imageFile);
                 Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
-
-                // Set the bitmap to the ImageView
                 userImage.setImageBitmap(bitmap);
-
-                // Close the input stream
                 fileInputStream.close();
             } else {
-                Toast.makeText(this, "Image not found", Toast.LENGTH_SHORT).show();
+                showCustomToast.showToast(UserProfileActivity.this, "Please add Profile Image !", R.drawable.warning);
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
+            showCustomToast.showToast(UserProfileActivity.this, "Error Loading Image", R.drawable.cancel);
         }
     }
     private void deleteImageFromInternalStorage() {
         try {
-            // Define the path of the saved image in internal storage
             File imageFile = new File(getFilesDir(), "User_profile_image.jpg");
-
-            // Check if the file exists
             if (imageFile.exists()) {
-                // Delete the file
+
                 boolean isDeleted = imageFile.delete();
 
                 if (isDeleted) {
-                    Toast.makeText(this, "Image deleted from internal storage", Toast.LENGTH_SHORT).show();
-                    // Optionally, you can clear the ImageView as well
+                    showCustomToast.showToast(UserProfileActivity.this, "Image Deleted", R.drawable.checked);
                     userImage.setImageBitmap(null);
                 } else {
-                    Toast.makeText(this, "Failed to delete image", Toast.LENGTH_SHORT).show();
+                    showCustomToast.showToast(UserProfileActivity.this, "Error Deleting Image", R.drawable.cancel);
                 }
             } else {
-                Toast.makeText(this, "Image not found", Toast.LENGTH_SHORT).show();
+                showCustomToast.showToast(UserProfileActivity.this, "Image Not Found", R.drawable.cancel);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Error deleting image", Toast.LENGTH_SHORT).show();
+            showCustomToast.showToast(UserProfileActivity.this, "Error Deleting Image", R.drawable.cancel);
         }
         recreate();
     }

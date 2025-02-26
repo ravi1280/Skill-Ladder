@@ -32,6 +32,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.skill_ladder.model.Admin;
 import com.example.skill_ladder.model.Company;
 import com.example.skill_ladder.model.customAlert;
+import com.example.skill_ladder.model.showCustomToast;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -149,7 +150,7 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
         getLoction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                getLocationBottomsheet();
+
                 requestLocationPermission();
             }
         });
@@ -165,15 +166,13 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
                 Uri selectedImageUri = data.getData();
 
                 try {
-                    // Convert the URI to a Bitmap to display it in the ImageView
                     Bitmap selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
                     companyImage.setImageBitmap(selectedImageBitmap);
 
-                    // Save the image to internal storage
                     saveImageToInternalStorage(selectedImageUri);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
+                    showCustomToast.showToast(CompanyUpdateProfileActivity.this, "Failed to load image", R.drawable.cancel);
                 }
             }
         }
@@ -190,35 +189,35 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
             while ((length = inputStream.read(buffer)) != -1) {
                 fileOutputStream.write(buffer, 0, length);
             }
-
             fileOutputStream.flush();
             fileOutputStream.close();
             inputStream.close();
-
-            Toast.makeText(this, "Image saved to internal storage", Toast.LENGTH_SHORT).show();
+            showCustomToast.showToast(CompanyUpdateProfileActivity.this, "Image saved to internal storage", R.drawable.checked);
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(this, "Failed to save image", Toast.LENGTH_SHORT).show();
+            showCustomToast.showToast(CompanyUpdateProfileActivity.this, "Failed to save image", R.drawable.cancel);
         }
     }
     private void deleteImageFromInternalStorage() {
         try {
-            File imageFile = new File(getFilesDir(), "User_profile_image.jpg");
+            File imageFile = new File(getFilesDir(), "Company_profile_image.jpg");
 
             if (imageFile.exists()) {
                 boolean isDeleted = imageFile.delete();
                 if (isDeleted) {
-                    Toast.makeText(this, "Image deleted from internal storage", Toast.LENGTH_SHORT).show();
+                    showCustomToast.showToast(CompanyUpdateProfileActivity.this, "Image deleted from internal storage", R.drawable.checked);
                     companyImage.setImageBitmap(null);
                 } else {
-                    Toast.makeText(this, "Failed to delete image", Toast.LENGTH_SHORT).show();
+                    showCustomToast.showToast(CompanyUpdateProfileActivity.this, "Failed to delete image", R.drawable.cancel);
                 }
             } else {
-                Toast.makeText(this, "Image not found", Toast.LENGTH_SHORT).show();
+                showCustomToast.showToast(CompanyUpdateProfileActivity.this, "Image not found", R.drawable.cancel);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Error deleting image", Toast.LENGTH_SHORT).show();
+            showCustomToast.showToast(CompanyUpdateProfileActivity.this, "Error deleting image", R.drawable.cancel);
+
         }
         recreate();
     }
@@ -235,11 +234,13 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
 
                 fileInputStream.close();
             } else {
-                Toast.makeText(this, "Image not found", Toast.LENGTH_SHORT).show();
+                showCustomToast.showToast(CompanyUpdateProfileActivity.this, "Please add Profile Image !", R.drawable.warning);
+
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
+            showCustomToast.showToast(CompanyUpdateProfileActivity.this, "Failed to load image", R.drawable.cancel);
+
         }
     }
 
@@ -468,7 +469,6 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ||
                     ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)) {
 
-                // Show a dialog explaining why the permission is needed
                 new AlertDialog.Builder(this)
                         .setTitle("Location Permission Needed")
                         .setMessage("This app requires location access to fetch your current location. Please allow it.")
@@ -479,7 +479,7 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
                         .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                         .show();
             } else {
-                // Directly request the permission
+
                 ActivityCompat.requestPermissions(this,
                         new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION},
                         LOCATION_PERMISSION_REQUEST_CODE);
