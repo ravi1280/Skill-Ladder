@@ -116,7 +116,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginRight="40dp"
             android:background="@drawable/edit_text_background"
-            android:drawableLeft="@drawable/lock"
+            android:drawableLeft="@drawable/password"
             android:drawablePadding="10dp"
             android:ems="10"
             android:hint="Password"
