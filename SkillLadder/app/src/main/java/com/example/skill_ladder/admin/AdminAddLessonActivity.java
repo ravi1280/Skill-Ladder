@@ -66,7 +66,7 @@ public class AdminAddLessonActivity extends AppCompatActivity {
 
         lessonNameEditText = findViewById(R.id.lessonNameEditText);
         subTopicNameEditText = findViewById(R.id.subTopicNameEditText);
-        contentTextEditText = findViewById(R.id.contentTextEditText);
+        contentTextEditText = findViewById(R.id.contentTextEditTextMulty);
         webUrlEditText = findViewById(R.id.webUrlEditText);
         ytVideoUrlEditText = findViewById(R.id.ytVideoUrlEditText);
         lessonPriceEditText = findViewById(R.id.lessonPriceEditText);
