@@ -77,6 +77,7 @@ public class SearchActivity extends AppCompatActivity {
     String lessonId01,jobTitle0001,lessonID001;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
