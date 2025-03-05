@@ -70,10 +70,7 @@ public class UserHomeActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
-        String UserName = sharedPreferences.getString("UserFullName", "");
-        TextView name =findViewById(R.id.UserHomeNameTV001);
-        name.setText("Hello "+UserName);
+
 
         CardView card = findViewById(R.id.footer_card);
 
@@ -91,6 +88,8 @@ public class UserHomeActivity extends AppCompatActivity {
         ImageSlider imageSlider= findViewById(R.id.ImageSlider001);
         ArrayList<SlideModel> imagelist = new ArrayList<>();
         imagelist.add(new SlideModel(R.drawable.image1, ScaleTypes.CENTER_INSIDE));
+        imagelist.add(new SlideModel(R.drawable.image2, ScaleTypes.CENTER_INSIDE));
+        imagelist.add(new SlideModel(R.drawable.image3, ScaleTypes.CENTER_INSIDE));
         imagelist.add(new SlideModel(R.drawable.image4, ScaleTypes.CENTER_INSIDE));
 
         imageSlider.setImageList(imagelist,ScaleTypes.CENTER_INSIDE);

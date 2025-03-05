@@ -57,7 +57,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/CompanyLogineditText01"
+            android:id="@+id/UserSighUpeditText01"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
@@ -75,7 +75,7 @@
 
 
         <EditText
-            android:id="@+id/CompanyLogineditText02"
+            android:id="@+id/UserSighUpeditText02"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
@@ -91,7 +91,7 @@
             android:textSize="14sp" />
 
         <EditText
-            android:id="@+id/CompanySignUpeditText03"
+            android:id="@+id/UserSighUpeditText03"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
@@ -107,7 +107,7 @@
             android:textSize="14sp" />
 
         <EditText
-            android:id="@+id/CompanySignUpeditText04"
+            android:id="@+id/UserSighUpeditText04"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
@@ -124,7 +124,7 @@
 
 
         <Button
-            android:id="@+id/CompanySignUpBtn01"
+            android:id="@+id/UserSighUpBtn01"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="30dp"

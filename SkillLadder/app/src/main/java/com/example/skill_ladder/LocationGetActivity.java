@@ -92,10 +92,10 @@ private void requestLocationPermission() {
 }
 
     private void getCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(LocationGetActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
 
-            fusedLocationClient.getLastLocation()
+            fusedLocationClient.getCurrentLocation(com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY, null)
                     .addOnSuccessListener(new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
@@ -104,12 +104,19 @@ private void requestLocationPermission() {
                                 double longitude = location.getLongitude();
                                 locationTextView.setText("Latitude: " + latitude + "\nLongitude: " + longitude);
                             } else {
-                                Toast.makeText(LocationGetActivity.this, "Failed to get location! Active GPS", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LocationGetActivity.this, "Failed to get location! Try moving outdoors.", Toast.LENGTH_SHORT).show();
                             }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(LocationGetActivity.this, "Error getting location: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

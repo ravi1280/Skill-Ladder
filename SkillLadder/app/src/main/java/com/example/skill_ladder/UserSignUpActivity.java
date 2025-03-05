@@ -39,14 +39,14 @@ public class UserSignUpActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        Button btn01 = findViewById(R.id.CompanySignUpBtn01);
+        Button btn01 = findViewById(R.id.UserSighUpBtn01);
         btn01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText editText01 = findViewById(R.id.CompanyLogineditText01);
-                EditText editText02 = findViewById(R.id.CompanyLogineditText02);
-                EditText editText03 = findViewById(R.id.CompanySignUpeditText03);
-                EditText editText04 = findViewById(R.id.CompanySignUpeditText04);
+                EditText editText01 = findViewById(R.id.UserSighUpeditText01);
+                EditText editText02 = findViewById(R.id.UserSighUpeditText02);
+                EditText editText03 = findViewById(R.id.UserSighUpeditText03);
+                EditText editText04 = findViewById(R.id.UserSighUpeditText04);
 
                 fullName = editText01.getText().toString();
                 mobile = editText02.getText().toString();
@@ -57,10 +57,15 @@ public class UserSignUpActivity extends AppCompatActivity {
                     customAlert.showCustomAlert(UserSignUpActivity.this, "Error !", "Please Fill Full Name",R.drawable.cancel);
                 } else if (mobile.isEmpty()) {
                     customAlert.showCustomAlert(UserSignUpActivity.this, "Error !", "Please Fill Mobile",R.drawable.cancel);
-                } else if (email.isEmpty()) {
+                }  else if (mobile.length() != 10) {
+                    customAlert.showCustomAlert(UserSignUpActivity.this, "Error ", "Please Fill The Correct Mobile Number", R.drawable.cancel);
+
+                }else if (email.isEmpty()) {
                     customAlert.showCustomAlert(UserSignUpActivity.this, "Error !", "Please Fill Email",R.drawable.cancel);
                 } else if (password.isEmpty()) {
                     customAlert.showCustomAlert(UserSignUpActivity.this, "Error !", "Please Fill Password",R.drawable.cancel);
+                } else if (!password.matches("^(?=.*[a-zA-Z])(?=.*\\d).{8,}$")) {
+                    customAlert.showCustomAlert(UserSignUpActivity.this, "Error ", "Password must contain at least 8 characters, including letters and numbers", R.drawable.cancel);
                 }else {
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
 

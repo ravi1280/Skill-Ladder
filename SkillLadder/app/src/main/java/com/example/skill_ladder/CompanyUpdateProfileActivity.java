@@ -128,14 +128,14 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
             }
         });
 
-        Button buttonlocation = findViewById(R.id.CompanyLocationBtn01);
-        buttonlocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(CompanyUpdateProfileActivity.this, LocationGetActivity.class);
-                startActivity(intent);
-            }
-        });
+//        Button buttonlocation = findViewById(R.id.CompanyLocationBtn01);
+//        buttonlocation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(CompanyUpdateProfileActivity.this, LocationGetActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         Button showBottomSheetButton = findViewById(R.id.CompanyProfileBtn02);
 
@@ -498,25 +498,32 @@ public class CompanyUpdateProfileActivity extends AppCompatActivity {
         Button getbtn = bottomSheetView.findViewById(R.id.getLctBottomBtn);
         EditText text01 = bottomSheetView.findViewById(R.id.LatitudeED01);
         EditText text02 = bottomSheetView.findViewById(R.id.LongitudeED01);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
 
-            if (ActivityCompat.checkSelfPermission(CompanyUpdateProfileActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-
-                fusedLocationClient.getLastLocation()
-                        .addOnSuccessListener(new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                if (location != null) {
-                                    double latitude = location.getLatitude();
-                                    double longitude = location.getLongitude();
-                                    text01.setText(String.valueOf(latitude));
-                                    text02.setText(String.valueOf(longitude));
-                                } else {
-                                    Toast.makeText(CompanyUpdateProfileActivity.this, "Failed to get location! Active GPS", Toast.LENGTH_SHORT).show();
-                                }
+            fusedLocationClient.getCurrentLocation(com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY, null)
+                    .addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+                                double latitude = location.getLatitude();
+                                double longitude = location.getLongitude();
+                                text01.setText(String.valueOf(latitude));
+                                text02.setText(String.valueOf(longitude));
+                            } else {
+                                Toast.makeText(CompanyUpdateProfileActivity.this, "Failed to get location! Try moving outdoors.", Toast.LENGTH_SHORT).show();
                             }
-                        });
-            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(CompanyUpdateProfileActivity.this, "Error getting location: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+
+
 
         getbtn.setOnClickListener(view -> {
             String latitude = text01.getText().toString().trim();

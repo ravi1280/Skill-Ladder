@@ -28,6 +28,7 @@ import com.example.skill_ladder.model.Company;
 import com.example.skill_ladder.model.JobField;
 import com.example.skill_ladder.model.JobTitle;
 import com.example.skill_ladder.model.Lesson;
+import com.example.skill_ladder.model.showCustomToast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -254,7 +255,7 @@ class mLessonListAdapter extends RecyclerView.Adapter<mLessonListAdapter.mLesson
 
         Lesson lDetails = lessondetails.get(position);
         holder.LessonName.setText(lDetails.getLessonName());
-        holder.active.setText(lDetails.isActive() ? "Active" : "Deactive");
+        holder.active.setText(lDetails.isActive() ? "Deactivate" : "Activate");
         if(lDetails.isActive()){
             holder.active.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.chart03));
         }else {
@@ -288,7 +289,7 @@ class mLessonListAdapter extends RecyclerView.Adapter<mLessonListAdapter.mLesson
                     }
 
 
-                    Toast.makeText(holder.itemView.getContext(), "Status updated", Toast.LENGTH_SHORT).show();
+                    showCustomToast.showToast(holder.itemView.getContext(), "Status updated", R.drawable.checked);
 
                 })
                 .addOnFailureListener(e -> {

@@ -24,6 +24,7 @@ import com.example.skill_ladder.R;
 import com.example.skill_ladder.model.JobField;
 import com.example.skill_ladder.model.JobTitle;
 import com.example.skill_ladder.model.customAlert;
+import com.example.skill_ladder.model.showCustomToast;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -165,7 +166,7 @@ public class ManageOtherFragment extends Fragment {
                     .add(jobField)
                     .addOnSuccessListener(documentReference -> {
                         customAlert.showCustomAlert(getContext(),"Success","Successfully Add Field",R.drawable.checked);
-                        jobFiled.setText(""); Toast.makeText(getContext(),"Job field added with ID: " + documentReference.getId(),Toast.LENGTH_SHORT).show();
+                        jobFiled.setText("");
                         refresh();
 
                     })
@@ -332,11 +333,11 @@ class FieldListAdapter extends RecyclerView.Adapter<FieldListAdapter.FieldViewHo
                     }
 
 
-                    Toast.makeText(holder.itemView.getContext(), "Status updated", Toast.LENGTH_SHORT).show();
+                    showCustomToast.showToast(holder.itemView.getContext(), "Status updated", R.drawable.checked);
 
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(holder.itemView.getContext(), "Failed to update", Toast.LENGTH_SHORT).show();
+                    showCustomToast.showToast(holder.itemView.getContext(), "Failed to update", R.drawable.cancel);
                 });
     }
 
