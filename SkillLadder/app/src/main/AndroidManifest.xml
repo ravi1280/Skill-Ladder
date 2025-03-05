@@ -125,9 +125,7 @@
         <activity
             android:name=".UserSignUpActivity"
             android:exported="false" />
-        <activity
-            android:name=".TestActivity"
-            android:exported="false" />
+        
         <activity
             android:name=".UserLoginActivity"
             android:exported="false" />
@@ -143,7 +141,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB21jQe9R-5KVW9Knk_NNkzsVs0VN5PR-Y" />
+            android:value="*Enter_Your_API_Key_Here*" />
     </application>
 
 </manifest>

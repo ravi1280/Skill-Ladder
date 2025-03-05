@@ -188,11 +188,11 @@ String UserIdShared;
             @Override
             public void onClick(View view) {
                 InitRequest req = new InitRequest();
-                req.setMerchantId("1221660");       // Merchant ID
-                req.setCurrency("LKR");             // Currency code LKR/USD/GBP/EUR/AUD
-                req.setAmount(CPrice);             // Final Amount to be charged
-                req.setOrderId("230000123");        // Unique Reference ID
-                req.setItemsDescription("Cart Item Check Out");  // Item description title
+                req.setMerchantId("Merchant_ID");
+                req.setCurrency("LKR");
+                req.setAmount(CPrice);
+                req.setOrderId("230000123");
+                req.setItemsDescription("Cart Item Check Out");
                 req.setCustom1("This is the custom message 1");
                 req.setCustom2("This is the custom message 2");
                 req.getCustomer().setFirstName("Saman");
@@ -206,7 +206,7 @@ String UserIdShared;
                 Intent intent = new Intent(UserCartActivity.this, PHMainActivity.class);
                 intent.putExtra(PHConstants.INTENT_EXTRA_DATA, req);
                 PHConfigs.setBaseUrl(PHConfigs.SANDBOX_URL);
-                startActivityForResult(intent, PAYHERE_REQUEST); //unique request ID e.g. "11001"
+                startActivityForResult(intent, PAYHERE_REQUEST);
 
                 bottomSheetDialog.dismiss();
             }
