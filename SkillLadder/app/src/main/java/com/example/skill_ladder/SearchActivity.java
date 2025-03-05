@@ -143,11 +143,11 @@ public class SearchActivity extends AppCompatActivity {
 
         // Your existing payment logic here
         InitRequest req = new InitRequest();
-        req.setMerchantId("1221660");       // Merchant ID
-        req.setCurrency("LKR");             // Currency code LKR/USD/GBP/EUR/AUD
-        req.setAmount(lessonPrice);             // Final Amount to be charged
-        req.setOrderId("230000123");        // Unique Reference ID
-        req.setItemsDescription("Buy Product");  // Item description title
+        req.setMerchantId("Merchant_ID");
+        req.setCurrency("LKR");
+        req.setAmount(lessonPrice);
+        req.setOrderId("230000123");
+        req.setItemsDescription("Buy Product");
         req.setCustom1("This is the custom message 1");
         req.setCustom2("This is the custom message 2");
         req.getCustomer().setFirstName("Saman");
