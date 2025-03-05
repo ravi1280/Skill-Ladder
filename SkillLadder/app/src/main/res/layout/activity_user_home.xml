@@ -26,39 +26,17 @@
                 android:layout_height="match_parent"
                 android:paddingTop="16dp">
 
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="52dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="16dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/userimage" />
-
-                <TextView
-                    android:id="@+id/UserHomeNameTV001"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:fontFamily="@font/nunito_bold"
-                    android:text="@string/HomeName"
-                    android:textColor="@color/HimeTxt"
-                    android:textSize="25sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/imageView"
-                    app:layout_constraintTop_toTopOf="@+id/imageView" />
-
                 <TextView
                     android:id="@+id/textView21"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="16dp"
                     android:text="Welcome to Skill-Ladder"
                     android:textColor="@color/HimeTxt"
-                    app:layout_constraintEnd_toEndOf="@+id/UserHomeNameTV001"
-                    app:layout_constraintStart_toStartOf="@+id/UserHomeNameTV001"
-                    app:layout_constraintTop_toBottomOf="@+id/UserHomeNameTV001" />
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
                 <androidx.cardview.widget.CardView

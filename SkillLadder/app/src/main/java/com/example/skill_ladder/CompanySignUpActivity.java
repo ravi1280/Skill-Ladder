@@ -62,10 +62,14 @@ public class CompanySignUpActivity extends AppCompatActivity {
                 email = editText03.getText().toString();
                 password = editText04.getText().toString();
 
+
                 if (name.isEmpty()) {
                     customAlert.showCustomAlert(CompanySignUpActivity.this, "Error ", "Please Fill The Company Name", R.drawable.cancel);
                 } else if (mobile.isEmpty()) {
                     customAlert.showCustomAlert(CompanySignUpActivity.this, "Error ", "Please Fill The Company Mobile", R.drawable.cancel);
+
+                } else if (mobile.length() != 10) {
+                    customAlert.showCustomAlert(CompanySignUpActivity.this, "Error ", "Please Fill The Correct Mobile Number", R.drawable.cancel);
 
                 } else if (email.isEmpty()) {
                     customAlert.showCustomAlert(CompanySignUpActivity.this, "Error ", "Please Fill The Company Email", R.drawable.cancel);
@@ -73,6 +77,8 @@ public class CompanySignUpActivity extends AppCompatActivity {
                 } else if (password.isEmpty()) {
                     customAlert.showCustomAlert(CompanySignUpActivity.this, "Error ", "Please Fill The Company Password", R.drawable.cancel);
 
+                } else if (!password.matches("^(?=.*[a-zA-Z])(?=.*\\d).{8,}$")) {
+                    customAlert.showCustomAlert(CompanySignUpActivity.this, "Error ", "Password must contain at least 8 characters, including letters and numbers", R.drawable.cancel);
                 } else {
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
 

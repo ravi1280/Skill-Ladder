@@ -64,7 +64,7 @@ String UserIdShared;
 
     private static final int PAYHERE_REQUEST = 11001;
     private static final String TAG = "UserCartActivity";
-    private TextView textView;
+//    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +80,7 @@ String UserIdShared;
         UserIdShared = sharedPreferences.getString("UserID", "");
         loadCartDetails(UserIdShared);
 
-        textView = findViewById(R.id.payheretv);
+//        textView = findViewById(R.id.payheretv);
 
         ImageView imageViewpback = findViewById(R.id.CartBackIcon01);
         imageViewpback.setOnClickListener(new View.OnClickListener() {
@@ -238,11 +238,11 @@ String UserIdShared;
 
                 } else {
                     Log.d(TAG, "Payment Failed: " + (response != null ? response.toString() : "No response"));
-                    textView.setText("Payment failed. Please try again.");
+//                    textView.setText("Payment failed. Please try again.");
                 }
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Log.d(TAG, "Payment Canceled: " + (response != null ? response.toString() : "User canceled the request"));
-                textView.setText("User canceled the payment.");
+//                textView.setText("User canceled the payment.");
             }
         }
     }
