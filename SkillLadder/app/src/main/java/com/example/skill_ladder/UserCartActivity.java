@@ -188,7 +188,7 @@ String UserIdShared;
             @Override
             public void onClick(View view) {
                 InitRequest req = new InitRequest();
-                req.setMerchantId("Merchant_ID");
+                req.setMerchantId("1221660");
                 req.setCurrency("LKR");
                 req.setAmount(CPrice);
                 req.setOrderId("230000123");

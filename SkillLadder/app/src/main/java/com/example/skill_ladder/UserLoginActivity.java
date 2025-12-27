@@ -103,7 +103,9 @@ public class UserLoginActivity extends AppCompatActivity {
 
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         firestore.collection("user")
-                .whereEqualTo("email", email).whereEqualTo("password", password).get()
+                .whereEqualTo("email", email)
+                .whereEqualTo("password", password)
+                .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -117,6 +119,8 @@ public class UserLoginActivity extends AppCompatActivity {
                                 String email = document.getString("email");
                                 String mobile = document.getString("mobile");
                                 String password = document.getString("password");
+
+
 
                                 SharedPreferences userSharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
                                 SharedPreferences.Editor editor = userSharedPreferences.edit();

@@ -189,6 +189,7 @@ class MCompanyListAdapter extends RecyclerView.Adapter<MCompanyListAdapter.MComp
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("company").document(company.getId())
                 .update("isActive", newStatus)
+
                 .addOnSuccessListener(aVoid -> {
 
                     company.setActive(newStatus);

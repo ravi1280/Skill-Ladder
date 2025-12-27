@@ -143,7 +143,7 @@ public class SearchActivity extends AppCompatActivity {
 
         // Your existing payment logic here
         InitRequest req = new InitRequest();
-        req.setMerchantId("Merchant_ID");
+        req.setMerchantId("1221660");
         req.setCurrency("LKR");
         req.setAmount(lessonPrice);
         req.setOrderId("230000123");
